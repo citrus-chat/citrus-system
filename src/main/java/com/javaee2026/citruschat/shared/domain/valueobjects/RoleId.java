@@ -1,23 +1,22 @@
 package com.javaee2026.citruschat.shared.domain.valueobjects;
 
-import com.javaee2026.citruschat.messaging.domain.exceptions.InvalidDeviceException;
+import com.javaee2026.citruschat.messaging.domain.exceptions.InvalidChatRoleException;
 import com.javaee2026.citruschat.shared.domain.constants.ErrorMessages;
 
 import java.util.UUID;
 
-public class DeviceId {
-
+public class RoleId {
 	private final UUID value;
 
-	public DeviceId(UUID value) {
+	public RoleId(UUID value) {
 		if (value == null) {
-			throw new InvalidDeviceException(ErrorMessages.DEVICE_ID_CANNOT_BE_NULL);
+			throw new InvalidChatRoleException(ErrorMessages.ROLE_ID_CANNOT_BE_NULL);
 		}
 		this.value = value;
 	}
 
-	public static DeviceId newId() {
-		return new DeviceId(UUID.randomUUID());
+	public static RoleId newId() {
+		return new RoleId(UUID.randomUUID());
 	}
 
 	public UUID value() {
@@ -28,9 +27,9 @@ public class DeviceId {
 	public boolean equals(Object o) {
 		if (this == o)
 			return true;
-		if (!(o instanceof DeviceId deviceId))
+		if (!(o instanceof RoleId roleId))
 			return false;
-		return value.equals(deviceId.value);
+		return value.equals(roleId.value);
 	}
 
 	@Override

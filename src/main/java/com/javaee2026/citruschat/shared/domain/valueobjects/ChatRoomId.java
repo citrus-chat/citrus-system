@@ -1,6 +1,6 @@
 package com.javaee2026.citruschat.shared.domain.valueobjects;
 
-import com.javaee2026.citruschat.identity.domain.exceptions.InvalidUserException;
+import com.javaee2026.citruschat.messaging.domain.exceptions.InvalidChatRoomException;
 import com.javaee2026.citruschat.shared.domain.constants.ErrorMessages;
 
 import java.util.UUID;
@@ -10,7 +10,7 @@ public class ChatRoomId {
 
 	public ChatRoomId(UUID value) {
 		if (value == null) {
-			throw new InvalidUserException(ErrorMessages.CHATROOM_ID_CANNOT_BE_NULL);
+			throw new InvalidChatRoomException(ErrorMessages.CHATROOM_ID_CANNOT_BE_NULL);
 		}
 		this.value = value;
 	}

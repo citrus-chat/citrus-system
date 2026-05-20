@@ -1,23 +1,23 @@
 package com.javaee2026.citruschat.shared.domain.valueobjects;
 
-import com.javaee2026.citruschat.messaging.domain.exceptions.InvalidDeviceException;
+import com.javaee2026.citruschat.messaging.domain.exceptions.InvalidParticipantException;
 import com.javaee2026.citruschat.shared.domain.constants.ErrorMessages;
 
 import java.util.UUID;
 
-public class DeviceId {
+public class ParticipantId {
 
 	private final UUID value;
 
-	public DeviceId(UUID value) {
+	public ParticipantId(UUID value) {
 		if (value == null) {
-			throw new InvalidDeviceException(ErrorMessages.DEVICE_ID_CANNOT_BE_NULL);
+			throw new InvalidParticipantException(ErrorMessages.PARTICIPANT_ID_CANNOT_BE_NULL);
 		}
 		this.value = value;
 	}
 
-	public static DeviceId newId() {
-		return new DeviceId(UUID.randomUUID());
+	public static ParticipantId newId() {
+		return new ParticipantId(UUID.randomUUID());
 	}
 
 	public UUID value() {
@@ -28,9 +28,9 @@ public class DeviceId {
 	public boolean equals(Object o) {
 		if (this == o)
 			return true;
-		if (!(o instanceof DeviceId deviceId))
+		if (!(o instanceof ParticipantId participantId))
 			return false;
-		return value.equals(deviceId.value);
+		return value.equals(participantId.value);
 	}
 
 	@Override

@@ -6,13 +6,12 @@ import com.javaee2026.citruschat.messaging.infrastructure.web.dto.response.Creat
 
 import java.util.UUID;
 
-public class CreateChatRoomWebMapper {
+public final class CreateChatRoomWebMapper {
 	private CreateChatRoomWebMapper() {
 	}
 
 	public static CreateChatRoomCommand toCommand(CreateChatRoomRequest request, UUID creatorId) {
-
-		return new CreateChatRoomCommand(request.chatRoomType(), request.name(), creatorId);
+		return new CreateChatRoomCommand(request.chatRoomType(), request.name(), creatorId, request.participantIds());
 	}
 
 	public static CreateChatRoomResponse toResponse() {

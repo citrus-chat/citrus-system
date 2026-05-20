@@ -51,6 +51,12 @@ public final class ErrorMessages {
 	public static final String CHATROOM_ID_CANNOT_BE_NULL = "Chatroom id cannot be null";
 	public static final String CHATROOM_CANNOT_BE_EDITED = "Chatroom cannot be edited";
 	public static final String CHATROOM_ALREADY_DELETED = "Chatroom already deleted";
+	public static final String CHATROOM_DOES_NOT_HAVE_ROLES = "Chatroom does not have roles";
+
+	public static final String PARTICIPANT_ID_CANNOT_BE_NULL = "Participant id cannot be null";
+
+	public static final String ROLE_ID_CANNOT_BE_NULL = "Role id cannot be null";
+	public static final String ROLES_CANNOT_BE_NULL = "Roles cannot be null";
 
 	public static String usernameLengthBetween(int min, int max) {
 		return "Username must be between " + min + " and " + max + " characters";
