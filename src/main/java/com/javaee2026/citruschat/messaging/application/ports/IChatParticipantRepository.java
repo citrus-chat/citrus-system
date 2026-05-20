@@ -5,6 +5,5 @@ import com.javaee2026.citruschat.shared.domain.valueobjects.UserId;
 
 public interface IChatParticipantRepository {
 	boolean existsDirectChat(UserId user1, UserId user2);
-
 	void save(ChatParticipant chatParticipant);
 }
