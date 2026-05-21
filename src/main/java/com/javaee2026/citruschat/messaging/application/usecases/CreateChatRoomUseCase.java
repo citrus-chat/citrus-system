@@ -2,33 +2,37 @@ package com.javaee2026.citruschat.messaging.application.usecases;
 
 import com.javaee2026.citruschat.identity.application.ports.IUserRepository;
 import com.javaee2026.citruschat.messaging.application.commands.CreateChatRoomCommand;
+import com.javaee2026.citruschat.messaging.application.ports.IChatPermissionRepository;
 import com.javaee2026.citruschat.messaging.application.ports.IChatRoomRepository;
+import com.javaee2026.citruschat.messaging.domain.enums.ChatRoleDefault;
 import com.javaee2026.citruschat.messaging.domain.enums.ChatRoomType;
 import com.javaee2026.citruschat.messaging.domain.factory.ChatRoomFactory;
+import com.javaee2026.citruschat.messaging.domain.model.ChatPermission;
 import com.javaee2026.citruschat.messaging.domain.model.ChatRoom;
+import com.javaee2026.citruschat.messaging.domain.policy.ChatAuthDefaults;
 import com.javaee2026.citruschat.shared.domain.valueobjects.UserId;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 public class CreateChatRoomUseCase {
 
 	private final IChatRoomRepository chatRoomRepository;
 	private final ChatRoomFactory chatRoomFactory;
 	private final IUserRepository userRepository;
+	private final IChatPermissionRepository permissionRepository;
 
 	public CreateChatRoomUseCase(IChatRoomRepository chatRoomRepository, ChatRoomFactory chatRoomFactory,
-			IUserRepository userRepository) {
+			IUserRepository userRepository, IChatPermissionRepository permissionRepository) {
 		this.chatRoomRepository = chatRoomRepository;
 		this.chatRoomFactory = chatRoomFactory;
 		this.userRepository = userRepository;
+		this.permissionRepository = permissionRepository;
 	}
 
-	public void execute(CreateChatRoomCommand command) {
-
-		UserId creatorId = new UserId(command.chatRoomCreatorId());
-
-		List<UserId> userIds = command.participantIds().stream().map(UserId::new).toList();
-
+	public void validate(CreateChatRoomCommand command, UserId creatorId, List<UserId> userIds) {
 		if (command.chatRoomType() == ChatRoomType.DIRECT) {
 			if (command.participantIds().size() != 1) {
 				throw new IllegalArgumentException("Direct chat rooms must have exactly one participant");
@@ -48,10 +52,33 @@ public class CreateChatRoomUseCase {
 				throw new IllegalArgumentException("User with id " + userId + " does not exist");
 			}
 		}
+	}
+
+	public Map<ChatRoleDefault, Set<ChatPermission>> resolvePermision() {
+		Map<ChatRoleDefault, Set<ChatPermission>> resolved = new HashMap<>();
+
+		for (var entry : ChatAuthDefaults.DEFAULTS.entrySet()) {
+			Set<ChatPermission> permissions = permissionRepository.findByCodes(entry.getValue());
+
+			resolved.put(entry.getKey(), permissions);
+		}
+
+		return resolved;
+	}
+
+	public void execute(CreateChatRoomCommand command) {
+
+		UserId creatorId = new UserId(command.chatRoomCreatorId());
+
+		List<UserId> userIds = command.participantIds().stream().map(UserId::new).toList();
+
+		validate(command, creatorId, userIds);
 
 		ChatRoom chatRoom = chatRoomFactory.createNew(command.chatRoomType(), command.name(), creatorId);
 
-		chatRoom.initRoles(); // Inicializa los roles por defecto
+		Map<ChatRoleDefault, Set<ChatPermission>> rolesDefaultPermissions = resolvePermision();
+
+		chatRoom.initRoles(rolesDefaultPermissions); // Inicializa los roles por defecto
 		chatRoom.initParticipants(creatorId, userIds); // Inicializa los participantes
 
 		chatRoomRepository.save(chatRoom);

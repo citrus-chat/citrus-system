@@ -113,7 +113,7 @@ public class IdentityBeansConfiguration {
 	}
 
 	@Bean
-	public CheckAdminAccessUseCase checkAdminAccessUseCase(final IAdminAccessRepository adminAccessRepository) {
+	public CheckAdminAccessUseCase checkAdminAccessUseCase(IAdminAccessRepository adminAccessRepository) {
 		return new CheckAdminAccessUseCase(adminAccessRepository);
 	}
 

@@ -18,11 +18,12 @@ public enum ErrorCode {
 																			HttpStatus.BAD_REQUEST), INVALID_CHATROOM(
 																					HttpStatus.BAD_REQUEST), INVALID_DEVICE(
 																							HttpStatus.BAD_REQUEST), INVALID_CHATROLE(
-																									HttpStatus.BAD_REQUEST), USER_ALREADY_ACTIVE(
-																											HttpStatus.CONFLICT), USER_ALREADY_INACTIVE(
-																													HttpStatus.CONFLICT), USER_ALREADY_VALIDATED(
-																															HttpStatus.CONFLICT), USER_NOT_FOUND(
-																																	HttpStatus.NOT_FOUND);
+																									HttpStatus.BAD_REQUEST), INVALID_PERMISSION(
+																											HttpStatus.BAD_REQUEST), USER_ALREADY_ACTIVE(
+																													HttpStatus.CONFLICT), USER_ALREADY_INACTIVE(
+																															HttpStatus.CONFLICT), USER_ALREADY_VALIDATED(
+																																	HttpStatus.CONFLICT), USER_NOT_FOUND(
+																																			HttpStatus.NOT_FOUND);
 
 	private final HttpStatus httpStatus;
 
