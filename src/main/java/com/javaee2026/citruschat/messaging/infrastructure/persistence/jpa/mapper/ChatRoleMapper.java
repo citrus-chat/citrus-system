@@ -6,12 +6,21 @@ import com.javaee2026.citruschat.messaging.infrastructure.persistence.jpa.entity
 import com.javaee2026.citruschat.shared.domain.valueobjects.ChatRoomId;
 import com.javaee2026.citruschat.shared.domain.valueobjects.RoleId;
 
+import java.util.stream.Collectors;
+
 public final class ChatRoleMapper {
 
-	public static ChatRole toDomain(ChatRoleJpaEntity entity) {
+	private final ChatPermissionMapper chatPermissionMapper;
+
+	public ChatRoleMapper(ChatPermissionMapper chatPermissionMapper) {
+		this.chatPermissionMapper = chatPermissionMapper;
+	}
+
+	public ChatRole toDomain(ChatRoleJpaEntity entity) {
 
 		return ChatRole.reconstitute(new RoleId(entity.getId()), new ChatRoomId(entity.getChatRoom().getId()),
-				entity.getName(), entity.getCreatedAt());
+				entity.getPermissions().stream().map(chatPermissionMapper::toDomain).collect(Collectors.toSet()),
+				entity.getName(), entity.getPriority(), entity.getCreatedAt());
 	}
 
 	public static ChatRoleJpaEntity toJpa(ChatRole chatRole, ChatRoomJpaEntity chatRoom) {

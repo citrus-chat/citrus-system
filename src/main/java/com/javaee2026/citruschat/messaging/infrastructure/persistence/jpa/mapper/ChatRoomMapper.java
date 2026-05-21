@@ -17,16 +17,18 @@ import java.util.stream.Collectors;
 public final class ChatRoomMapper {
 
 	private final ChatRoomFactory chatRoomFactory;
+	private final ChatRoleMapper chatRoleMapper;
 
-	public ChatRoomMapper(ChatRoomFactory chatRoomFactory) {
+	public ChatRoomMapper(ChatRoomFactory chatRoomFactory, ChatRoleMapper chatRoleMapper) {
 		this.chatRoomFactory = chatRoomFactory;
+		this.chatRoleMapper = chatRoleMapper;
 	}
 
 	public ChatRoom toDomain(ChatRoomJpaEntity entity) {
 		return chatRoomFactory.reconstitute(new ChatRoomId(entity.getId()), entity.getType(), entity.getName(),
 				new UserId(entity.getCreatedBy()),
 				entity.getParticipants().stream().map(ChatParticipantMapper::toDomain).toList(),
-				entity.getRoles().stream().map(ChatRoleMapper::toDomain)
+				entity.getRoles().stream().map(chatRoleMapper::toDomain)
 						.collect(Collectors.toMap(ChatRole::getName, r -> r)),
 				entity.getCreatedAt(), entity.getUpdatedAt(), entity.getDeletedAt());
 	}

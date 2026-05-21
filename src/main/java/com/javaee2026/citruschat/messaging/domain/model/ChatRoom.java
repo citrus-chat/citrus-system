@@ -1,7 +1,9 @@
 package com.javaee2026.citruschat.messaging.domain.model;
 
+import com.javaee2026.citruschat.messaging.domain.enums.ChatRoleDefault;
 import com.javaee2026.citruschat.messaging.domain.enums.ChatRoomType;
 import com.javaee2026.citruschat.messaging.domain.exceptions.InvalidMessageException;
+import com.javaee2026.citruschat.messaging.domain.policy.permissions.ChatRoleDefaultPriority;
 import com.javaee2026.citruschat.shared.domain.constants.ErrorMessages;
 import com.javaee2026.citruschat.shared.domain.valueobjects.ChatRoomId;
 import com.javaee2026.citruschat.shared.domain.valueobjects.RoleId;
@@ -13,6 +15,7 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import static java.util.Objects.requireNonNull;
 
@@ -50,14 +53,19 @@ public class ChatRoom {
 		this.deletedAt = deletedAt;
 	}
 
-	public void initRoles() {
+	public void initRoles(Map<ChatRoleDefault, Set<ChatPermission>> permissions) {
 		if (!this.roles.isEmpty()) {
 			return;
 		}
 
-		roles.put("OWNER", ChatRole.owner(id));
-		roles.put("MEMBER", ChatRole.member(id));
-		roles.put("ADMIN", ChatRole.admin(id));
+		for (ChatRoleDefault roleDefault : ChatRoleDefault.values()) { // Por cada roleDefault que venga de la BD
+			Set<ChatPermission> rolePermissions = permissions.get(roleDefault);
+
+			String roleName = roleDefault.toString();
+			Integer rolePriority = ChatRoleDefaultPriority.priority(roleDefault);
+
+			roles.put(roleName, ChatRole.createDefault(id, roleDefault, rolePermissions, rolePriority));
+		}
 	}
 
 	public void touch() {
@@ -77,8 +85,8 @@ public class ChatRoom {
 	}
 
 	public void initParticipants(UserId creatorId, List<UserId> participantIds) {
-		ChatRole ownerRole = this.roles.get("OWNER");
-		ChatRole memberRole = this.roles.get("MEMBER");
+		ChatRole ownerRole = this.roles.get(ChatRoleDefault.OWNER.toString());
+		ChatRole memberRole = this.roles.get(ChatRoleDefault.MEMBER.toString());
 
 		if (ownerRole == null || memberRole == null) {
 			throw new InvalidMessageException(ErrorMessages.CHATROOM_DOES_NOT_HAVE_ROLES);

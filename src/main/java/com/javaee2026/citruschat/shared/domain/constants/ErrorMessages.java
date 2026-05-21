@@ -58,6 +58,9 @@ public final class ErrorMessages {
 	public static final String ROLE_ID_CANNOT_BE_NULL = "Role id cannot be null";
 	public static final String ROLES_CANNOT_BE_NULL = "Roles cannot be null";
 
+	public static final String PERMISSION_ID_CANNOT_BE_NULL = "Permission id cannot be null";
+	public static final String PERMISSION_CODE_CANNOT_BE_NULL = "Permission code cannot be null";
+
 	public static String usernameLengthBetween(int min, int max) {
 		return "Username must be between " + min + " and " + max + " characters";
 	}

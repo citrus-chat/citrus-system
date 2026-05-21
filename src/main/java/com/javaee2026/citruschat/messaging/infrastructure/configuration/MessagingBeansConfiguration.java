@@ -1,11 +1,14 @@
 package com.javaee2026.citruschat.messaging.infrastructure.configuration;
 
 import com.javaee2026.citruschat.identity.application.ports.IUserRepository;
+import com.javaee2026.citruschat.messaging.application.ports.IChatPermissionRepository;
 import com.javaee2026.citruschat.messaging.application.ports.IChatRoomRepository;
 import com.javaee2026.citruschat.messaging.application.ports.IMessageRepository;
 import com.javaee2026.citruschat.messaging.application.usecases.CreateChatRoomUseCase;
 import com.javaee2026.citruschat.messaging.application.usecases.SendMessageUseCase;
 import com.javaee2026.citruschat.messaging.domain.factory.*;
+import com.javaee2026.citruschat.messaging.infrastructure.persistence.jpa.mapper.ChatPermissionMapper;
+import com.javaee2026.citruschat.messaging.infrastructure.persistence.jpa.mapper.ChatRoleMapper;
 import com.javaee2026.citruschat.messaging.infrastructure.persistence.jpa.mapper.ChatRoomMapper;
 import com.javaee2026.citruschat.messaging.infrastructure.persistence.jpa.mapper.MessageMapper;
 import com.javaee2026.citruschat.messaging.infrastructure.persistence.jpa.repository.*;
@@ -44,13 +47,28 @@ public class MessagingBeansConfiguration {
 	}
 
 	@Bean
+	public ChatPermissionFactory chatPermissionFactory() {
+		return new ChatPermissionFactory();
+	}
+
+	@Bean
+	public ChatPermissionMapper chatPermissionMapper(ChatPermissionFactory chatPermissionFactory) {
+		return new ChatPermissionMapper(chatPermissionFactory);
+	}
+
+	@Bean
+	public ChatRoleMapper chatRoleMapper(ChatPermissionMapper chatPermissionMapper) {
+		return new ChatRoleMapper(chatPermissionMapper);
+	}
+
+	@Bean
 	public ChatRoomFactory chatRoomFactory() {
 		return new ChatRoomFactory();
 	}
 
 	@Bean
-	public ChatRoomMapper chatRoomMapper(ChatRoomFactory chatRoomFactory) {
-		return new ChatRoomMapper(chatRoomFactory);
+	public ChatRoomMapper chatRoomMapper(ChatRoomFactory chatRoomFactory, ChatRoleMapper chatRoleMapper) {
+		return new ChatRoomMapper(chatRoomFactory, chatRoleMapper);
 	}
 
 	@Bean
@@ -60,8 +78,16 @@ public class MessagingBeansConfiguration {
 	}
 
 	@Bean
+	public IChatPermissionRepository chatPermissionRepository(
+			SpingDataChatPermissionRepositoryAdapter chatPermissionRepository,
+			ChatPermissionMapper chatPermissionMapper) {
+		return new JpaChatPermissionRepositoryAdapter(chatPermissionRepository, chatPermissionMapper);
+	}
+
+	@Bean
 	public CreateChatRoomUseCase createChatRoomUseCase(IChatRoomRepository chatRoomRepository,
-			ChatRoomFactory chatRoomFactory, IUserRepository userRepository) {
-		return new CreateChatRoomUseCase(chatRoomRepository, chatRoomFactory, userRepository);
+			ChatRoomFactory chatRoomFactory, IUserRepository userRepository,
+			IChatPermissionRepository permissionRepository) {
+		return new CreateChatRoomUseCase(chatRoomRepository, chatRoomFactory, userRepository, permissionRepository);
 	}
 }
