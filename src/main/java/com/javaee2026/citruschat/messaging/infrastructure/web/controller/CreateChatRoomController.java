@@ -27,7 +27,7 @@ public class CreateChatRoomController {
 		this.createChatRoomUseCase = createChatRoomUseCase;
 	}
 
-	@PostMapping(ApiRoutes.API_CHAT_ROOMS)
+	@PostMapping(ApiRoutes.API_CHAT_ROOMS_CREATE)
 	public ResponseEntity<ApiResponse<CreateChatRoomResponse>> send(@AuthenticationPrincipal Jwt jwt,
 			@Valid @RequestBody CreateChatRoomRequest request) {
 		UUID creatorId = UUID.fromString(jwt.getSubject());

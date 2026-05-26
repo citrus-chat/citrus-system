@@ -30,6 +30,7 @@ public final class ChatRoleMapper {
 		entity.setId(chatRole.getId().value());
 		entity.setChatRoom(chatRoom);
 		entity.setName(chatRole.getName());
+		entity.setPriority(chatRole.getPriority());
 		entity.setCreatedAt(chatRole.getCreatedAt());
 
 		return entity;

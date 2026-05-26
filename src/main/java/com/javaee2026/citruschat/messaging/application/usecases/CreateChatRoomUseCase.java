@@ -60,8 +60,14 @@ public class CreateChatRoomUseCase {
 		for (var entry : ChatAuthDefaults.DEFAULTS.entrySet()) {
 			Set<ChatPermission> permissions = permissionRepository.findByCodes(entry.getValue());
 
+			if (permissions.isEmpty()) {
+				continue;
+			}
+
 			resolved.put(entry.getKey(), permissions);
 		}
+
+		System.out.println(resolved);
 
 		return resolved;
 	}

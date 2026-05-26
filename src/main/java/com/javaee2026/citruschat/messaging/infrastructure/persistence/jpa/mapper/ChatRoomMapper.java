@@ -41,17 +41,6 @@ public final class ChatRoomMapper {
 		entity.setName(chatRoom.getName());
 		entity.setCreatedBy(chatRoom.getCreatedBy().value());
 
-		List<ChatParticipantJpaEntity> participants = new ArrayList<>();
-
-		for (ChatParticipant participant : chatRoom.getParticipants()) {
-
-			ChatParticipantJpaEntity participantEntity = ChatParticipantMapper.toJpa(participant, entity);
-
-			participants.add(participantEntity);
-		}
-
-		entity.setParticipants(participants);
-
 		List<ChatRoleJpaEntity> roles = new ArrayList<>();
 
 		for (ChatRole role : chatRoom.getRoles().values()) {
@@ -63,6 +52,17 @@ public final class ChatRoomMapper {
 		}
 
 		entity.setRoles(roles);
+
+		List<ChatParticipantJpaEntity> participants = new ArrayList<>();
+
+		for (ChatParticipant participant : chatRoom.getParticipants()) {
+
+			ChatParticipantJpaEntity participantEntity = ChatParticipantMapper.toJpa(participant, entity);
+
+			participants.add(participantEntity);
+		}
+
+		entity.setParticipants(participants);
 
 		entity.setCreatedAt(chatRoom.getCreatedAt());
 		entity.setUpdatedAt(chatRoom.getUpdatedAt());

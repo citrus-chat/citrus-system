@@ -55,7 +55,7 @@ public class ChatRoom {
 
 	public void initRoles(Map<ChatRoleDefault, Set<ChatPermission>> permissions) {
 		if (!this.roles.isEmpty()) {
-			return;
+			throw new InvalidMessageException(ErrorMessages.CHATROOM_ROLES_ALREADY_INITIALIZED);
 		}
 
 		for (ChatRoleDefault roleDefault : ChatRoleDefault.values()) { // Por cada roleDefault que venga de la BD
@@ -66,6 +66,7 @@ public class ChatRoom {
 
 			roles.put(roleName, ChatRole.createDefault(id, roleDefault, rolePermissions, rolePriority));
 		}
+		System.out.println("Roles initialized: " + roles);
 	}
 
 	public void touch() {
