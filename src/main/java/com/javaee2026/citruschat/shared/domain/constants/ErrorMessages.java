@@ -52,6 +52,7 @@ public final class ErrorMessages {
 	public static final String CHATROOM_CANNOT_BE_EDITED = "Chatroom cannot be edited";
 	public static final String CHATROOM_ALREADY_DELETED = "Chatroom already deleted";
 	public static final String CHATROOM_DOES_NOT_HAVE_ROLES = "Chatroom does not have roles";
+	public static final String CHATROOM_ROLES_ALREADY_INITIALIZED = "Chatroom roles already initialized";
 
 	public static final String PARTICIPANT_ID_CANNOT_BE_NULL = "Participant id cannot be null";
 

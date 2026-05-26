@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -31,11 +32,11 @@ public class ChatRoomJpaEntity {
 	@Column(name = "created_by", nullable = false)
 	private UUID createdBy;
 
-	@OneToMany(mappedBy = "chatRoom", cascade = CascadeType.ALL)
-	private List<ChatParticipantJpaEntity> participants;
+	@OneToMany(mappedBy = "chatRoom", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<ChatRoleJpaEntity> roles = new ArrayList<>();
 
-	@OneToMany(mappedBy = "chatRoom", cascade = CascadeType.ALL)
-	private List<ChatRoleJpaEntity> roles;
+	@OneToMany(mappedBy = "chatRoom", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<ChatParticipantJpaEntity> participants = new ArrayList<>();
 
 	@Column(name = "created_at", nullable = false)
 	private Instant createdAt;

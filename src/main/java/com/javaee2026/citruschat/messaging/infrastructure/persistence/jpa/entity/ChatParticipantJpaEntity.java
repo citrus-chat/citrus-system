@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -26,9 +27,9 @@ public class ChatParticipantJpaEntity {
 	@Column(name = "user_id", nullable = false)
 	private UUID userId;
 
-	@ManyToMany
+	@ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
 	@JoinTable(name = "chat_participant_roles", joinColumns = @JoinColumn(name = "participant_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
-	private List<ChatRoleJpaEntity> roles;
+	private List<ChatRoleJpaEntity> roles = new ArrayList<>();
 
 	@Column(name = "joined_at", nullable = false)
 	private Instant joinedAt;
