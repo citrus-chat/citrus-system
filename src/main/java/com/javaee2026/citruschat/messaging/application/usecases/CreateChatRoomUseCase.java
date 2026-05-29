@@ -52,6 +52,12 @@ public class CreateChatRoomUseCase {
 				throw new IllegalArgumentException("User with id " + userId + " does not exist");
 			}
 		}
+
+		if (command.chatRoomType() == ChatRoomType.DIRECT) {
+			if (chatRoomRepository.existsDirectChatBetweenParticipants(creatorId, userIds.getFirst())) {
+				throw new IllegalArgumentException("Direct chat room already exists between these participants");
+			}
+		}
 	}
 
 	public Map<ChatRoleDefault, Set<ChatPermission>> resolvePermision() {

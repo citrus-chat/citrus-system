@@ -7,7 +7,10 @@ import java.util.List;
 
 public interface IChatRoomRepository {
 
-	public List<ChatRoom> findChatRoomsCreatedBy(UserId creator);
+	public List<ChatRoom> findAllChatRooms(UserId user);
+	public List<ChatRoom> findChatRoomsCreatedBy(UserId user);
+
+	public Boolean existsDirectChatBetweenParticipants(UserId participant1, UserId participant2);
 
 	void save(ChatRoom chatRoom);
 }

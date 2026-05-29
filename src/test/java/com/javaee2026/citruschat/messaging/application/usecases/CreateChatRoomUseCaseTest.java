@@ -235,4 +235,28 @@ class CreateChatRoomUseCaseTest {
 
 		assertNotNull(creatorParticipant);
 	}
+
+	@Test
+	void shouldNotAllowCreatingDuplicateDirectChatRoomWithSameParticipants() {
+
+		UUID creatorId = UUID.randomUUID();
+		UUID participantId = UUID.randomUUID();
+
+		CreateChatRoomCommand command = new CreateChatRoomCommand(ChatRoomType.DIRECT, "Private Chat", creatorId,
+				List.of(participantId));
+
+		when(userRepository.findById(any(UserId.class))).thenReturn(Optional.of(mock(User.class)));
+
+		when(permissionRepository.findByCodes(anySet())).thenReturn(Set.of(mock(ChatPermission.class)));
+
+		when(chatRoomRepository.existsDirectChatBetweenParticipants(new UserId(creatorId), new UserId(participantId)))
+				.thenReturn(true);
+
+		IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+				() -> useCase.execute(command));
+
+		assertEquals("Direct chat room already exists between these participants", exception.getMessage());
+
+		verify(chatRoomRepository, never()).save(any());
+	}
 }
