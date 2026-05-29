@@ -2,7 +2,7 @@ package com.javaee2026.citruschat.shared.infrastructure.web;
 
 import com.javaee2026.citruschat.shared.application.exceptions.BusinessException;
 import com.javaee2026.citruschat.shared.domain.errors.ErrorCode;
-import com.javaee2026.citruschat.shared.infrastructure.web.dto.ApiErrorResponse;
+import com.javaee2026.citruschat.shared.infrastructure.web.dto.response.ApiErrorResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

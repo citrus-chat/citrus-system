@@ -1,17 +1,10 @@
 package com.javaee2026.citruschat.shared.infrastructure.configuration;
 
 import com.javaee2026.citruschat.shared.domain.constants.ConfigConstants;
-import com.javaee2026.citruschat.shared.infrastructure.constants.ApiRoutes;
+import com.javaee2026.citruschat.shared.infrastructure.constants.SecurityRoutes;
 import io.jsonwebtoken.security.Keys;
-
-import java.nio.charset.StandardCharsets;
-import java.util.List;
-
-import javax.crypto.SecretKey;
-
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -23,6 +16,11 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import javax.crypto.SecretKey;
+import java.nio.charset.StandardCharsets;
+import java.util.List;
+
 @EnableMethodSecurity
 @Configuration
 public class SecurityConfiguration {
@@ -33,10 +31,8 @@ public class SecurityConfiguration {
 	public SecurityFilterChain securityFilterChain(final HttpSecurity http) throws Exception {
 		return http.cors(Customizer.withDefaults()).csrf(csrf -> csrf.disable())
 				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-				.authorizeHttpRequests(auth -> auth
-						.requestMatchers(HttpMethod.POST, ApiRoutes.API_ADMIN_USERS,
-								ApiRoutes.API_AUTH_VALIDATE_ACCOUNT, ApiRoutes.API_AUTH_LOGIN)
-						.permitAll().anyRequest().authenticated())
+				.authorizeHttpRequests(auth -> auth.requestMatchers(SecurityRoutes.PUBLIC_HTTP_ROUTES).permitAll()
+						.requestMatchers(SecurityRoutes.ADMIN_ROUTES).authenticated().anyRequest().authenticated())
 				.httpBasic(httpBasic -> httpBasic.disable()).formLogin(form -> form.disable())
 				.oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults())).build();
 	}
@@ -44,7 +40,6 @@ public class SecurityConfiguration {
 	@Bean
 	public JwtDecoder jwtDecoder() {
 		SecretKey key = Keys.hmacShaKeyFor(JWT_SECRET.getBytes(StandardCharsets.UTF_8));
-
 		return NimbusJwtDecoder.withSecretKey(key).macAlgorithm(MacAlgorithm.HS256).build();
 	}
 
@@ -62,5 +57,4 @@ public class SecurityConfiguration {
 
 		return source;
 	}
-
 }

@@ -5,7 +5,7 @@ import com.javaee2026.citruschat.identity.infrastructure.web.dto.response.AdminA
 import com.javaee2026.citruschat.shared.domain.constants.ApiResponseMessages;
 import com.javaee2026.citruschat.shared.infrastructure.constants.ApiRoutes;
 import com.javaee2026.citruschat.shared.infrastructure.web.ApiResponses;
-import com.javaee2026.citruschat.shared.infrastructure.web.dto.ApiResponse;
+import com.javaee2026.citruschat.shared.infrastructure.web.dto.response.ApiResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;

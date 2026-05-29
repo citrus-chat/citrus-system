@@ -34,4 +34,17 @@ public final class ApiRoutes {
 	public static final String API_CHAT_ROOMS_CREATE = API_CHATROOM_BASE + "/create"; // => /api/v1/chatroom/create
 	public static final String API_CHAT_MESSAGES = "/api/v1/chats/{chatRoomId}/messages";
 	// ===================== END API ROUTES ====================
+
+	// ===================== WEBSOCKET ROUTES ====================
+	public static final String WS_ENDPOINT = "/ws";
+	public static final String WS_ENDPOINT_PATTERN = WS_ENDPOINT + "/**";
+
+	public static final String WS_TOPIC_BASE = "/topic";
+	public static final String WS_QUEUE_BASE = "/queue";
+	public static final String WS_APP_PREFIX = "/app";
+	public static final String WS_USER_PREFIX = "/user";
+
+	public static final String WS_CHAT_SEND_MESSAGE = "/chat/sendMessage";
+	public static final String WS_CHATROOM_TOPIC_PREFIX = WS_TOPIC_BASE + "/chatrooms/";
+	// ===================== END WEBSOCKET ROUTES ====================
 }

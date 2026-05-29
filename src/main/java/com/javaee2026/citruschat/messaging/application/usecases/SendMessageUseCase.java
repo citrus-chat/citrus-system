@@ -3,6 +3,7 @@ package com.javaee2026.citruschat.messaging.application.usecases;
 import com.javaee2026.citruschat.messaging.application.commands.MessageDevicePayloadCommand;
 import com.javaee2026.citruschat.messaging.application.commands.SendMessageCommand;
 import com.javaee2026.citruschat.messaging.application.ports.IMessageRepository;
+import com.javaee2026.citruschat.messaging.application.results.SendMessageResult;
 import com.javaee2026.citruschat.messaging.domain.factory.MessageDevicePayloadFactory;
 import com.javaee2026.citruschat.messaging.domain.factory.MessageFactory;
 import com.javaee2026.citruschat.messaging.domain.model.Message;
@@ -26,8 +27,7 @@ public class SendMessageUseCase {
 		this.payloadFactory = payloadFactory;
 	}
 
-	public void execute(SendMessageCommand command) {
-
+	public SendMessageResult execute(SendMessageCommand command) {
 		Message message = messageFactory.createNew(new ChatRoomId(command.chatRoomId()),
 				new DeviceId(command.senderDeviceId()),
 				command.replyToMessageId() != null ? new MessageId(command.replyToMessageId()) : null);
@@ -36,9 +36,11 @@ public class SendMessageUseCase {
 				.map(payload -> createPayload(message, payload)).toList();
 
 		messageRepository.save(message, payloads);
-	}
-	private MessageDevicePayload createPayload(Message message, MessageDevicePayloadCommand payload) {
 
+		return new SendMessageResult(message, payloads);
+	}
+
+	private MessageDevicePayload createPayload(Message message, MessageDevicePayloadCommand payload) {
 		return payloadFactory.create(message.getId(), new DeviceId(payload.targetDeviceId()),
 				payload.encryptedPayload());
 	}
