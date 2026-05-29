@@ -1,6 +1,7 @@
 package com.javaee2026.citruschat.messaging.infrastructure.persistence.jpa.repository;
 
 import com.javaee2026.citruschat.messaging.application.ports.IChatRoomRepository;
+import com.javaee2026.citruschat.messaging.domain.enums.ChatRoomType;
 import com.javaee2026.citruschat.messaging.domain.model.ChatRoom;
 import com.javaee2026.citruschat.messaging.infrastructure.persistence.jpa.mapper.ChatRoomMapper;
 import com.javaee2026.citruschat.shared.domain.valueobjects.UserId;
@@ -26,7 +27,19 @@ public class JpaChatRoomRepositoryAdapter implements IChatRoomRepository {
 	}
 
 	@Override
-	public List<ChatRoom> findChatRoomsCreatedBy(UserId creator) {
-		return chatRoomRepository.findByCreatedBy(creator.value()).stream().map(chatRoomMapper::toDomain).toList();
+	public List<ChatRoom> findAllChatRooms(UserId user) {
+		return chatRoomRepository.findAllChatRooms(user.value()).stream().map(chatRoomMapper::toDomain).toList();
 	}
+
+	@Override
+	public List<ChatRoom> findChatRoomsCreatedBy(UserId user) {
+		return chatRoomRepository.findByCreatedBy(user.value()).stream().map(chatRoomMapper::toDomain).toList();
+	}
+
+	@Override
+	public Boolean existsDirectChatBetweenParticipants(UserId participant1, UserId participant2) {
+		return chatRoomRepository.existsDirectChatBetweenParticipants(participant1.value(), participant2.value(),
+				ChatRoomType.DIRECT);
+	}
+
 }
