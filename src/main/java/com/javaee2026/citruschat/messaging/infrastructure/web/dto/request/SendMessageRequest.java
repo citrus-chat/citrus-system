@@ -9,8 +9,6 @@ import java.util.UUID;
 
 public record SendMessageRequest(
 
-		@NotNull UUID chatRoomId,
-
 		@NotNull UUID senderDeviceId,
 
 		UUID replyToMessageId,

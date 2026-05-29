@@ -1,7 +1,6 @@
 package com.javaee2026.citruschat.shared.infrastructure.web;
 
 import com.javaee2026.citruschat.shared.application.exceptions.BusinessException;
-import com.javaee2026.citruschat.shared.domain.constants.ErrorMessages;
 import com.javaee2026.citruschat.shared.domain.errors.ErrorCode;
 import com.javaee2026.citruschat.shared.infrastructure.web.dto.ApiErrorResponse;
 import jakarta.servlet.http.HttpServletRequest;
@@ -51,8 +50,8 @@ public class GlobalExceptionHandler {
 
 	@ExceptionHandler(Exception.class)
 	public ResponseEntity<ApiErrorResponse> handleGenericException(Exception ex, HttpServletRequest request) {
-		return buildErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR, ErrorCode.UNEXPECTED_ERROR,
-				ErrorMessages.UNEXPECTED_ERROR, request);
+		return buildErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR, ErrorCode.UNEXPECTED_ERROR, ex.getMessage(),
+				request);
 	}
 
 	private ResponseEntity<ApiErrorResponse> buildErrorResponse(HttpStatus status, ErrorCode errorCode, String message,

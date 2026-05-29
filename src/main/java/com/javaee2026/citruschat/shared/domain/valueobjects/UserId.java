@@ -37,4 +37,9 @@ public final class UserId {
 	public int hashCode() {
 		return value.hashCode();
 	}
+
+	@Override
+	public String toString() {
+		return value.toString();
+	}
 }

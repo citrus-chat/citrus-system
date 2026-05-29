@@ -32,5 +32,6 @@ public final class ApiRoutes {
 	// ===================== CHAT_ROOM API ROUTES ====================
 	public static final String API_CHAT_ROOMS = API_CHATROOM_BASE;
 	public static final String API_CHAT_ROOMS_CREATE = API_CHATROOM_BASE + "/create"; // => /api/v1/chatroom/create
+	public static final String API_CHAT_MESSAGES = "/api/v1/chats/{chatRoomId}/messages";
 	// ===================== END API ROUTES ====================
 }
