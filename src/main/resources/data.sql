@@ -54,6 +54,58 @@ ON CONFLICT (id) DO UPDATE SET
                                updated_at = NOW(),
                                deleted_at = NULL;
 
+INSERT INTO users (id,
+                   email,
+                   username,
+                   phone_number,
+                   password_hash,
+                   validated_at,
+                   created_at,
+                   updated_at,
+                   deleted_at)
+VALUES ('bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb',
+        'user@citruschat.com',
+        'user',
+        '+59899999997',
+        '$2a$10$REym006Yo6TmEpL7yLAqluHiChR3NrkGkMpUCIJKw83bDhsYVY3GW', -- Admin123!
+        NOW(),
+        NOW(),
+        NOW(),
+        NULL)
+ON CONFLICT (id) DO UPDATE SET
+                               email = EXCLUDED.email,
+                               username = EXCLUDED.username,
+                               phone_number = EXCLUDED.phone_number,
+                               password_hash = EXCLUDED.password_hash,
+                               validated_at = EXCLUDED.validated_at,
+                               updated_at = NOW(),
+                               deleted_at = NULL;
+INSERT INTO users (id,
+                   email,
+                   username,
+                   phone_number,
+                   password_hash,
+                   validated_at,
+                   created_at,
+                   updated_at,
+                   deleted_at)
+VALUES ('cccccccc-cccc-cccc-cccc-cccccccccccc',
+        'user2@citruschat.com',
+        'user2',
+        '+59899999998',
+        '$2a$10$REym006Yo6TmEpL7yLAqluHiChR3NrkGkMpUCIJKw83bDhsYVY3GW', -- Admin123!
+        NOW(),
+        NOW(),
+        NOW(),
+        NULL)
+ON CONFLICT (id) DO UPDATE SET
+                               email = EXCLUDED.email,
+                               username = EXCLUDED.username,
+                               phone_number = EXCLUDED.phone_number,
+                               password_hash = EXCLUDED.password_hash,
+                               validated_at = EXCLUDED.validated_at,
+                               updated_at = NOW(),
+                               deleted_at = NULL;
 -- =========================================
 -- USER ORGANIZATION
 -- =========================================

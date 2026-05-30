@@ -1,13 +1,16 @@
 package com.javaee2026.citruschat.messaging.infrastructure.persistence.jpa.repository;
 
 import com.javaee2026.citruschat.messaging.application.ports.IMessageRepository;
+import com.javaee2026.citruschat.messaging.application.results.ChatMessageResult;
 import com.javaee2026.citruschat.messaging.domain.model.Message;
 import com.javaee2026.citruschat.messaging.domain.model.MessageDevicePayload;
 import com.javaee2026.citruschat.messaging.infrastructure.persistence.jpa.mapper.MessageDevicePayloadMapper;
 import com.javaee2026.citruschat.messaging.infrastructure.persistence.jpa.mapper.MessageMapper;
 import jakarta.transaction.Transactional;
+import org.springframework.data.domain.PageRequest;
 
 import java.util.List;
+import java.util.UUID;
 
 public class JpaMessageRepositoryAdapter implements IMessageRepository {
 
@@ -22,6 +25,10 @@ public class JpaMessageRepositoryAdapter implements IMessageRepository {
 		this.messageMapper = messageMapper;
 	}
 
+	@Override
+	public List<ChatMessageResult> findMessagesByChatRoomId(UUID chatRoomId, int page, int size) {
+		return messageRepository.findMessagesByChatRoomId(chatRoomId, PageRequest.of(page, size));
+	}
 	@Override
 	@Transactional
 	public void save(Message message, List<MessageDevicePayload> payloads) {

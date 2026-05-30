@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <title>CitrusChat WebSocket Test</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/stompjs@2.3.3/lib/stomp.min.js"></script>
+</head>
+
+<body class="min-h-screen bg-slate-950 text-slate-100">
+<main class="mx-auto flex min-h-screen max-w-5xl flex-col justify-center p-6">
+    <section class="rounded-3xl border border-white/10 bg-slate-900/80 p-6 shadow-2xl">
+        <div class="mb-6">
+            <h1 class="text-3xl font-bold text-orange-400">CitrusChat WebSocket Test</h1>
+            <p class="mt-1 text-sm text-slate-400">
+                Test manual para STOMP + SockJS + JWT + SendMessageUseCase
+            </p>
+        </div>
+
+        <div class="grid gap-4 md:grid-cols-2">
+            <div class="space-y-4 rounded-2xl border border-white/10 bg-slate-950/70 p-4">
+                <h2 class="font-semibold text-slate-200">Conexión</h2>
+
+                <label class="block text-sm text-slate-400">JWT Access Token</label>
+                <textarea
+                        id="token"
+                        rows="5"
+                        placeholder="Pegá el accessToken acá..."
+                        class="w-full rounded-xl border border-white/10 bg-slate-900 p-3 text-sm text-slate-100 outline-none focus:border-orange-400"
+                ></textarea>
+
+                <div class="flex gap-3">
+                    <button
+                            onclick="connect()"
+                            class="rounded-xl bg-orange-500 px-4 py-2 font-semibold text-white hover:bg-orange-400"
+                    >
+                        Connect
+                    </button>
+
+                    <button
+                            onclick="disconnect()"
+                            class="rounded-xl border border-white/10 px-4 py-2 font-semibold text-slate-200 hover:bg-white/10"
+                    >
+                        Disconnect
+                    </button>
+                </div>
+
+                <p id="status" class="text-sm text-slate-400">Estado: desconectado</p>
+            </div>
+
+            <div class="space-y-4 rounded-2xl border border-white/10 bg-slate-950/70 p-4">
+                <h2 class="font-semibold text-slate-200">Mensaje</h2>
+
+                <input
+                        id="chatRoomId"
+                        type="text"
+                        placeholder="Chat Room ID"
+                        class="w-full rounded-xl border border-white/10 bg-slate-900 p-3 text-sm outline-none focus:border-orange-400"
+                />
+
+                <input
+                        id="senderDeviceId"
+                        type="text"
+                        placeholder="Sender Device ID"
+                        class="w-full rounded-xl border border-white/10 bg-slate-900 p-3 text-sm outline-none focus:border-orange-400"
+                />
+
+                <input
+                        id="targetDeviceId"
+                        type="text"
+                        placeholder="Target Device ID"
+                        class="w-full rounded-xl border border-white/10 bg-slate-900 p-3 text-sm outline-none focus:border-orange-400"
+                />
+
+                <textarea
+                        id="message"
+                        rows="4"
+                        placeholder="Mensaje / encryptedPayload temporal..."
+                        class="w-full rounded-xl border border-white/10 bg-slate-900 p-3 text-sm outline-none focus:border-orange-400"
+                ></textarea>
+
+                <button
+                        onclick="sendMessage()"
+                        class="w-full rounded-xl bg-orange-500 px-4 py-3 font-semibold text-white hover:bg-orange-400"
+                >
+                    Send message
+                </button>
+            </div>
+        </div>
+
+        <div class="mt-6 rounded-2xl border border-white/10 bg-slate-950 p-4">
+            <div class="mb-3 flex items-center justify-between">
+                <h2 class="font-semibold text-slate-200">Mensajes recibidos</h2>
+                <button
+                        onclick="clearMessages()"
+                        class="rounded-lg border border-white/10 px-3 py-1 text-xs text-slate-300 hover:bg-white/10"
+                >
+                    Limpiar
+                </button>
+            </div>
+
+            <div
+                    id="messages"
+                    class="h-80 overflow-y-auto rounded-xl bg-black/30 p-3 font-mono text-sm text-slate-300"
+            ></div>
+        </div>
+    </section>
+</main>
+
+<script>
+    let stompClient = null;
+    let currentSubscription = null;
+
+    const messagesDiv = document.getElementById("messages");
+    const statusText = document.getElementById("status");
+
+    function setStatus(text, ok = false) {
+        statusText.textContent = "Estado: " + text;
+        statusText.className = ok
+            ? "text-sm text-emerald-400"
+            : "text-sm text-slate-400";
+    }
+
+    function appendMessage(label, payload) {
+        const div = document.createElement("div");
+        div.className = "mb-2 rounded-lg border border-white/10 bg-slate-900/80 p-3";
+
+        div.innerHTML = `
+        <div class="mb-1 text-xs text-orange-400">${label}</div>
+        <pre class="whitespace-pre-wrap break-words">${JSON.stringify(payload, null, 2)}</pre>
+      `;
+
+        messagesDiv.appendChild(div);
+        messagesDiv.scrollTop = messagesDiv.scrollHeight;
+    }
+
+    function connect() {
+        const token = document.getElementById("token").value.trim();
+        const chatRoomId = document.getElementById("chatRoomId").value.trim();
+
+        if (!token) {
+            alert("Pegá el JWT primero.");
+            return;
+        }
+
+        if (!chatRoomId) {
+            alert("Ingresá un chatRoomId.");
+            return;
+        }
+
+        const socket = new SockJS("http://localhost:8200/ws");
+        stompClient = Stomp.over(socket);
+        stompClient.debug = null;
+
+        stompClient.connect(
+            { Authorization: "Bearer " + token },
+            function (frame) {
+                setStatus("conectado", true);
+                appendMessage("CONNECTED", frame);
+
+                currentSubscription = stompClient.subscribe(
+                    "/topic/chatrooms/" + chatRoomId,
+                    function (message) {
+                        appendMessage("MESSAGE RECEIVED", JSON.parse(message.body));
+                    }
+                );
+            },
+            function (error) {
+                setStatus("error de conexión");
+                appendMessage("CONNECTION ERROR", error);
+                console.error(error);
+            }
+        );
+    }
+
+    function disconnect() {
+        if (currentSubscription) {
+            currentSubscription.unsubscribe();
+            currentSubscription = null;
+        }
+
+        if (stompClient !== null) {
+            stompClient.disconnect(function () {
+                setStatus("desconectado");
+                appendMessage("DISCONNECTED", "Connection closed");
+            });
+        }
+
+        stompClient = null;
+    }
+
+    function sendMessage() {
+        if (!stompClient || !stompClient.connected) {
+            alert("Primero conectate.");
+            return;
+        }
+
+        const chatRoomId = document.getElementById("chatRoomId").value.trim();
+        const senderDeviceId = document.getElementById("senderDeviceId").value.trim();
+        const targetDeviceId = document.getElementById("targetDeviceId").value.trim();
+        const content = document.getElementById("message").value.trim();
+
+        if (!chatRoomId || !senderDeviceId || !targetDeviceId || !content) {
+            alert("Completá chatRoomId, senderDeviceId, targetDeviceId y mensaje.");
+            return;
+        }
+
+        const payload = {
+            chatRoomId,
+            senderDeviceId,
+            replyToMessageId: null,
+            payloads: [
+                {
+                    targetDeviceId,
+                    encryptedPayload: content
+                }
+            ]
+        };
+
+        stompClient.send("/app/chat/sendMessage", {}, JSON.stringify(payload));
+        appendMessage("MESSAGE SENT", payload);
+
+        document.getElementById("message").value = "";
+    }
+
+    function clearMessages() {
+        messagesDiv.innerHTML = "";
+    }
+</script>
+</body>
+</html>

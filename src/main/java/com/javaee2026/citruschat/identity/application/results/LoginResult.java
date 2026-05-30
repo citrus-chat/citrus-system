@@ -1,6 +1,7 @@
 package com.javaee2026.citruschat.identity.application.results;
 
-import com.javaee2026.citruschat.identity.domain.model.User;
+import java.util.UUID;
 
-public record LoginResult(User user, String accessToken, String tokenType, long expiresIn) {
+public record LoginResult(UUID userId, String email, String username, String accessToken, String tokenType,
+		long expiresIn, UUID deviceId) {
 }

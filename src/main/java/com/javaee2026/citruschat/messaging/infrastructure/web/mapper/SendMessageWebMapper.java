@@ -13,11 +13,8 @@ public final class SendMessageWebMapper {
 	private SendMessageWebMapper() {
 	}
 
-	public static SendMessageCommand toCommand(SendMessageRequest request, UUID senderUserId) {
-
-		return new SendMessageCommand(request.chatRoomId(), senderUserId, request.senderDeviceId(),
-				request.replyToMessageId(),
-
+	public static SendMessageCommand toCommand(UUID chatRoomId, SendMessageRequest request, UUID senderUserId) {
+		return new SendMessageCommand(chatRoomId, senderUserId, request.senderDeviceId(), request.replyToMessageId(),
 				request.payloads().stream().map(SendMessageWebMapper::toPayloadCommand).toList());
 	}
 
@@ -26,7 +23,6 @@ public final class SendMessageWebMapper {
 	}
 
 	private static MessageDevicePayloadCommand toPayloadCommand(MessageDevicePayloadRequest request) {
-
 		return new MessageDevicePayloadCommand(request.targetDeviceId(), request.encryptedPayload());
 	}
 }

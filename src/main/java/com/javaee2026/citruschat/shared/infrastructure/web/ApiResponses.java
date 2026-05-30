@@ -1,6 +1,6 @@
 package com.javaee2026.citruschat.shared.infrastructure.web;
 
-import com.javaee2026.citruschat.shared.infrastructure.web.dto.ApiResponse;
+import com.javaee2026.citruschat.shared.infrastructure.web.dto.response.ApiResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 

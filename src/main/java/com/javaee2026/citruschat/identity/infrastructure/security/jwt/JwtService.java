@@ -26,4 +26,8 @@ public class JwtService {
 		return Jwts.builder().subject(userId).claim("email", email).claim("username", username).issuedAt(now)
 				.expiration(expiration).signWith(getSigningKey(), Jwts.SIG.HS256).compact();
 	}
+
+	public Long getExpirationInSeconds() {
+		return EXPIRATION_MILLIS / 1000;
+	}
 }

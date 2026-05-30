@@ -1,11 +1,11 @@
 package com.javaee2026.citruschat.messaging.infrastructure.configuration;
 
 import com.javaee2026.citruschat.identity.application.ports.IUserRepository;
+import com.javaee2026.citruschat.messaging.application.ports.IChatParticipantRepository;
 import com.javaee2026.citruschat.messaging.application.ports.IChatPermissionRepository;
 import com.javaee2026.citruschat.messaging.application.ports.IChatRoomRepository;
 import com.javaee2026.citruschat.messaging.application.ports.IMessageRepository;
-import com.javaee2026.citruschat.messaging.application.usecases.CreateChatRoomUseCase;
-import com.javaee2026.citruschat.messaging.application.usecases.SendMessageUseCase;
+import com.javaee2026.citruschat.messaging.application.usecases.*;
 import com.javaee2026.citruschat.messaging.domain.factory.*;
 import com.javaee2026.citruschat.messaging.infrastructure.persistence.jpa.mapper.ChatPermissionMapper;
 import com.javaee2026.citruschat.messaging.infrastructure.persistence.jpa.mapper.ChatRoleMapper;
@@ -89,5 +89,28 @@ public class MessagingBeansConfiguration {
 			ChatRoomFactory chatRoomFactory, IUserRepository userRepository,
 			IChatPermissionRepository permissionRepository) {
 		return new CreateChatRoomUseCase(chatRoomRepository, chatRoomFactory, userRepository, permissionRepository);
+	}
+
+	@Bean
+	public ValidateChatParticipantUseCase validateChatParticipantUseCase(
+			IChatParticipantRepository chatParticipantRepository) {
+		return new ValidateChatParticipantUseCase(chatParticipantRepository);
+	}
+
+	@Bean
+	public GetCurrentUserChatRoomsUseCase getCurrentUserChatRoomsUseCase(IChatRoomRepository chatRoomRepository) {
+		return new GetCurrentUserChatRoomsUseCase(chatRoomRepository);
+	}
+
+	@Bean
+	public GetChatRoomMessagesUseCase getChatRoomMessagesUseCase(IMessageRepository messageRepository,
+			ValidateChatParticipantUseCase validateChatParticipantUseCase) {
+		return new GetChatRoomMessagesUseCase(messageRepository, validateChatParticipantUseCase);
+	}
+
+	@Bean
+	public IChatParticipantRepository chatParticipantRepository(
+			SpringDataChatParticipantRepository springDataChatParticipantRepository) {
+		return new JpaChatParticipantRepositoryAdapter(springDataChatParticipantRepository);
 	}
 }

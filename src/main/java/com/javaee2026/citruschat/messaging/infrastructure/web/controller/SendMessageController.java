@@ -7,7 +7,7 @@ import com.javaee2026.citruschat.messaging.infrastructure.web.mapper.SendMessage
 import com.javaee2026.citruschat.shared.domain.constants.ApiResponseMessages;
 import com.javaee2026.citruschat.shared.infrastructure.constants.ApiRoutes;
 import com.javaee2026.citruschat.shared.infrastructure.web.ApiResponses;
-import com.javaee2026.citruschat.shared.infrastructure.web.dto.ApiResponse;
+import com.javaee2026.citruschat.shared.infrastructure.web.dto.response.ApiResponse;
 
 import jakarta.validation.Valid;
 
@@ -27,12 +27,12 @@ public class SendMessageController {
 		this.sendMessageUseCase = sendMessageUseCase;
 	}
 
-	@PostMapping(ApiRoutes.API_MESSAGES)
+	@PostMapping(ApiRoutes.API_CHAT_MESSAGES)
 	public ResponseEntity<ApiResponse<SendMessageResponse>> send(@AuthenticationPrincipal Jwt jwt,
-			@Valid @RequestBody SendMessageRequest request) {
+			@PathVariable UUID chatRoomId, @Valid @RequestBody SendMessageRequest request) {
 		UUID senderUserId = UUID.fromString(jwt.getSubject());
 
-		sendMessageUseCase.execute(SendMessageWebMapper.toCommand(request, senderUserId));
+		sendMessageUseCase.execute(SendMessageWebMapper.toCommand(chatRoomId, request, senderUserId));
 
 		return ApiResponses.created(ApiResponseMessages.MESSAGE_SENT_SUCCESS, SendMessageWebMapper.toResponse());
 	}

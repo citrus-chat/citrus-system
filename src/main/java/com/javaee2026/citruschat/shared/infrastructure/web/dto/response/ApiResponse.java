@@ -1,4 +1,4 @@
-package com.javaee2026.citruschat.shared.infrastructure.web.dto;
+package com.javaee2026.citruschat.shared.infrastructure.web.dto.response;
 
 import java.time.Instant;
 

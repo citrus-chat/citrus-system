@@ -1,16 +1,13 @@
 package com.javaee2026.citruschat.identity.infrastructure.configuration;
 
-import com.javaee2026.citruschat.identity.application.ports.IAdminAccessRepository;
-import com.javaee2026.citruschat.identity.application.ports.IDefaultPasswordGenerator;
-import com.javaee2026.citruschat.identity.application.ports.IPasswordHasher;
-import com.javaee2026.citruschat.identity.application.ports.IUserRepository;
-import com.javaee2026.citruschat.identity.application.usecases.CheckAdminAccessUseCase;
-import com.javaee2026.citruschat.identity.application.usecases.RegisterUserUseCase;
-import com.javaee2026.citruschat.identity.application.usecases.ValidateUserAccountUseCase;
+import com.javaee2026.citruschat.identity.application.ports.*;
+import com.javaee2026.citruschat.identity.application.usecases.*;
 import com.javaee2026.citruschat.identity.domain.factory.UserFactory;
 import com.javaee2026.citruschat.identity.domain.factory.UsernameFactory;
 import com.javaee2026.citruschat.identity.infrastructure.persistence.jpa.mapper.UserMapper;
 
+import com.javaee2026.citruschat.identity.infrastructure.persistence.jpa.repository.JpaUserDeviceRepositoryAdapter;
+import com.javaee2026.citruschat.identity.infrastructure.persistence.jpa.repository.SpringDataUserDeviceRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -117,4 +114,24 @@ public class IdentityBeansConfiguration {
 		return new CheckAdminAccessUseCase(adminAccessRepository);
 	}
 
+	@Bean
+	public IUserDeviceRepository userDeviceRepository(SpringDataUserDeviceRepository springDataUserDeviceRepository) {
+		return new JpaUserDeviceRepositoryAdapter(springDataUserDeviceRepository);
+	}
+
+	@Bean
+	public RegisterOrRefreshUserDeviceUseCase registerOrRefreshUserDeviceUseCase(
+			IUserDeviceRepository userDeviceRepository) {
+		return new RegisterOrRefreshUserDeviceUseCase(userDeviceRepository);
+	}
+
+	@Bean
+	public GetCurrentUserDevicesUseCase getCurrentUserDevicesUseCase(IUserDeviceRepository userDeviceRepository) {
+		return new GetCurrentUserDevicesUseCase(userDeviceRepository);
+	}
+	@Bean
+	public ValidateUserDeviceOwnershipUseCase validateUserDeviceOwnershipUseCase(
+			IUserDeviceRepository userDeviceRepository) {
+		return new ValidateUserDeviceOwnershipUseCase(userDeviceRepository);
+	}
 }
