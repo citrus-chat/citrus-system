@@ -23,6 +23,7 @@ public final class ApiRoutes {
 																								// /api/v1/auth/validate-account
 	public static final String API_AUTH_LOGIN = API_AUTH_BASE + "/login"; // => /api/v1/auth/login
 	public static final String API_AUTH_ME = API_AUTH_BASE + "/me"; // => /api/v1/auth/me
+	public static final String API_AUTH_DEVICES = API_AUTH_BASE + "/devices";
 	// ===================== END API Routes ====================
 
 	// ===================== MESSAGES API Routes ====================
@@ -32,6 +33,8 @@ public final class ApiRoutes {
 	// ===================== CHAT_ROOM API ROUTES ====================
 	public static final String API_CHAT_ROOMS = API_CHATROOM_BASE;
 	public static final String API_CHAT_ROOMS_CREATE = API_CHATROOM_BASE + "/create"; // => /api/v1/chatroom/create
+	public static final String API_CHAT_ROOMS_ME = API_CHATROOM_BASE + "/me";
+	public static final String API_CHAT_ROOM_MESSAGES = API_CHATROOM_BASE + "/{chatRoomId}/messages";
 	public static final String API_CHAT_MESSAGES = "/api/v1/chats/{chatRoomId}/messages";
 	// ===================== END API ROUTES ====================
 

@@ -1,8 +1,10 @@
 package com.javaee2026.citruschat.messaging.infrastructure.websocket.controller;
 
+import com.javaee2026.citruschat.identity.application.usecases.ValidateUserDeviceOwnershipUseCase;
 import com.javaee2026.citruschat.messaging.application.commands.SendMessageCommand;
 import com.javaee2026.citruschat.messaging.application.results.SendMessageResult;
 import com.javaee2026.citruschat.messaging.application.usecases.SendMessageUseCase;
+import com.javaee2026.citruschat.messaging.application.usecases.ValidateChatParticipantUseCase;
 import com.javaee2026.citruschat.messaging.infrastructure.websocket.dto.request.ChatMessageWsRequest;
 import com.javaee2026.citruschat.messaging.infrastructure.websocket.dto.response.ChatMessageWsResponse;
 import com.javaee2026.citruschat.messaging.infrastructure.websocket.mapper.ChatWebSocketMapper;
@@ -20,11 +22,17 @@ public class ChatWebSocketController {
 
 	private final SendMessageUseCase sendMessageUseCase;
 	private final SimpMessageSendingOperations messagingTemplate;
+	private final ValidateUserDeviceOwnershipUseCase validateUserDeviceOwnershipUseCase;
+	private final ValidateChatParticipantUseCase validateChatParticipantUseCase;
 
 	public ChatWebSocketController(SendMessageUseCase sendMessageUseCase,
-			SimpMessageSendingOperations messagingTemplate) {
+			SimpMessageSendingOperations messagingTemplate,
+			ValidateUserDeviceOwnershipUseCase validateUserDeviceOwnershipUseCase,
+			ValidateChatParticipantUseCase validateChatParticipantUseCase) {
 		this.sendMessageUseCase = sendMessageUseCase;
 		this.messagingTemplate = messagingTemplate;
+		this.validateUserDeviceOwnershipUseCase = validateUserDeviceOwnershipUseCase;
+		this.validateChatParticipantUseCase = validateChatParticipantUseCase;
 	}
 
 	@MessageMapping(ApiRoutes.WS_CHAT_SEND_MESSAGE)
@@ -38,6 +46,14 @@ public class ChatWebSocketController {
 		}
 
 		UUID senderUserId = UUID.fromString(authentication.getName());
+
+		if (!validateUserDeviceOwnershipUseCase.execute(senderUserId, request.senderDeviceId())) {
+			return;
+		}
+
+		if (!validateChatParticipantUseCase.execute(request.chatRoomId(), senderUserId)) {
+			return;
+		}
 
 		SendMessageCommand command = ChatWebSocketMapper.toCommand(request, senderUserId);
 

@@ -2,7 +2,9 @@ package com.javaee2026.citruschat.identity.infrastructure.persistence.jpa.entity
 
 import com.javaee2026.citruschat.shared.infrastructure.persistence.constants.TableNames;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.Instant;
 import java.util.UUID;
@@ -10,6 +12,8 @@ import java.util.UUID;
 @Entity
 @Table(name = TableNames.Identity.USERS)
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class UserJpaEntity {
 
 	@Id
