@@ -48,7 +48,7 @@ class LoginUserUseCaseTest {
 	@Test
 	void shouldLoginSuccessfullyWhenCredentialsAreValid() {
 
-		LoginCommand command = new LoginCommand("test@gmail.com", "123456", null, "Chrome on Windows", DeviceType.web,
+		LoginCommand command = new LoginCommand("test@gmail.com", "123456", null, "Chrome on Windows", DeviceType.WEB,
 				"public-key", "signed-prekey");
 
 		User user = createUser();
@@ -85,7 +85,7 @@ class LoginUserUseCaseTest {
 		verify(registerOrRefreshUserDeviceUseCase).execute(argThat(
 				deviceCommand -> deviceCommand.deviceId() == null && deviceCommand.userId().equals(user.getId().value())
 						&& deviceCommand.deviceName().equals("Chrome on Windows")
-						&& deviceCommand.deviceType() == DeviceType.web
+						&& deviceCommand.deviceType() == DeviceType.WEB
 						&& deviceCommand.publicIdentityKey().equals("public-key")
 						&& deviceCommand.signedPrekey().equals("signed-prekey")));
 	}
@@ -93,7 +93,7 @@ class LoginUserUseCaseTest {
 	@Test
 	void shouldThrowInvalidCredentialsWhenUserDoesNotExist() {
 		LoginCommand command = new LoginCommand("missing@gmail.com", "123456", null, "Chrome on Windows",
-				DeviceType.web, null, null);
+				DeviceType.WEB, null, null);
 
 		when(userRepository.findByEmail(new UserEmail("missing@gmail.com"))).thenReturn(Optional.empty());
 
@@ -108,7 +108,7 @@ class LoginUserUseCaseTest {
 	@Test
 	void shouldThrowInvalidCredentialsWhenPasswordIsInvalid() {
 		LoginCommand command = new LoginCommand("test@gmail.com", "wrong-password", null, "Chrome on Windows",
-				DeviceType.web, null, null);
+				DeviceType.WEB, null, null);
 
 		User user = createUser();
 
