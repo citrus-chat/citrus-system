@@ -5,10 +5,12 @@ import com.javaee2026.citruschat.messaging.application.results.ChatRoomSummaryRe
 import com.javaee2026.citruschat.messaging.domain.enums.ChatRoomType;
 import com.javaee2026.citruschat.messaging.domain.model.ChatRoom;
 import com.javaee2026.citruschat.messaging.infrastructure.persistence.jpa.mapper.ChatRoomMapper;
+import com.javaee2026.citruschat.shared.domain.valueobjects.ChatRoomId;
 import com.javaee2026.citruschat.shared.domain.valueobjects.UserId;
 import jakarta.transaction.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 public class JpaChatRoomRepositoryAdapter implements IChatRoomRepository {
@@ -46,5 +48,10 @@ public class JpaChatRoomRepositoryAdapter implements IChatRoomRepository {
 	@Override
 	public List<ChatRoomSummaryResult> findActiveChatRoomsByUserId(UUID userId) {
 		return chatRoomRepository.findActiveChatRoomsByUserId(userId);
+	}
+
+	@Override
+	public Optional<ChatRoom> findById(ChatRoomId id) {
+		return chatRoomRepository.findById(id.value()).map(chatRoomMapper::toDomain);
 	}
 }

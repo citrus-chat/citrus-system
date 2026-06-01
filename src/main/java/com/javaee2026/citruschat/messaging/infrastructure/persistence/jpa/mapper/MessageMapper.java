@@ -6,6 +6,7 @@ import com.javaee2026.citruschat.messaging.infrastructure.persistence.jpa.entity
 import com.javaee2026.citruschat.shared.domain.valueobjects.ChatRoomId;
 import com.javaee2026.citruschat.shared.domain.valueobjects.DeviceId;
 import com.javaee2026.citruschat.shared.domain.valueobjects.MessageId;
+import com.javaee2026.citruschat.shared.domain.valueobjects.UserId;
 
 public final class MessageMapper {
 
@@ -17,7 +18,7 @@ public final class MessageMapper {
 
 	public Message toDomain(MessageJpaEntity entity) {
 		return messageFactory.reconstitute(new MessageId(entity.getId()), new ChatRoomId(entity.getChatRoomId()),
-				new DeviceId(entity.getSenderDeviceId()),
+				new UserId(entity.getSenderUserId()), new DeviceId(entity.getSenderDeviceId()),
 
 				entity.getReplyToMessageId() != null ? new MessageId(entity.getReplyToMessageId()) : null,
 
@@ -29,6 +30,7 @@ public final class MessageMapper {
 
 		entity.setId(message.getId().value());
 		entity.setChatRoomId(message.getChatRoomId().value());
+		entity.setSenderUserId(message.getSenderUserId().value());
 		entity.setSenderDeviceId(message.getSenderDeviceId().value());
 
 		entity.setReplyToMessageId(

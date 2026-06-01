@@ -53,4 +53,8 @@ public class ChatRole {
 		return new ChatRole(RoleId.newId(), chatRoomId, rolePermissions, roleDefault.toString(), priority,
 				Instant.now());
 	}
+
+	public boolean hasPermission(String permission) {
+		return rolePermissions.stream().anyMatch(chatPermission -> chatPermission.getCode().equals(permission));
+	}
 }

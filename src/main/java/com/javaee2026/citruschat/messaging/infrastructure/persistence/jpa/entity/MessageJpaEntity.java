@@ -21,6 +21,9 @@ public class MessageJpaEntity implements Persistable<UUID> {
 	@Column(name = "chat_room_id", nullable = false)
 	private UUID chatRoomId;
 
+	@Column(name = "sender_user_id", nullable = false)
+	private UUID senderUserId;
+
 	@Column(name = "sender_device_id", nullable = false)
 	private UUID senderDeviceId;
 

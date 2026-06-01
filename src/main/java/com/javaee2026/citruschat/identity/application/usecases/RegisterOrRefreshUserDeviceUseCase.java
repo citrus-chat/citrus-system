@@ -19,7 +19,7 @@ public class RegisterOrRefreshUserDeviceUseCase {
 
 	public RegisterOrRefreshUserDeviceResult execute(RegisterOrRefreshUserDeviceCommand command) {
 		Instant now = Instant.now();
-		DeviceType deviceType = command.deviceType() != null ? command.deviceType() : DeviceType.web;
+		DeviceType deviceType = command.deviceType() != null ? command.deviceType() : DeviceType.WEB;
 
 		if (command.deviceId() != null) {
 			var existingById = userDeviceRepository.findActiveByIdAndUserId(command.deviceId(), command.userId());

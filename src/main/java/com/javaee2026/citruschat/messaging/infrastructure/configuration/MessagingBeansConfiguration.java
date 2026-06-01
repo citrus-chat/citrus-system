@@ -1,5 +1,6 @@
 package com.javaee2026.citruschat.messaging.infrastructure.configuration;
 
+import com.javaee2026.citruschat.identity.application.ports.IUserDeviceRepository;
 import com.javaee2026.citruschat.identity.application.ports.IUserRepository;
 import com.javaee2026.citruschat.messaging.application.ports.IChatParticipantRepository;
 import com.javaee2026.citruschat.messaging.application.ports.IChatPermissionRepository;
@@ -41,9 +42,11 @@ public class MessagingBeansConfiguration {
 	}
 
 	@Bean
-	public SendMessageUseCase sendMessageUseCase(MessageFactory messageFactory, IMessageRepository messageRepository,
+	public SendMessageUseCase sendMessageUseCase(IUserDeviceRepository deviceRepository, IUserRepository userRepository,
+			IChatRoomRepository chatRoomRepository, IMessageRepository messageRepository, MessageFactory messageFactory,
 			MessageDevicePayloadFactory payloadFactory) {
-		return new SendMessageUseCase(messageRepository, messageFactory, payloadFactory);
+		return new SendMessageUseCase(deviceRepository, userRepository, chatRoomRepository, messageRepository,
+				messageFactory, payloadFactory);
 	}
 
 	@Bean

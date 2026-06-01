@@ -116,6 +116,15 @@ public class ChatRoom {
 		participants.add(member);
 	}
 
+	public ChatRole getRole(RoleId roleId) {
+		return roles.values().stream().filter(role -> role.getId().equals(roleId)).findFirst()
+				.orElseThrow(() -> new IllegalArgumentException("Role not found: " + roleId.value()));
+	}
+
+	public boolean hasPermission(ChatParticipant participant, String permission) {
+		return participant.getRoles().stream().map(this::getRole).anyMatch(role -> role.hasPermission(permission));
+	}
+
 	public boolean isDeleted() {
 		return deletedAt != null;
 	}

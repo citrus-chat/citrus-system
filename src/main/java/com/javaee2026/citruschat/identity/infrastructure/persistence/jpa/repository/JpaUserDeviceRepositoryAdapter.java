@@ -36,6 +36,12 @@ public class JpaUserDeviceRepositoryAdapter implements IUserDeviceRepository {
 	public boolean existsActiveByIdAndUserId(UUID deviceId, UUID userId) {
 		return repository.existsByIdAndUserIdAndRevokedAtIsNull(deviceId, userId);
 	}
+
+	@Override
+	public List<UserDevice> findAllByUserId(UUID userId) {
+		return repository.findUserDeviceJpaEntitiesByUserId(userId).stream().map(UserDeviceMapper::toDomain).toList();
+	}
+
 	@Override
 	public UserDevice save(UserDevice userDevice) {
 		var saved = repository.save(UserDeviceMapper.toEntity(userDevice));
