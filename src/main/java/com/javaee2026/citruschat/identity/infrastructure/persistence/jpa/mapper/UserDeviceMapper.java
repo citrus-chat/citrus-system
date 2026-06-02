@@ -4,7 +4,9 @@ import com.javaee2026.citruschat.identity.domain.model.UserDevice;
 import com.javaee2026.citruschat.identity.infrastructure.persistence.jpa.entity.UserDeviceJpaEntity;
 import com.javaee2026.citruschat.shared.domain.valueobjects.DeviceId;
 import com.javaee2026.citruschat.shared.domain.valueobjects.UserId;
+import org.springframework.stereotype.Component;
 
+@Component
 public final class UserDeviceMapper {
 
 	private UserDeviceMapper() {
@@ -12,13 +14,12 @@ public final class UserDeviceMapper {
 
 	public static UserDevice toDomain(UserDeviceJpaEntity entity) {
 		return UserDevice.reconstitute(new DeviceId(entity.getId()), new UserId(entity.getUserId()),
-				entity.getDeviceName(), entity.getDeviceType(), entity.getPublicIdentityKey(), entity.getSignedPrekey(),
-				entity.getLastSeen(), entity.getCreatedAt(), entity.getRevokedAt());
+				entity.getDeviceName(), entity.getDeviceType(), entity.getLastSeen(), entity.getCreatedAt(),
+				entity.getRevokedAt());
 	}
 
 	public static UserDeviceJpaEntity toEntity(UserDevice device) {
 		return new UserDeviceJpaEntity(device.getId().value(), device.getUserId().value(), device.getDeviceName(),
-				device.getDeviceType(), device.getPublicIdentityKey(), device.getSignedPrekey(), device.getLastSeen(),
-				device.getCreatedAt(), device.getRevokedAt());
+				device.getDeviceType(), device.getLastSeen(), device.getCreatedAt(), device.getRevokedAt());
 	}
 }

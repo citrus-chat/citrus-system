@@ -10,7 +10,7 @@ import com.javaee2026.citruschat.shared.domain.valueobjects.UserId;
 import org.springframework.stereotype.Component;
 
 @Component
-public class UserMapper {
+public final class UserMapper {
 
 	private final UserFactory userFactory;
 

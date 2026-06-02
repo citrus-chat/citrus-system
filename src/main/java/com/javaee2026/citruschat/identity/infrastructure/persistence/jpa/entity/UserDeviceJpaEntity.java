@@ -9,7 +9,7 @@ import java.util.UUID;
 
 @Entity
 @Table(name = TableNames.Identity.USER_DEVICES)
-@Data
+@Getter
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserDeviceJpaEntity {
@@ -24,19 +24,13 @@ public class UserDeviceJpaEntity {
 	private String deviceName;
 
 	@Enumerated(EnumType.STRING)
-	@Column(name = "device_type")
+	@Column(name = "device_type", nullable = false)
 	private DeviceType deviceType;
 
-	@Column(name = "public_identity_key", columnDefinition = "text")
-	private String publicIdentityKey;
-
-	@Column(name = "signed_prekey", columnDefinition = "text")
-	private String signedPrekey;
-
-	@Column(name = "last_seen")
+	@Column(name = "last_seen", nullable = false)
 	private Instant lastSeen;
 
-	@Column(name = "created_at")
+	@Column(name = "created_at", nullable = false)
 	private Instant createdAt;
 
 	@Column(name = "revoked_at")

@@ -3,9 +3,18 @@ Me hice este archivo de lista para tareas pendientes:
 1- Modificar UserDevice para manejar encriptación ⌛
    - Definir las clases:
      - UserDevice ✅ 
-     - ├── DeviceIdentity ❌ 
-     - ├── DeviceSignedPreKey ❌ 
-     - └── DeviceOneTimePreKey ❌
+     - ├── DeviceIdentity ✅
+     - ├──────── Repository ❌
+     - ├──────── JPA ✅
+     - ├──────── Mapper ✅
+     - ├── DeviceSignedPreKey ✅
+     - ├──────── Repository ❌
+     - ├──────── JPA ✅
+     - ├──────── Mapper ✅
+     - ├── DeviceOneTimePreKey ✅
+     - ├──────── Repository ❌
+     - ├──────── JPA ✅
+     - └───────── Mapper ✅
 
 2- Implementar el caso de uso RegisterDeviceUseCase ❌
    - Evaluar si debe cambiarse el Login o incluir el UseCase dentro del mismo. ❌
