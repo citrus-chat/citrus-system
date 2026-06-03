@@ -11,26 +11,27 @@ import java.util.Optional;
 @Repository
 public class JpaDeviceIdentityRepositoryAdapter implements IDeviceIdentityRepository {
 
-    private final SpringDataDeviceIdentityRepository repository;
-    private final DeviceIdentityMapper deviceMapper;
+	private final SpringDataDeviceIdentityRepository repository;
+	private final DeviceIdentityMapper deviceMapper;
 
-    public JpaDeviceIdentityRepositoryAdapter(SpringDataDeviceIdentityRepository repository, DeviceIdentityMapper deviceMapper) {
-        this.repository = repository;
-        this.deviceMapper = deviceMapper;
-    }
+	public JpaDeviceIdentityRepositoryAdapter(SpringDataDeviceIdentityRepository repository,
+			DeviceIdentityMapper deviceMapper) {
+		this.repository = repository;
+		this.deviceMapper = deviceMapper;
+	}
 
-    @Override
-    public void save(DeviceIdentity deviceIdentity){
-        repository.save(deviceMapper.toJpa(deviceIdentity));
-    }
+	@Override
+	public void save(DeviceIdentity deviceIdentity) {
+		repository.save(deviceMapper.toJpa(deviceIdentity));
+	}
 
-    @Override
-    public Optional<DeviceIdentity> findByDeviceId(DeviceId deviceId) {
-        return repository.findById(deviceId.value()).map(deviceMapper::toDomain);
-    }
+	@Override
+	public Optional<DeviceIdentity> findByDeviceId(DeviceId deviceId) {
+		return repository.findById(deviceId.value()).map(deviceMapper::toDomain);
+	}
 
-    @Override
-    public boolean existsByDeviceId(DeviceId deviceId) {
-        return repository.existsById(deviceId.value());
-    }
+	@Override
+	public boolean existsByDeviceId(DeviceId deviceId) {
+		return repository.existsById(deviceId.value());
+	}
 }

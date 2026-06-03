@@ -19,41 +19,34 @@ public class RegisterOrRefreshUserDeviceUseCase {
 
 	public RegisterOrRefreshUserDeviceResult execute(RegisterOrRefreshUserDeviceCommand command) {
 		Instant now = Instant.now();
+
 		DeviceType deviceType = command.deviceType() != null ? command.deviceType() : DeviceType.WEB;
 
 		if (command.deviceId() != null) {
-			var existingById = userDeviceRepository.findActiveByIdAndUserId(command.deviceId(), command.userId());
+			var existing = userDeviceRepository.findActiveByIdAndUserId(command.deviceId(), command.userId());
 
-			if (existingById.isPresent()) {
-				UserDevice device = existingById.get();
+			if (existing.isPresent()) {
+				UserDevice device = existing.get();
+
 				refreshDevice(device, command, now);
 
 				UserDevice saved = userDeviceRepository.save(device);
+
 				return new RegisterOrRefreshUserDeviceResult(saved.getId().value());
 			}
 		}
 
-		var existingByType = userDeviceRepository.findActiveByUserIdAndDeviceType(command.userId(), deviceType);
-
-		if (existingByType.isPresent()) {
-			UserDevice device = existingByType.get();
-			refreshDevice(device, command, now);
-
-			UserDevice saved = userDeviceRepository.save(device);
-			return new RegisterOrRefreshUserDeviceResult(saved.getId().value());
-		}
-
 		UserDevice newDevice = UserDevice.createNew(new UserId(command.userId()),
-				normalizeDeviceName(command.deviceName()), deviceType, command.publicIdentityKey(),
-				command.signedPrekey(), now);
+				normalizeDeviceName(command.deviceName()), deviceType, now);
 
 		UserDevice saved = userDeviceRepository.save(newDevice);
+
 		return new RegisterOrRefreshUserDeviceResult(saved.getId().value());
 	}
 
 	private void refreshDevice(UserDevice device, RegisterOrRefreshUserDeviceCommand command, Instant now) {
-		device.refresh(normalizeDeviceName(command.deviceName()), command.publicIdentityKey(), command.signedPrekey(),
-				now);
+		device.rename(normalizeDeviceName(command.deviceName()));
+		device.refreshLastSeen(now);
 	}
 
 	private String normalizeDeviceName(String deviceName) {

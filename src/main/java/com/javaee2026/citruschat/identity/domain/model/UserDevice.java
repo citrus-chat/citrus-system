@@ -48,6 +48,10 @@ public class UserDevice {
 	}
 
 	public void rename(String deviceName) {
+		if (this.deviceName.equals(deviceName)) { // If the device's name does not change, don't rename it
+			return;
+		}
+
 		this.deviceName = deviceName;
 	}
 

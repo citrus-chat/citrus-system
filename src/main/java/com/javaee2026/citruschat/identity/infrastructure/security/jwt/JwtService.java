@@ -19,12 +19,13 @@ public class JwtService {
 		return Keys.hmacShaKeyFor(JWT_SECRET.getBytes(StandardCharsets.UTF_8));
 	}
 
-	public String generateToken(String userId, String email, String username) {
+	public String generateToken(String userId, String deviceId, String email, String username) {
 		Date now = new Date();
 		Date expiration = new Date(now.getTime() + EXPIRATION_MILLIS);
 
-		return Jwts.builder().subject(userId).claim("email", email).claim("username", username).issuedAt(now)
-				.expiration(expiration).signWith(getSigningKey(), Jwts.SIG.HS256).compact();
+		return Jwts.builder().subject(userId).claim("deviceId", deviceId).claim("email", email)
+				.claim("username", username).issuedAt(now).expiration(expiration)
+				.signWith(getSigningKey(), Jwts.SIG.HS256).compact();
 	}
 
 	public Long getExpirationInSeconds() {

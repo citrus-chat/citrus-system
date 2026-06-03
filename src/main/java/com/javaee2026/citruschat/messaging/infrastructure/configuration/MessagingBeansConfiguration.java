@@ -11,7 +11,6 @@ import com.javaee2026.citruschat.messaging.domain.factory.*;
 import com.javaee2026.citruschat.messaging.infrastructure.persistence.jpa.mapper.ChatPermissionMapper;
 import com.javaee2026.citruschat.messaging.infrastructure.persistence.jpa.mapper.ChatRoleMapper;
 import com.javaee2026.citruschat.messaging.infrastructure.persistence.jpa.mapper.ChatRoomMapper;
-import com.javaee2026.citruschat.messaging.infrastructure.persistence.jpa.mapper.MessageMapper;
 import com.javaee2026.citruschat.messaging.infrastructure.persistence.jpa.repository.*;
 
 import org.springframework.context.annotation.Bean;
@@ -31,14 +30,9 @@ public class MessagingBeansConfiguration {
 	}
 
 	@Bean
-	public MessageMapper messageMapper(MessageFactory messageFactory) {
-		return new MessageMapper(messageFactory);
-	}
-
-	@Bean
 	public IMessageRepository messageRepository(SpringDataMessageRepository messageRepository,
-			SpringDataMessageDevicePayloadRepository payloadRepository, MessageMapper messageMapper) {
-		return new JpaMessageRepositoryAdapter(messageRepository, payloadRepository, messageMapper);
+			SpringDataMessageDevicePayloadRepository payloadRepository) {
+		return new JpaMessageRepositoryAdapter(messageRepository, payloadRepository);
 	}
 
 	@Bean
@@ -82,8 +76,7 @@ public class MessagingBeansConfiguration {
 
 	@Bean
 	public IChatPermissionRepository chatPermissionRepository(
-			SpingDataChatPermissionRepositoryAdapter chatPermissionRepository,
-			ChatPermissionMapper chatPermissionMapper) {
+			SpingDataChatPermissionRepository chatPermissionRepository, ChatPermissionMapper chatPermissionMapper) {
 		return new JpaChatPermissionRepositoryAdapter(chatPermissionRepository, chatPermissionMapper);
 	}
 

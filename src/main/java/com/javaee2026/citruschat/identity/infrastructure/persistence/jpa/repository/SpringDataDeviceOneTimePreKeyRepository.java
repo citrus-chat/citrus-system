@@ -8,15 +8,17 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-public interface SpringDataDeviceOneTimePreKeyRepository extends JpaRepository<DeviceOneTimePreKeyJpaEntity, DeviceOneTimePreKeyJpaId> {
+public interface SpringDataDeviceOneTimePreKeyRepository
+		extends
+			JpaRepository<DeviceOneTimePreKeyJpaEntity, DeviceOneTimePreKeyJpaId> {
 
-    List<DeviceOneTimePreKeyJpaEntity> findByIdDeviceId(UUID deviceId);
+	List<DeviceOneTimePreKeyJpaEntity> findByIdDeviceId(UUID deviceId);
 
-    Optional<DeviceOneTimePreKeyJpaEntity> findByIdDeviceIdAndIdKeyId(UUID deviceId, Integer keyId);
+	Optional<DeviceOneTimePreKeyJpaEntity> findByIdDeviceIdAndIdKeyId(UUID deviceId, Integer keyId);
 
-    Optional<DeviceOneTimePreKeyJpaEntity> findFirstByIdDeviceIdAndConsumedAtIsNull(UUID deviceId);
+	Optional<DeviceOneTimePreKeyJpaEntity> findFirstByIdDeviceIdAndConsumedAtIsNull(UUID deviceId);
 
-    long countByIdDeviceIdAndConsumedAtIsNull(UUID deviceId);
+	long countByIdDeviceIdAndConsumedAtIsNull(UUID deviceId);
 
-    void deleteByIdDeviceId(UUID deviceId);
+	void deleteByIdDeviceId(UUID deviceId);
 }

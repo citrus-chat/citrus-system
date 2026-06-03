@@ -6,8 +6,6 @@ import com.javaee2026.citruschat.identity.domain.factory.UserFactory;
 import com.javaee2026.citruschat.identity.domain.factory.UsernameFactory;
 import com.javaee2026.citruschat.identity.infrastructure.persistence.jpa.mapper.UserMapper;
 
-import com.javaee2026.citruschat.identity.infrastructure.persistence.jpa.repository.JpaUserDeviceRepositoryAdapter;
-import com.javaee2026.citruschat.identity.infrastructure.persistence.jpa.repository.SpringDataUserDeviceRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -112,11 +110,6 @@ public class IdentityBeansConfiguration {
 	@Bean
 	public CheckAdminAccessUseCase checkAdminAccessUseCase(IAdminAccessRepository adminAccessRepository) {
 		return new CheckAdminAccessUseCase(adminAccessRepository);
-	}
-
-	@Bean
-	public IUserDeviceRepository userDeviceRepository(SpringDataUserDeviceRepository springDataUserDeviceRepository) {
-		return new JpaUserDeviceRepositoryAdapter(springDataUserDeviceRepository);
 	}
 
 	@Bean

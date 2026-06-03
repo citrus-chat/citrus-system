@@ -9,13 +9,13 @@ import java.util.Optional;
 
 public interface IDeviceSignedPreKeyRepository {
 
-    void save(DeviceSignedPreKey signedPreKey);
+	void save(DeviceSignedPreKey signedPreKey);
 
-    List<DeviceSignedPreKey> findByDeviceId(DeviceId deviceId);
+	List<DeviceSignedPreKey> findByDeviceId(DeviceId deviceId);
 
-    Optional<DeviceSignedPreKey> findActiveByDeviceId(DeviceId deviceId, Instant now);
+	Optional<DeviceSignedPreKey> findActiveByDeviceId(DeviceId deviceId, Instant now);
 
-    Optional<DeviceSignedPreKey> findByDeviceIdAndKeyId(DeviceId deviceId, int keyId);
+	Optional<DeviceSignedPreKey> findByDeviceIdAndKeyId(DeviceId deviceId, int keyId);
 
-    void deleteByDeviceId(DeviceId deviceId);
+	void deleteByDeviceId(DeviceId deviceId);
 }

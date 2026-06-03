@@ -22,7 +22,8 @@ class JwtServiceTest {
 
 	@Test
 	void shouldGenerateValidJwtToken() {
-		String token = jwtService.generateToken("91ae5825-9096-4c74-9447-1bf03004c36b", "test@gmail.com", "test_test");
+		String token = jwtService.generateToken("91ae5825-9096-4c74-9447-1bf03004c36b",
+				"91ae5825-9096-4c74-7654-1bf03004c36b", "test@gmail.com", "test_test");
 
 		assertNotNull(token);
 		assertEquals(3, token.split("\\.").length);

@@ -9,13 +9,16 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-public interface SpringDataDeviceSignedPreKeyRepository extends JpaRepository<DeviceSignedPreKeyJpaEntity, DeviceSignedPreKeyJpaId> {
+public interface SpringDataDeviceSignedPreKeyRepository
+		extends
+			JpaRepository<DeviceSignedPreKeyJpaEntity, DeviceSignedPreKeyJpaId> {
 
-    List<DeviceSignedPreKeyJpaEntity> findByIdDeviceId(UUID deviceId);
+	List<DeviceSignedPreKeyJpaEntity> findByIdDeviceId(UUID deviceId);
 
-    Optional<DeviceSignedPreKeyJpaEntity> findByIdDeviceIdAndIdKeyId(UUID deviceId, Integer keyId);
+	Optional<DeviceSignedPreKeyJpaEntity> findByIdDeviceIdAndIdKeyId(UUID deviceId, Integer keyId);
 
-    void deleteByIdDeviceId(UUID deviceId);
+	void deleteByIdDeviceId(UUID deviceId);
 
-    Optional<DeviceSignedPreKeyJpaEntity> findFirstByIdDeviceIdAndExpiresAtAfterOrderByCreatedAtDesc(UUID deviceId, Instant now);
+	Optional<DeviceSignedPreKeyJpaEntity> findFirstByIdDeviceIdAndExpiresAtAfterOrderByCreatedAtDesc(UUID deviceId,
+			Instant now);
 }

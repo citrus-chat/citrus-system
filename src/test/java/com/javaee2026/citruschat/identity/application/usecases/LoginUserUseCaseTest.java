@@ -48,23 +48,21 @@ class LoginUserUseCaseTest {
 	@Test
 	void shouldLoginSuccessfullyWhenCredentialsAreValid() {
 
-		LoginCommand command = new LoginCommand("test@gmail.com", "123456", null, "Chrome on Windows", DeviceType.WEB,
-				"public-key", "signed-prekey");
+		LoginCommand command = new LoginCommand("test@gmail.com", "123456", null, "Chrome on Windows", DeviceType.WEB);
 
 		User user = createUser();
-		when(jwtService.generateToken(user.getId().value().toString(), user.getEmail().getValue(),
-				user.getUsername().getValue())).thenReturn("jwt-token");
 
-		when(jwtService.getExpirationInSeconds()).thenReturn(86400L);
 		when(userRepository.findByEmail(new UserEmail("test@gmail.com"))).thenReturn(Optional.of(user));
 
 		when(passwordEncoder.matches("123456", user.getPasswordHash())).thenReturn(true);
 
-		when(jwtService.generateToken(user.getId().value().toString(), user.getEmail().getValue(),
-				user.getUsername().getValue())).thenReturn("jwt-token");
-
 		when(registerOrRefreshUserDeviceUseCase.execute(any(RegisterOrRefreshUserDeviceCommand.class)))
 				.thenReturn(new RegisterOrRefreshUserDeviceResult(DEVICE_ID));
+
+		when(jwtService.generateToken(user.getId().value().toString(), DEVICE_ID.toString(), user.getEmail().getValue(),
+				user.getUsername().getValue())).thenReturn("jwt-token");
+
+		when(jwtService.getExpirationInSeconds()).thenReturn(86400L);
 
 		LoginResult result = loginUserUseCase.execute(command);
 
@@ -78,28 +76,30 @@ class LoginUserUseCaseTest {
 		assertEquals(DEVICE_ID, result.deviceId());
 
 		verify(userRepository).findByEmail(new UserEmail("test@gmail.com"));
+
 		verify(passwordEncoder).matches("123456", user.getPasswordHash());
-		verify(jwtService).generateToken(user.getId().value().toString(), user.getEmail().getValue(),
-				user.getUsername().getValue());
 
 		verify(registerOrRefreshUserDeviceUseCase).execute(argThat(
 				deviceCommand -> deviceCommand.deviceId() == null && deviceCommand.userId().equals(user.getId().value())
 						&& deviceCommand.deviceName().equals("Chrome on Windows")
-						&& deviceCommand.deviceType() == DeviceType.WEB
-						&& deviceCommand.publicIdentityKey().equals("public-key")
-						&& deviceCommand.signedPrekey().equals("signed-prekey")));
+						&& deviceCommand.deviceType() == DeviceType.WEB));
+
+		verify(jwtService).generateToken(user.getId().value().toString(), DEVICE_ID.toString(),
+				user.getEmail().getValue(), user.getUsername().getValue());
 	}
 
 	@Test
 	void shouldThrowInvalidCredentialsWhenUserDoesNotExist() {
+
 		LoginCommand command = new LoginCommand("missing@gmail.com", "123456", null, "Chrome on Windows",
-				DeviceType.WEB, null, null);
+				DeviceType.WEB);
 
 		when(userRepository.findByEmail(new UserEmail("missing@gmail.com"))).thenReturn(Optional.empty());
 
 		assertThrows(InvalidCredentialsException.class, () -> loginUserUseCase.execute(command));
 
 		verify(userRepository).findByEmail(new UserEmail("missing@gmail.com"));
+
 		verifyNoInteractions(passwordEncoder);
 		verifyNoInteractions(jwtService);
 		verifyNoInteractions(registerOrRefreshUserDeviceUseCase);
@@ -107,8 +107,9 @@ class LoginUserUseCaseTest {
 
 	@Test
 	void shouldThrowInvalidCredentialsWhenPasswordIsInvalid() {
+
 		LoginCommand command = new LoginCommand("test@gmail.com", "wrong-password", null, "Chrome on Windows",
-				DeviceType.WEB, null, null);
+				DeviceType.WEB);
 
 		User user = createUser();
 
@@ -119,7 +120,9 @@ class LoginUserUseCaseTest {
 		assertThrows(InvalidCredentialsException.class, () -> loginUserUseCase.execute(command));
 
 		verify(userRepository).findByEmail(new UserEmail("test@gmail.com"));
+
 		verify(passwordEncoder).matches("wrong-password", user.getPasswordHash());
+
 		verifyNoInteractions(jwtService);
 		verifyNoInteractions(registerOrRefreshUserDeviceUseCase);
 	}

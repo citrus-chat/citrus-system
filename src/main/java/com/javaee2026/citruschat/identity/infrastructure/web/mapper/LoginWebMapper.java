@@ -12,7 +12,7 @@ public final class LoginWebMapper {
 
 	public static LoginCommand toCommand(LoginRequest request) {
 		return new LoginCommand(request.email(), request.password(), request.deviceId(), request.deviceName(),
-				request.deviceType(), request.publicIdentityKey(), request.signedPrekey());
+				request.deviceType());
 	}
 
 	public static LoginResponse toResponse(LoginResult result) {

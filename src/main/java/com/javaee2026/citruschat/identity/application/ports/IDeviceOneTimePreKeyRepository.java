@@ -8,14 +8,14 @@ import java.util.Optional;
 
 public interface IDeviceOneTimePreKeyRepository {
 
-    void save(DeviceOneTimePreKey oneTimePreKey);
+	void save(DeviceOneTimePreKey oneTimePreKey);
 
-    List<DeviceOneTimePreKey> findByDeviceId(DeviceId deviceId);
+	List<DeviceOneTimePreKey> findByDeviceId(DeviceId deviceId);
 
-    Optional<DeviceOneTimePreKey> findByDeviceIdAndKeyId(DeviceId deviceId, int keyId);
+	Optional<DeviceOneTimePreKey> findByDeviceIdAndKeyId(DeviceId deviceId, int keyId);
 
-    Optional<DeviceOneTimePreKey> findFirstAvailable(DeviceId deviceId);
+	Optional<DeviceOneTimePreKey> findFirstAvailable(DeviceId deviceId);
 
-    void deleteByDeviceId(DeviceId deviceId);
+	void deleteByDeviceId(DeviceId deviceId);
 
 }

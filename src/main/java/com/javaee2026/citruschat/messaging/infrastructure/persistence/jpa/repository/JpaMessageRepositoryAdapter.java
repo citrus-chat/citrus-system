@@ -16,13 +16,11 @@ public class JpaMessageRepositoryAdapter implements IMessageRepository {
 
 	private final SpringDataMessageRepository messageRepository;
 	private final SpringDataMessageDevicePayloadRepository payloadRepository;
-	private final MessageMapper messageMapper;
 
 	public JpaMessageRepositoryAdapter(SpringDataMessageRepository messageRepository,
-			SpringDataMessageDevicePayloadRepository payloadRepository, MessageMapper messageMapper) {
+			SpringDataMessageDevicePayloadRepository payloadRepository) {
 		this.messageRepository = messageRepository;
 		this.payloadRepository = payloadRepository;
-		this.messageMapper = messageMapper;
 	}
 
 	@Override
