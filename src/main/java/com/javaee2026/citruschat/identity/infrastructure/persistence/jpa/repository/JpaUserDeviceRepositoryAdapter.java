@@ -1,14 +1,15 @@
 package com.javaee2026.citruschat.identity.infrastructure.persistence.jpa.repository;
 
 import com.javaee2026.citruschat.identity.application.ports.IUserDeviceRepository;
-import com.javaee2026.citruschat.identity.domain.enums.DeviceType;
 import com.javaee2026.citruschat.identity.domain.model.UserDevice;
 import com.javaee2026.citruschat.identity.infrastructure.persistence.jpa.mapper.UserDeviceMapper;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+@Repository
 public class JpaUserDeviceRepositoryAdapter implements IUserDeviceRepository {
 
 	private final SpringDataUserDeviceRepository repository;
@@ -21,11 +22,14 @@ public class JpaUserDeviceRepositoryAdapter implements IUserDeviceRepository {
 	public Optional<UserDevice> findActiveByIdAndUserId(UUID deviceId, UUID userId) {
 		return repository.findByIdAndUserIdAndRevokedAtIsNull(deviceId, userId).map(UserDeviceMapper::toDomain);
 	}
-	@Override
-	public Optional<UserDevice> findActiveByUserIdAndDeviceType(UUID userId, DeviceType deviceType) {
-		return repository.findByUserIdAndDeviceTypeAndRevokedAtIsNull(userId, deviceType)
-				.map(UserDeviceMapper::toDomain);
-	}
+
+	// @Override
+	// public Optional<UserDevice> findActiveByUserIdAndDeviceType(UUID userId,
+	// DeviceType deviceType) {
+	// return repository.findByUserIdAndDeviceTypeAndRevokedAtIsNull(userId,
+	// deviceType)
+	// .map(UserDeviceMapper::toDomain);
+	// }
 
 	@Override
 	public List<UserDevice> findActiveByUserId(UUID userId) {

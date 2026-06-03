@@ -214,7 +214,7 @@ class SendMessageUseCaseTest {
 
 	private UserDevice createDevice(UUID userId, UUID deviceId) {
 
-		return UserDevice.reconstitute(new DeviceId(deviceId), new UserId(userId), "device", DeviceType.WEB, "identity",
-				"signed", Instant.now(), Instant.now(), null);
+		return UserDevice.reconstitute(new DeviceId(deviceId), new UserId(userId), "device", DeviceType.WEB,
+				Instant.now(), Instant.now(), null);
 	}
 }

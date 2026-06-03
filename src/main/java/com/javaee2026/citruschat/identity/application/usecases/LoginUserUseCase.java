@@ -38,12 +38,16 @@ public class LoginUserUseCase {
 		if (!validPassword) {
 			throw new InvalidCredentialsException();
 		}
-		RegisterOrRefreshUserDeviceResult deviceResult = registerOrRefreshUserDeviceUseCase.execute(
-				new RegisterOrRefreshUserDeviceCommand(command.deviceId(), user.getId().value(), command.deviceName(),
-						command.deviceType(), command.publicIdentityKey(), command.signedPrekey()));
+		RegisterOrRefreshUserDeviceResult deviceResult = registerOrRefreshUserDeviceUseCase
+				.execute(new RegisterOrRefreshUserDeviceCommand(command.deviceId(), user.getId().value(),
+						command.deviceName(), command.deviceType()));
 
-		String accessToken = jwtService.generateToken(user.getId().value().toString(), user.getEmail().getValue(),
-				user.getUsername().getValue());
+		// // uploadDeviceKeysUseCase.execute(
+		// new UploadDeviceKeysCommand(...)
+		// );
+
+		String accessToken = jwtService.generateToken(user.getId().value().toString(),
+				deviceResult.deviceId().toString(), user.getEmail().getValue(), user.getUsername().getValue());
 		long expiresIn = jwtService.getExpirationInSeconds();
 
 		return new LoginResult(user.getId().value(), user.getEmail().getValue(), user.getUsername().getValue(),

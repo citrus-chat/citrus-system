@@ -11,10 +11,10 @@ import java.util.Set;
 
 public class JpaChatPermissionRepositoryAdapter implements IChatPermissionRepository {
 
-	private final SpingDataChatPermissionRepositoryAdapter chatPermissionRepository;
+	private final SpingDataChatPermissionRepository chatPermissionRepository;
 	private final ChatPermissionMapper chatPermissionMapper;
 
-	public JpaChatPermissionRepositoryAdapter(SpingDataChatPermissionRepositoryAdapter chatPermissionRepository,
+	public JpaChatPermissionRepositoryAdapter(SpingDataChatPermissionRepository chatPermissionRepository,
 			ChatPermissionMapper chatPermissionMapper) {
 		this.chatPermissionRepository = chatPermissionRepository;
 		this.chatPermissionMapper = chatPermissionMapper;

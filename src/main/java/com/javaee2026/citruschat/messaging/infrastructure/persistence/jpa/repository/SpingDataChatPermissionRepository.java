@@ -5,6 +5,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.UUID;
 
-public interface SpingDataChatPermissionRepositoryAdapter extends JpaRepository<ChatPermissionJpaEntity, UUID> {
+public interface SpingDataChatPermissionRepository extends JpaRepository<ChatPermissionJpaEntity, UUID> {
 	ChatPermissionJpaEntity findByCode(String code);
 }
