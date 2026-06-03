@@ -4,15 +4,15 @@ Me hice este archivo de lista para tareas pendientes:
    - Definir las clases:
      - UserDevice ✅ 
      - ├── DeviceIdentity ✅
-     - ├──────── Repository ❌
+     - ├──────── Repository ✅
      - ├──────── JPA ✅
      - ├──────── Mapper ✅
      - ├── DeviceSignedPreKey ✅
-     - ├──────── Repository ❌
+     - ├──────── Repository ✅
      - ├──────── JPA ✅
      - ├──────── Mapper ✅
      - ├── DeviceOneTimePreKey ✅
-     - ├──────── Repository ❌
+     - ├──────── Repository ✅
      - ├──────── JPA ✅
      - └───────── Mapper ✅
 

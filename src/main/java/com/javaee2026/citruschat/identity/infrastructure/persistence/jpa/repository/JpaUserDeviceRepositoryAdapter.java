@@ -4,11 +4,13 @@ import com.javaee2026.citruschat.identity.application.ports.IUserDeviceRepositor
 import com.javaee2026.citruschat.identity.domain.enums.DeviceType;
 import com.javaee2026.citruschat.identity.domain.model.UserDevice;
 import com.javaee2026.citruschat.identity.infrastructure.persistence.jpa.mapper.UserDeviceMapper;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+@Repository
 public class JpaUserDeviceRepositoryAdapter implements IUserDeviceRepository {
 
 	private final SpringDataUserDeviceRepository repository;
