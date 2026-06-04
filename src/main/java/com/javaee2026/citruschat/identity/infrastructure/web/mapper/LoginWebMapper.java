@@ -12,11 +12,11 @@ public final class LoginWebMapper {
 
 	public static LoginCommand toCommand(LoginRequest request) {
 		return new LoginCommand(request.email(), request.password(), request.deviceId(), request.deviceName(),
-				request.deviceType());
+				request.deviceType(), request.publicIdentityKey(), request.signedPreKey(), request.oneTimePreKeys());
 	}
 
 	public static LoginResponse toResponse(LoginResult result) {
 		return new LoginResponse(result.userId().toString(), result.email(), result.username(), result.accessToken(),
-				result.tokenType(), result.expiresIn(), result.deviceId());
+				result.tokenType(), result.expiresIn(), result.deviceId(), result.availableOneTimePreKeys());
 	}
 }
