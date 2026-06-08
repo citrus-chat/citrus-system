@@ -13,6 +13,8 @@ public interface IUserDeviceRepository {
 	// Optional<UserDevice> findActiveByUserIdAndDeviceType(UUID userId, DeviceType
 	// deviceType);
 
+	Optional<UserDevice> findActiveById(UUID deviceId);
+
 	List<UserDevice> findActiveByUserId(UUID userId);
 
 	List<UserDevice> findAllByUserId(UUID userId);
