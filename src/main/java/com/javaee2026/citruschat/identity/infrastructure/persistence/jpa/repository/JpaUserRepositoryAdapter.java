@@ -7,8 +7,11 @@ import com.javaee2026.citruschat.identity.domain.valueobjects.UserEmail;
 import com.javaee2026.citruschat.identity.domain.valueobjects.Username;
 import com.javaee2026.citruschat.identity.infrastructure.persistence.jpa.mapper.UserMapper;
 import com.javaee2026.citruschat.shared.domain.valueobjects.UserId;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -55,6 +58,22 @@ public class JpaUserRepositoryAdapter implements IUserRepository {
 	@Override
 	public boolean existsByPhoneNumber(PhoneNumber phoneNumber) {
 		return repository.existsByPhoneNumber(phoneNumber.getValue());
+	}
+
+	@Override
+	public List<User> search(String text, int page, int size) {
+
+		Pageable pageable = PageRequest.of(page, size);
+
+		return repository.search(text, pageable).stream().map(userMapper::toDomain).toList();
+	}
+
+	@Override
+	public List<User> findAll(int page, int size) {
+
+		Pageable pageable = PageRequest.of(page, size);
+
+		return repository.findAll(pageable).stream().map(userMapper::toDomain).toList();
 	}
 
 	@Override

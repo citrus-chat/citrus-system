@@ -12,4 +12,5 @@ public final class ApiResponseMessages {
 	public static final String MESSAGE_SENT_SUCCESS = "Message sent successfully.";
 	public static final String CHAT_ROOM_CREATION_SUCCESS = "Chat room created successfully.";
 	public static final String ADMIN_ACCESS_CHECKED_SUCCESSFULLY = "Admin access checked successfully";
+	public static final String USER_LIST_RETRIEVED_SUCCESS = "User list retrieved successfully.";
 }
