@@ -1,0 +1,9 @@
+FROM eclipse-temurin:25-jdk
+
+WORKDIR /app
+
+COPY . .
+
+EXPOSE 8200
+
+CMD ["./mvnw", "spring-boot:run"]

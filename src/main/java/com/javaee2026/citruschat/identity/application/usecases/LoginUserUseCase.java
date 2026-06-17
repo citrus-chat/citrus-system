@@ -2,12 +2,10 @@ package com.javaee2026.citruschat.identity.application.usecases;
 
 import com.javaee2026.citruschat.identity.application.commands.LoginCommand;
 import com.javaee2026.citruschat.identity.application.commands.RegisterOrRefreshUserDeviceCommand;
-import com.javaee2026.citruschat.identity.application.commands.UploadPreKeysCommand;
 import com.javaee2026.citruschat.identity.application.exceptions.InvalidCredentialsException;
 import com.javaee2026.citruschat.identity.application.ports.IUserRepository;
 import com.javaee2026.citruschat.identity.application.results.LoginResult;
 import com.javaee2026.citruschat.identity.application.results.RegisterOrRefreshUserDeviceResult;
-import com.javaee2026.citruschat.identity.application.results.UploadPreKeysResult;
 import com.javaee2026.citruschat.identity.domain.model.User;
 import com.javaee2026.citruschat.identity.domain.valueobjects.UserEmail;
 import com.javaee2026.citruschat.identity.infrastructure.security.jwt.JwtService;
@@ -47,19 +45,25 @@ public class LoginUserUseCase {
 				.execute(new RegisterOrRefreshUserDeviceCommand(command.deviceId(), user.getId().value(),
 						command.deviceName(), command.deviceType()));
 
-		UploadPreKeysResult keysResult = uploadPreKeysUseCase.execute(new UploadPreKeysCommand(deviceResult.deviceId(),
-				command.publicIdentityKey(),
-				new UploadPreKeysCommand.SignedPreKeyCommand(command.signedPreKey().keyId(),
-						command.signedPreKey().publicKey(), command.signedPreKey().signature()),
-				command.oneTimePreKeys().stream().map(
-						preKey -> new UploadPreKeysCommand.OneTimePreKeyCommand(preKey.keyId(), preKey.publicKey()))
-						.toList()));
+		// UploadPreKeysResult keysResult = uploadPreKeysUseCase.execute(new
+		// UploadPreKeysCommand(deviceResult.deviceId(),
+		// command.publicIdentityKey(),
+		// new UploadPreKeysCommand.SignedPreKeyCommand(command.signedPreKey().keyId(),
+		// command.signedPreKey().publicKey(), command.signedPreKey().signature()),
+		// command.oneTimePreKeys().stream().map(
+		// preKey -> new UploadPreKeysCommand.OneTimePreKeyCommand(preKey.keyId(),
+		// preKey.publicKey()))
+		// .toList()));
 
 		String accessToken = jwtService.generateToken(user.getId().value().toString(),
 				deviceResult.deviceId().toString(), user.getEmail().getValue(), user.getUsername().getValue());
 		long expiresIn = jwtService.getExpirationInSeconds();
 
+		// return new LoginResult(user.getId().value(), user.getEmail().getValue(),
+		// user.getUsername().getValue(),
+		// accessToken, "Bearer", expiresIn, deviceResult.deviceId(),
+		// keysResult.availableKeys());
 		return new LoginResult(user.getId().value(), user.getEmail().getValue(), user.getUsername().getValue(),
-				accessToken, "Bearer", expiresIn, deviceResult.deviceId(), keysResult.availableKeys());
+				accessToken, "Bearer", expiresIn);
 	}
 }

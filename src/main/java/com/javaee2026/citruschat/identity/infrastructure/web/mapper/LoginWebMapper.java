@@ -15,8 +15,14 @@ public final class LoginWebMapper {
 				request.deviceType(), request.publicIdentityKey(), request.signedPreKey(), request.oneTimePreKeys());
 	}
 
+	// public static LoginResponse toResponse(LoginResult result) {
+	// return new LoginResponse(result.userId().toString(), result.email(),
+	// result.username(), result.accessToken(),
+	// result.tokenType(), result.expiresIn(), result.deviceId(),
+	// result.availableOneTimePreKeys());
+
 	public static LoginResponse toResponse(LoginResult result) {
 		return new LoginResponse(result.userId().toString(), result.email(), result.username(), result.accessToken(),
-				result.tokenType(), result.expiresIn(), result.deviceId(), result.availableOneTimePreKeys());
+				result.tokenType(), result.expiresIn());
 	}
 }

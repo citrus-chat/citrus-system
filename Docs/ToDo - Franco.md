@@ -21,18 +21,20 @@ Me hice este archivo de lista para tareas pendientes:
 
 3- Implementar el caso de uso UploadPreKeysUseCase ✅
 
-4- Implementar el caso de uso GetDevicePreKeysUseCase ❌
+4- Implementar el caso de uso GetDevicePreKeysUseCase ✅
 
-5- Modificar el caso de uso LoginUseCase ✅
+5- Implementar el caso de uso GetUserPreKeysUseCase ❌
+
+6- Modificar el caso de uso LoginUseCase ✅
    - Modificar Request para obtener el KeyBundle del dispositivo ✅
    - Modificar Response para incluir el KeysAvailable del dispositivo ✅
 
-6- Implementar endpoint para /messages ❌
+7- Implementar endpoint para /messages ❌
    - Definir separación entre mensajes directos y grupales ❌
 
-7- Implementar el caso de uso CreateChatRoom para mensajes directos ❌
+8- Implementar el caso de uso CreateChatRoom para mensajes directos ❌
 
-8- Modificar el caso de uso SendMessageUseCase para mensajes directos ❌
+9- Modificar el caso de uso SendMessageUseCase para mensajes directos ❌
 
-9- Crear el caso de uso SendGroupMessageUseCase para mensajes grupales ❌
+10- Crear el caso de uso SendGroupMessageUseCase para mensajes grupales ❌
    - Implementar SenderKeys para mandar mensajes grupales ❌
