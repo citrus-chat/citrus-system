@@ -6,6 +6,7 @@ import com.javaee2026.citruschat.identity.domain.valueobjects.UserEmail;
 import com.javaee2026.citruschat.identity.domain.valueobjects.Username;
 import com.javaee2026.citruschat.shared.domain.valueobjects.UserId;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface IUserRepository {
@@ -19,4 +20,8 @@ public interface IUserRepository {
 	boolean existsByEmail(UserEmail email);
 	boolean existsByUsername(Username username);
 	boolean existsByPhoneNumber(PhoneNumber phoneNumber);
+
+	List<User> findAll(int page, int size);
+
+	List<User> search(String search, int page, int size);
 }
