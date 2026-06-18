@@ -2,320 +2,77 @@
 
 ## Descripción
 
-El `RegisterOrRefreshUserDeviceUseCase` es el encargado de registrar o actualizar dispositivos dentro del módulo de identidad.
+El `RegisterOrRefreshUserDeviceUseCase` es el responsable de registrar nuevos dispositivos o actualizar dispositivos existentes asociados a un usuario.
 
-Cada dispositivo representa una sesión autenticada de un usuario y sirve como unidad principal para asociar:
+Este caso de uso centraliza toda la lógica relacionada con la gestión de dispositivos dentro del sistema.
 
-* Tokens JWT.
-* Material criptográfico de Signal Protocol.
-* Identity Keys.
-* Signed PreKeys.
-* One-Time PreKeys.
+Durante el proceso:
+
+* Se busca el dispositivo utilizando su identificador único.
+* Si el dispositivo no existe, se registra uno nuevo.
+* Si el dispositivo existe, se actualiza su información.
+* Se sincroniza la clave pública del dispositivo.
+* Se actualiza la fecha de última actividad.
+* Se retorna el dispositivo persistido.
 
 ---
 
 ## Objetivo
 
-Este caso de uso permite:
+Garantizar que el sistema mantenga información consistente y actualizada sobre los dispositivos utilizados por los usuarios.
 
-* Registrar nuevos dispositivos.
-* Reutilizar dispositivos existentes cuando corresponda.
-* Actualizar información de actividad.
-* Mantener trazabilidad de sesiones activas.
+Al finalizar exitosamente:
 
-Al finalizar exitosamente se obtiene un:
-
-```java
-UUID deviceId
-```
-
-que será utilizado por otros casos de uso del sistema.
+* El dispositivo existe en la base de datos.
+* El dispositivo está asociado a un usuario válido.
+* La clave pública almacenada está actualizada.
+* La última actividad refleja la autenticación más reciente.
 
 ---
 
-## Flujo de registro
+## Flujo de ejecución
 
 ```text
 Request
   ↓
-Controller
-  ↓
-RegisterOrRefreshUserDeviceUseCase
-  ↓
-Buscar dispositivo existente
+Buscar dispositivo por DeviceId
   ↓
 ¿Existe?
- ├─ Sí → Actualizar información
- └─ No → Crear dispositivo
+ ├─ No → Registrar dispositivo
+ └─ Sí → Actualizar dispositivo
   ↓
-Persistencia
+Actualizar LastSeen
   ↓
-Response
+Persistir cambios
+  ↓
+Retornar UserDevice
 ```
 
 ---
 
-## Flujo interno
+## Registro de dispositivo
 
-```text
-Validar DeviceType
-        ↓
-Buscar Device por DeviceId + UserId
-        ↓
-¿Existe?
-        ↓
-Sí ---------------------- No
-↓                         ↓
-Actualizar lastSeen       Crear Device
-Actualizar nombre         Generar DeviceId
-↓                         ↓
-Persistir                 Persistir
-        ↓
-Retornar DeviceId
-```
-
----
-
-## Comportamiento de creación
-
-Si el cliente no proporciona un `deviceId`, o el dispositivo no existe para el usuario indicado, se crea un nuevo dispositivo.
-
-Internamente:
+Si el dispositivo no existe previamente:
 
 ```java
-UserDevice.createNew(...)
+userDeviceRepository.findById(deviceId)
 ```
 
-genera automáticamente:
+retorna vacío y el caso de uso procede a crear una nueva instancia.
+
+Información registrada:
 
 ```java
-DeviceId.newId()
+DeviceId
+UserId
+DeviceName
+DeviceType
+PublicKey
+CreatedAt
+LastSeen
 ```
 
-y establece:
-
-```java
-createdAt
-lastSeen
-```
-
-con la fecha actual.
-
----
-
-## Comportamiento de actualización
-
-Si el cliente proporciona un `deviceId` válido perteneciente al usuario:
-
-```java
-findActiveByIdAndUserId(deviceId, userId)
-```
-
-el dispositivo es actualizado.
-
-Actualmente se actualizan:
-
-```java
-deviceName
-lastSeen
-```
-
-mediante:
-
-```java
-refreshDevice(...)
-```
-
----
-
-## Normalización del nombre
-
-Los nombres de dispositivo son normalizados automáticamente.
-
-### Nombre nulo
-
-```java
-null
-```
-
-Resultado:
-
-```text
-Unknown device
-```
-
-### Nombre vacío
-
-```java
-""
-```
-
-Resultado:
-
-```text
-Unknown device
-```
-
-### Nombre válido
-
-```java
-" Chrome on Windows "
-```
-
-Resultado:
-
-```text
-Chrome on Windows
-```
-
----
-
-## Tipos de dispositivo soportados
-
-Actualmente existen tres tipos:
-
-```java
-MOBILE
-WEB
-DESKTOP
-```
-
----
-
-### MOBILE
-
-Representa aplicaciones móviles.
-
-Ejemplos:
-
-```text
-Android
-iOS
-```
-
----
-
-### WEB
-
-Representa navegadores web.
-
-Ejemplos:
-
-```text
-Chrome
-Firefox
-Edge
-```
-
----
-
-### DESKTOP
-
-Representa aplicaciones de escritorio.
-
-Ejemplos:
-
-```text
-Windows
-Linux
-macOS
-```
-
----
-
-## Valor por defecto
-
-Si el cliente no especifica un tipo:
-
-```java
-null
-```
-
-se utiliza automáticamente:
-
-```java
-DeviceType.WEB
-```
-
----
-
-## Entidad UserDevice
-
-La entidad principal administrada por este caso de uso es:
-
-```java
-UserDevice
-```
-
----
-
-### Campos principales
-
-```java
-DeviceId id
-UserId userId
-String deviceName
-DeviceType deviceType
-Instant lastSeen
-Instant createdAt
-Instant revokedAt
-```
-
----
-
-### lastSeen
-
-Representa la última actividad conocida del dispositivo.
-
-Se actualiza automáticamente cada vez que el dispositivo es reutilizado.
-
----
-
-### createdAt
-
-Fecha de creación del dispositivo.
-
-Permanece inmutable.
-
----
-
-### revokedAt
-
-Fecha de revocación del dispositivo.
-
-Si posee valor:
-
-```java
-device.isRevoked()
-```
-
-retorna:
-
-```java
-true
-```
-
----
-
-## Gestión de dispositivos activos
-
-Todas las búsquedas de reutilización utilizan:
-
-```java
-findActiveByIdAndUserId(...)
-```
-
-Por lo tanto:
-
-* Los dispositivos revocados no pueden reutilizarse.
-* Solo los dispositivos activos pueden actualizarse.
-* El propietario debe coincidir.
-
----
-
-## Persistencia
-
-La persistencia se realiza mediante:
+Posteriormente el dispositivo es persistido mediante:
 
 ```java
 IUserDeviceRepository
@@ -323,20 +80,45 @@ IUserDeviceRepository
 
 ---
 
-### Métodos utilizados
+## Actualización de dispositivo
 
-```java
-findActiveByIdAndUserId(...)
-save(...)
-```
+Si el dispositivo ya existe:
+
+* Se actualiza el nombre del dispositivo.
+* Se actualiza la clave pública.
+* Se actualiza la fecha de última actividad.
+
+Esto permite mantener sincronizada la información reportada por el cliente.
 
 ---
 
-### Tabla principal
+## Clave pública
 
-```sql
-user_devices
+Cada dispositivo posee una clave pública asociada:
+
+```java
+PublicKey
 ```
+
+La clave pública representa la identidad criptográfica actual del dispositivo.
+
+Durante cada autenticación el sistema sincroniza este valor para garantizar que el estado almacenado refleje la información más reciente enviada por el cliente.
+
+---
+
+## Last Seen
+
+Cada autenticación actualiza:
+
+```java
+lastSeen
+```
+
+Este campo permite:
+
+* Detectar dispositivos inactivos.
+* Auditar actividad reciente.
+* Implementar futuras políticas de expiración o revocación.
 
 ---
 
@@ -345,53 +127,92 @@ user_devices
 El caso de uso retorna:
 
 ```java
-RegisterOrRefreshUserDeviceResult
+UserDevice
 ```
 
-Contenido:
+Información incluida:
 
 ```java
-UUID deviceId
+DeviceId id
+UserId userId
+String deviceName
+DeviceType deviceType
+PublicKey publicKey
+Instant createdAt
+Instant lastSeen
+Instant revokedAt
 ```
 
 ---
 
-## Integración con Login
-
-Este caso de uso es invocado directamente por:
-
-```java
-LoginUserUseCase
-```
-
-Flujo:
+## Flujo interno
 
 ```text
-Login
-  ↓
-RegisterOrRefreshUserDeviceUseCase
-  ↓
-UploadPreKeysUseCase
-  ↓
-JWT
+Buscar dispositivo
+    ↓
+¿Existe?
+    ↓
+Crear o actualizar
+    ↓
+Actualizar PublicKey
+    ↓
+Actualizar LastSeen
+    ↓
+Guardar
+    ↓
+Retornar UserDevice
 ```
 
-El `deviceId` generado será utilizado posteriormente para:
+---
 
-* Asociar llaves criptográficas.
-* Generar JWT.
-* Identificar el dispositivo autenticado.
+## Dependencias
+
+### IUserDeviceRepository
+
+Responsable de persistir y recuperar dispositivos.
+
+```java
+IUserDeviceRepository
+```
 
 ---
 
 ## Validaciones implementadas
 
-Actualmente se valida:
+El caso de uso valida:
 
-* Existencia de dispositivo activo.
-* Propiedad del dispositivo.
-* Normalización de nombre.
-* Valor por defecto de DeviceType.
+* El DeviceId debe ser válido.
+* El UserId debe ser válido.
+* La clave pública debe ser válida.
+* El dispositivo no debe encontrarse revocado para ser reutilizado.
+
+Si alguna validación falla se lanza la excepción correspondiente.
+
+---
+
+## Casos soportados
+
+### Registro inicial
+
+```text
+DeviceId inexistente
+    ↓
+Crear dispositivo
+    ↓
+Persistir
+```
+
+---
+
+### Reautenticación
+
+```text
+DeviceId existente
+    ↓
+Actualizar información
+    ↓
+Persistir
+```
 
 ---
 
@@ -401,74 +222,88 @@ Actualmente existen tests para:
 
 ### Casos válidos
 
-* Crear dispositivo nuevo.
-* Reutilizar dispositivo existente.
-* Actualizar lastSeen.
-* Actualizar nombre del dispositivo.
-* Aplicar DeviceType por defecto.
-* Normalizar nombres.
+* Registro de un nuevo dispositivo.
+* Actualización de un dispositivo existente.
+* Actualización de la clave pública.
+* Actualización de LastSeen.
+* Persistencia correcta del dispositivo.
 
 ### Casos inválidos
 
-* DeviceId inexistente.
-* DeviceId perteneciente a otro usuario.
-* Nombre vacío.
-* Tipo de dispositivo nulo.
+* Datos inválidos del dispositivo.
+* Dispositivo revocado.
+* Error de persistencia.
 
 ---
 
-## Testing vía Postman
+## Persistencia
 
-Este caso de uso no expone endpoint propio.
+Los dispositivos son almacenados en:
 
-Actualmente es utilizado de forma interna por:
+```text
+user_devices
+```
 
-```http
-POST /api/v1/auth/login
+Campos principales:
+
+```text
+id
+user_id
+public_key
+device_name
+device_type
+created_at
+last_seen
+revoked_at
 ```
 
 ---
 
 ## Consideraciones de diseño
 
-### Device como identidad criptográfica
+### DeviceId como identidad permanente
 
-En CitrusChat el material criptográfico no se asocia directamente al usuario.
-
-Se asocia a:
+Cada dispositivo es identificado por un:
 
 ```java
 DeviceId
 ```
 
+estable generado por el cliente.
+
 Esto permite:
 
-* Múltiples dispositivos por usuario.
-* Rotación independiente de llaves.
-* Revocación individual de sesiones.
-* Compatibilidad con Signal Protocol.
+* Reconocer dispositivos entre sesiones.
+* Mantener historial de actividad.
+* Asociar material criptográfico a un dispositivo específico.
 
 ---
 
-### Sesión = Dispositivo
+### Clave pública por dispositivo
 
-Actualmente el comportamiento funcional esperado es:
+La clave pública pertenece al dispositivo y no al usuario.
 
-```text
-Login
-   ↓
-Crear Device
+Esto permite:
 
-Logout
-   ↓
-Revocar Device
+* Múltiples dispositivos por usuario.
+* Rotación independiente de claves.
+* Identidades criptográficas separadas.
 
-Próximo Login
-   ↓
-Crear nuevo Device
+---
+
+### Revocación futura
+
+El modelo contempla:
+
+```java
+revokedAt
 ```
 
-Por lo tanto, aunque el caso de uso soporta actualización de dispositivos existentes, el flujo habitual de la aplicación consiste en crear un nuevo dispositivo para cada sesión autenticada.
+para soportar futuras funcionalidades de:
+
+* Cierre remoto de sesiones.
+* Eliminación de dispositivos.
+* Revocación de acceso.
 
 ---
 
@@ -481,6 +316,7 @@ El módulo sigue una arquitectura basada en:
 * Use Cases
 * Ports & Adapters
 * Spring Boot
-* JWT Authentication
-* Signal Protocol
 * JPA/Hibernate
+* Device Management
+* Device-Based Authentication
+* End-to-End Encryption Readiness

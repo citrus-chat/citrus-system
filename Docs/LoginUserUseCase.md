@@ -1,31 +1,31 @@
-# LoginUserUseCase
+# LoginUseCase
 
 ## Descripción
 
-El `LoginUserUseCase` es el encargado de autenticar usuarios dentro del módulo de identidad.
+El `LoginUseCase` es el responsable de autenticar usuarios dentro del módulo de identidad.
 
 Durante el proceso:
 
 * Se valida que el usuario exista.
 * Se validan las credenciales.
-* Se registra o actualiza el dispositivo desde el que inicia sesión.
-* Se registra el material criptográfico necesario para Signal Protocol.
-* Se genera el JWT de autenticación.
-* Finalmente se retorna la información de sesión del usuario.
+* Se registra o actualiza el dispositivo desde el cual se realiza el login.
+* Se actualiza la última actividad del dispositivo.
+* Se genera un JWT de autenticación.
+* Se retorna la información de sesión del usuario y del dispositivo autenticado.
 
 ---
 
 ## Objetivo
 
-Este caso de uso centraliza todo el proceso de inicio de sesión y bootstrap criptográfico del dispositivo.
+Centralizar el proceso completo de autenticación de usuarios y vinculación de dispositivos.
 
 Al finalizar exitosamente:
 
 * El usuario queda autenticado.
-* El dispositivo queda registrado.
-* Las llaves criptográficas quedan almacenadas.
+* El dispositivo queda registrado o actualizado.
+* La clave pública actual del dispositivo queda almacenada.
 * El cliente recibe un JWT válido.
-* El cliente conoce cuántas One-Time PreKeys tiene disponibles.
+* El sistema conoce desde qué dispositivo se originó la sesión.
 
 ---
 
@@ -36,15 +36,13 @@ Request
   ↓
 Controller
   ↓
-LoginUserUseCase
+LoginUseCase
   ↓
 Validación de usuario
   ↓
 Validación de contraseña
   ↓
-RegisterOrRefreshUserDeviceUseCase
-  ↓
-UploadPreKeysUseCase
+Registro / actualización de dispositivo
   ↓
 Generación JWT
   ↓
@@ -55,14 +53,16 @@ Response
 
 ## Registro de dispositivo
 
-Antes de generar el token, el sistema registra o actualiza el dispositivo desde el cual se realiza el login.
+Durante el login el cliente debe informar información del dispositivo que intenta autenticarse.
 
-Esto permite:
+Información requerida:
 
-* Identificar dispositivos únicos.
-* Asociar material criptográfico a cada dispositivo.
-* Mantener múltiples dispositivos por usuario.
-* Soportar cifrado End-to-End basado en Signal Protocol.
+```java
+UUID deviceId
+String deviceName
+DeviceType deviceType
+PublicKey publicKey
+```
 
 La operación es delegada a:
 
@@ -70,49 +70,38 @@ La operación es delegada a:
 RegisterOrRefreshUserDeviceUseCase
 ```
 
+Responsabilidades:
+
+* Registrar un nuevo dispositivo si no existe.
+* Actualizar la información de un dispositivo existente.
+* Actualizar la clave pública del dispositivo.
+* Actualizar la fecha de última actividad.
+* Asociar el dispositivo al usuario autenticado.
+
 ---
 
-## Registro de llaves criptográficas
+## Clave pública del dispositivo
 
-Una vez registrado el dispositivo, se almacenan las llaves criptográficas enviadas por el cliente.
-
-Actualmente se registran:
-
-### Identity Key
-
-Clave pública permanente del dispositivo.
+Cada dispositivo mantiene una clave pública única.
 
 ```java
-publicIdentityKey
+PublicKey
 ```
 
-### Signed PreKey
+Esta clave será utilizada posteriormente para:
 
-Clave firmada utilizada durante el establecimiento inicial de sesiones.
+* Intercambio seguro de claves.
+* Distribución de bundles criptográficos.
+* Establecimiento de sesiones End-to-End Encryption.
+* Verificación de identidad del dispositivo.
 
-```java
-signedPreKey
-```
-
-### One-Time PreKeys
-
-Conjunto de claves efímeras utilizadas para iniciar conversaciones de forma segura.
-
-```java
-oneTimePreKeys
-```
-
-La operación es delegada a:
-
-```java
-UploadPreKeysUseCase
-```
+Actualmente el login registra o actualiza esta clave durante cada autenticación.
 
 ---
 
 ## JWT
 
-Luego de registrar el dispositivo y las llaves, se genera un JWT utilizando:
+Luego de autenticar al usuario y registrar el dispositivo, se genera un JWT utilizando:
 
 ```java
 JwtService
@@ -127,26 +116,32 @@ Email
 Username
 ```
 
-El token será utilizado posteriormente para acceder a los endpoints protegidos.
+El token será utilizado para acceder a endpoints protegidos.
 
 ---
 
 ## Validaciones implementadas
 
-El caso de uso actualmente valida:
+El caso de uso valida:
 
 * El usuario debe existir.
-* La contraseña debe ser válida.
+* La contraseña debe ser correcta.
+* El dispositivo debe contener información válida.
 * El dispositivo debe poder registrarse correctamente.
-* Las llaves criptográficas deben poder almacenarse correctamente.
 
-Si cualquiera de estas validaciones falla:
+Si alguna validación falla se lanza la excepción correspondiente.
+
+Ejemplos:
+
+```java
+UserNotFoundException
+```
 
 ```java
 InvalidCredentialsException
 ```
 
-o la excepción correspondiente del caso de uso invocado.
+o excepciones derivadas del registro de dispositivos.
 
 ---
 
@@ -164,11 +159,10 @@ Información incluida:
 UUID userId
 String email
 String username
+UUID deviceId
 String accessToken
 String tokenType
 long expiresIn
-UUID deviceId
-int availableOneTimePreKeys
 ```
 
 ---
@@ -180,9 +174,7 @@ Buscar usuario
     ↓
 Validar contraseña
     ↓
-Registrar dispositivo
-    ↓
-Subir llaves criptográficas
+Registrar o actualizar dispositivo
     ↓
 Generar JWT
     ↓
@@ -192,8 +184,6 @@ Retornar LoginResult
 ---
 
 ## Dependencias
-
-El caso de uso depende de:
 
 ### IUserRepository
 
@@ -227,14 +217,6 @@ Responsable de registrar o actualizar dispositivos.
 RegisterOrRefreshUserDeviceUseCase
 ```
 
-### UploadPreKeysUseCase
-
-Responsable de registrar las llaves criptográficas.
-
-```java
-UploadPreKeysUseCase
-```
-
 ---
 
 ## Testing
@@ -244,16 +226,18 @@ Actualmente existen tests para:
 ### Casos válidos
 
 * Login exitoso.
+* Validación correcta de credenciales.
 * Generación correcta del JWT.
 * Registro correcto del dispositivo.
-* Registro correcto de las llaves criptográficas.
-* Retorno correcto de One-Time PreKeys disponibles.
+* Actualización correcta de dispositivo existente.
+* Retorno correcto de información de sesión.
 * Verificación del orden de ejecución del flujo.
 
 ### Casos inválidos
 
 * Usuario inexistente.
 * Contraseña inválida.
+* Dispositivo inválido.
 
 ---
 
@@ -275,27 +259,14 @@ Content-Type: application/json
 
 ```json
 {
-  "email": "test@gmail.com",
-  "password": "123456",
-  "deviceId": null,
-  "deviceName": "Chrome on Windows",
-  "deviceType": "WEB",
-  "publicIdentityKey": "BASE64_PUBLIC_IDENTITY_KEY",
-  "signedPreKey": {
-    "keyId": 1,
-    "publicKey": "BASE64_SIGNED_PREKEY",
-    "signature": "BASE64_SIGNATURE"
-  },
-  "oneTimePreKeys": [
-    {
-      "keyId": 1,
-      "publicKey": "BASE64_PREKEY_1"
-    },
-    {
-      "keyId": 2,
-      "publicKey": "BASE64_PREKEY_2"
-    }
-  ]
+  "email": "admin@citruschat.com",
+  "password": "Admin123!",
+  "deviceRequest": {
+    "deviceId": "7fdcc08c-9f97-4352-b673-6a1c73cadc1c",
+    "deviceName": "Google Chrome Web",
+    "deviceType": "WEB",
+    "publicKey": "XS+UkYt/iNkNlruc6jyuD9BxGR46qawzJ4k2tTfMIDc="
+  }
 }
 ```
 
@@ -306,13 +277,12 @@ Content-Type: application/json
 ```json
 {
   "userId": "91ae5825-9096-4c74-9447-1bf03004c36b",
-  "email": "test@gmail.com",
-  "username": "test_test",
+  "email": "admin@citruschat.com",
+  "username": "admin",
+  "deviceId": "7fdcc08c-9f97-4352-b673-6a1c73cadc1c",
   "accessToken": "jwt-token",
   "tokenType": "Bearer",
-  "expiresIn": 86400,
-  "deviceId": "aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa",
-  "availableOneTimePreKeys": 100
+  "expiresIn": 86400
 }
 ```
 
@@ -328,37 +298,44 @@ Ejemplo:
 Authorization: Bearer <jwt>
 ```
 
-El backend obtendrá la identidad mediante Spring Security y JWT Authentication.
+Spring Security utilizará el token para reconstruir el contexto de autenticación del usuario.
 
 ---
 
 ## Consideraciones de diseño
 
-### Registro de llaves durante Login
+### Dispositivos persistentes
 
-El sistema actual registra el material criptográfico durante el proceso de autenticación.
+Cada dispositivo posee una identidad propia dentro del sistema.
 
-Esto garantiza que:
+Esto permite:
 
-* Todo dispositivo autenticado posea llaves válidas.
-* No existan dispositivos activos sin material criptográfico.
-* El servidor pueda distribuir bundles de Signal Protocol inmediatamente.
+* Múltiples dispositivos por usuario.
+* Revocación individual de dispositivos.
+* Seguimiento de actividad por dispositivo.
+* Gestión independiente de claves públicas.
 
-### Dispositivo como entidad principal
+### Actualización de claves públicas
 
-Todas las llaves son asociadas a un:
+Durante el login la clave pública informada por el cliente se sincroniza con la almacenada por el servidor.
+
+Esto permite:
+
+* Detectar rotaciones de claves.
+* Mantener información criptográfica actualizada.
+* Preparar futuras funcionalidades de cifrado End-to-End.
+
+### DeviceId como identificador estable
+
+El dispositivo es identificado mediante:
 
 ```java
 DeviceId
 ```
 
-y no directamente al usuario.
+y no mediante sesiones temporales.
 
-Esto permite:
-
-* Múltiples dispositivos por usuario.
-* Sesiones independientes.
-* Rotación de llaves por dispositivo.
+Esto permite reconocer un mismo dispositivo a través de múltiples autenticaciones.
 
 ---
 
@@ -373,5 +350,5 @@ El módulo sigue una arquitectura basada en:
 * Spring Boot
 * Spring Security
 * JWT Authentication
-* Signal Protocol
 * JPA/Hibernate
+* Device-Based Authentication

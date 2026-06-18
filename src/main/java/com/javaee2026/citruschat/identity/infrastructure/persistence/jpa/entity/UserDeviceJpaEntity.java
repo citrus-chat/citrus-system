@@ -20,6 +20,9 @@ public class UserDeviceJpaEntity {
 	@Column(name = "user_id", nullable = false)
 	private UUID userId;
 
+	@Column(name = "public_key", nullable = false, length = 512)
+	private String publicKey;
+
 	@Column(name = "device_name")
 	private String deviceName;
 
