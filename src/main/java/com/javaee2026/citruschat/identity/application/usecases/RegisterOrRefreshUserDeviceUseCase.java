@@ -1,10 +1,12 @@
 package com.javaee2026.citruschat.identity.application.usecases;
 
 import com.javaee2026.citruschat.identity.application.commands.RegisterOrRefreshUserDeviceCommand;
+import com.javaee2026.citruschat.identity.application.exceptions.IllegalPublicKeyException;
 import com.javaee2026.citruschat.identity.application.ports.IUserDeviceRepository;
 import com.javaee2026.citruschat.identity.application.results.RegisterOrRefreshUserDeviceResult;
 import com.javaee2026.citruschat.identity.domain.enums.DeviceType;
 import com.javaee2026.citruschat.identity.domain.model.UserDevice;
+import com.javaee2026.citruschat.identity.domain.valueobjects.PublicKey;
 import com.javaee2026.citruschat.shared.domain.valueobjects.UserId;
 
 import java.time.Instant;
@@ -28,6 +30,10 @@ public class RegisterOrRefreshUserDeviceUseCase {
 			if (existing.isPresent()) {
 				UserDevice device = existing.get();
 
+				if (!device.getPublicKey().toString().equals(command.publicKey())) {
+					throw new IllegalPublicKeyException();
+				}
+
 				refreshDevice(device, command, now);
 
 				UserDevice saved = userDeviceRepository.save(device);
@@ -37,7 +43,8 @@ public class RegisterOrRefreshUserDeviceUseCase {
 		}
 
 		UserDevice newDevice = UserDevice.createNew(new UserId(command.userId()),
-				normalizeDeviceName(command.deviceName()), deviceType, now);
+				new PublicKey(command.publicKey().toString()), normalizeDeviceName(command.deviceName()), deviceType,
+				now);
 
 		UserDevice saved = userDeviceRepository.save(newDevice);
 

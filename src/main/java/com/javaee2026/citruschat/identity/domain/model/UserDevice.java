@@ -1,6 +1,7 @@
 package com.javaee2026.citruschat.identity.domain.model;
 
 import com.javaee2026.citruschat.identity.domain.enums.DeviceType;
+import com.javaee2026.citruschat.identity.domain.valueobjects.PublicKey;
 import com.javaee2026.citruschat.shared.domain.valueobjects.DeviceId;
 import com.javaee2026.citruschat.shared.domain.valueobjects.UserId;
 import lombok.Getter;
@@ -12,21 +13,23 @@ public class UserDevice {
 
 	private final DeviceId id;
 	private final UserId userId;
+	private final PublicKey publicKey;
 
 	private String deviceName;
 
 	private final DeviceType deviceType;
 
+	// private Instant lastSecurityChange; // Not implemented yet, if a user changes
+	// his password, ALL OF HIS DEVICES SHOULD BE 'NOT SECURE'
 	private Instant lastSeen;
-
 	private final Instant createdAt;
-
 	private Instant revokedAt;
 
-	private UserDevice(DeviceId id, UserId userId, String deviceName, DeviceType deviceType, Instant lastSeen,
-			Instant createdAt, Instant revokedAt) {
+	private UserDevice(DeviceId id, UserId userId, PublicKey publicKey, String deviceName, DeviceType deviceType,
+			Instant lastSeen, Instant createdAt, Instant revokedAt) {
 		this.id = id;
 		this.userId = userId;
+		this.publicKey = publicKey;
 		this.deviceName = deviceName;
 		this.deviceType = deviceType;
 		this.lastSeen = lastSeen;
@@ -34,13 +37,14 @@ public class UserDevice {
 		this.revokedAt = revokedAt;
 	}
 
-	public static UserDevice createNew(UserId userId, String deviceName, DeviceType deviceType, Instant now) {
-		return new UserDevice(DeviceId.newId(), userId, deviceName, deviceType, now, now, null);
+	public static UserDevice createNew(UserId userId, PublicKey publicKey, String deviceName, DeviceType deviceType,
+			Instant now) {
+		return new UserDevice(DeviceId.newId(), userId, publicKey, deviceName, deviceType, now, now, null);
 	}
 
-	public static UserDevice reconstitute(DeviceId id, UserId userId, String deviceName, DeviceType deviceType,
-			Instant lastSeen, Instant createdAt, Instant revokedAt) {
-		return new UserDevice(id, userId, deviceName, deviceType, lastSeen, createdAt, revokedAt);
+	public static UserDevice reconstitute(DeviceId id, UserId userId, PublicKey publicKey, String deviceName,
+			DeviceType deviceType, Instant lastSeen, Instant createdAt, Instant revokedAt) {
+		return new UserDevice(id, userId, publicKey, deviceName, deviceType, lastSeen, createdAt, revokedAt);
 	}
 
 	public void refreshLastSeen(Instant now) {

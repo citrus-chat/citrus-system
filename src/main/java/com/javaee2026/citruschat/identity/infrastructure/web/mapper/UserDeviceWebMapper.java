@@ -9,7 +9,7 @@ public final class UserDeviceWebMapper {
 	}
 
 	public static UserDeviceResponse toResponse(UserDevice device) {
-		return new UserDeviceResponse(device.getId().value(), device.getDeviceName(), device.getDeviceType(),
-				device.getLastSeen(), device.getCreatedAt());
+		return new UserDeviceResponse(device.getId().value(), device.getPublicKey().value(), device.getDeviceName(),
+				device.getDeviceType(), device.getLastSeen(), device.getCreatedAt());
 	}
 }

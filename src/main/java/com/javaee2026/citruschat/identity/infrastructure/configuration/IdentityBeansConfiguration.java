@@ -119,13 +119,6 @@ public class IdentityBeansConfiguration {
 	}
 
 	@Bean
-	public UploadPreKeysUseCase uploadPreKeysUseCase(IDeviceIdentityRepository identityRepository,
-			IDeviceSignedPreKeyRepository signedPreKeyRepository,
-			IDeviceOneTimePreKeyRepository oneTimePreKeyRepository) {
-		return new UploadPreKeysUseCase(identityRepository, signedPreKeyRepository, oneTimePreKeyRepository);
-	}
-
-	@Bean
 	public GetCurrentUserDevicesUseCase getCurrentUserDevicesUseCase(IUserDeviceRepository userDeviceRepository) {
 		return new GetCurrentUserDevicesUseCase(userDeviceRepository);
 	}
