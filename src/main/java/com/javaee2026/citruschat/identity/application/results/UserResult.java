@@ -1,9 +1,10 @@
 package com.javaee2026.citruschat.identity.application.results;
 
 import com.javaee2026.citruschat.identity.domain.model.User;
+import lombok.Getter;
 
 import java.util.UUID;
-
+@Getter
 public class UserResult {
 
 	private final UUID id;
@@ -19,23 +20,7 @@ public class UserResult {
 	}
 
 	public static UserResult from(User user) {
-		return new UserResult(user.getId().value(), user.getUsername().toString(), user.getEmail().toString(),
+		return new UserResult(user.getId().value(), user.getUsername().getValue(), user.getEmail().getValue(),
 				user.isActive());
-	}
-
-	public UUID getId() {
-		return id;
-	}
-
-	public String getUsername() {
-		return username;
-	}
-
-	public String getEmail() {
-		return email;
-	}
-
-	public boolean isActive() {
-		return active;
 	}
 }
