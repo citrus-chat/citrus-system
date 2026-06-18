@@ -27,6 +27,13 @@ public final class ApiRoutes {
 	public static final String API_AUTH_DEVICES = API_AUTH_BASE + "/devices";
 	// ===================== END API Routes ====================
 
+	// ===================== DOCS API Routes ====================
+	public static final String API_DOCS_SWAGGER_BASE = "/swagger-ui.html";
+	public static final String API_DOCS_SWAGGER = "/swagger-ui/**";
+	public static final String API_DOCS_V3_BASE = "/v3/api-docs";
+	public static final String API_DOCS_V3 = "/v3/api-docs/**";
+	// ===================== END API Routes ====================
+
 	// ===================== MESSAGES API Routes ====================
 	public static final String API_MESSAGES = API_MESSAGES_BASE; // => /api/v1/messages
 	// ===================== END API Routes ====================
