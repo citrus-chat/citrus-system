@@ -1,5 +1,6 @@
 package com.javaee2026.citruschat.messaging.infrastructure.web.controller;
 
+import com.javaee2026.citruschat.messaging.application.results.CreateChatRoomResult;
 import com.javaee2026.citruschat.messaging.application.usecases.CreateChatRoomUseCase;
 import com.javaee2026.citruschat.messaging.infrastructure.web.dto.request.CreateChatRoomRequest;
 import com.javaee2026.citruschat.messaging.infrastructure.web.dto.response.CreateChatRoomResponse;
@@ -32,9 +33,10 @@ public class CreateChatRoomController {
 			@Valid @RequestBody CreateChatRoomRequest request) {
 		UUID creatorId = UUID.fromString(jwt.getSubject());
 
-		createChatRoomUseCase.execute(CreateChatRoomWebMapper.toCommand(request, creatorId));
+		CreateChatRoomResult result = createChatRoomUseCase
+				.execute(CreateChatRoomWebMapper.toCommand(request, creatorId));
 
 		return ApiResponses.created(ApiResponseMessages.CHAT_ROOM_CREATION_SUCCESS,
-				CreateChatRoomWebMapper.toResponse());
+				CreateChatRoomWebMapper.toResponse(result));
 	}
 }
