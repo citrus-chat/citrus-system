@@ -4,6 +4,7 @@ import com.javaee2026.citruschat.identity.application.ports.IUserRepository;
 import com.javaee2026.citruschat.messaging.application.commands.CreateChatRoomCommand;
 import com.javaee2026.citruschat.messaging.application.ports.IChatPermissionRepository;
 import com.javaee2026.citruschat.messaging.application.ports.IChatRoomRepository;
+import com.javaee2026.citruschat.messaging.application.results.CreateChatRoomResult;
 import com.javaee2026.citruschat.messaging.domain.enums.ChatRoleDefault;
 import com.javaee2026.citruschat.messaging.domain.enums.ChatRoomType;
 import com.javaee2026.citruschat.messaging.domain.factory.ChatRoomFactory;
@@ -78,7 +79,7 @@ public class CreateChatRoomUseCase {
 		return resolved;
 	}
 
-	public void execute(CreateChatRoomCommand command) {
+	public CreateChatRoomResult execute(CreateChatRoomCommand command) {
 
 		UserId creatorId = new UserId(command.chatRoomCreatorId());
 
@@ -94,5 +95,9 @@ public class CreateChatRoomUseCase {
 		chatRoom.initParticipants(creatorId, userIds); // Inicializa los participantes
 
 		chatRoomRepository.save(chatRoom);
+
+		return new CreateChatRoomResult(chatRoom.getId(), chatRoom.getType(), chatRoom.getName(),
+				chatRoom.getCreatedBy(), chatRoom.getParticipants(), chatRoom.getRoles(), chatRoom.getCreatedAt(),
+				chatRoom.getUpdatedAt(), chatRoom.getDeletedAt());
 	}
 }
