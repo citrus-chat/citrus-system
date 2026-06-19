@@ -96,7 +96,8 @@ public class CreateChatRoomUseCase {
 
 		chatRoomRepository.save(chatRoom);
 
-		return new CreateChatRoomResult(chatRoom.getId().value(), chatRoom.getName(), chatRoom.getType(),
-				chatRoom.getCreatedAt(), chatRoom.getUpdatedAt());
+		return new CreateChatRoomResult(chatRoom.getId(), chatRoom.getType(), chatRoom.getName(),
+				chatRoom.getCreatedBy(), chatRoom.getParticipants(), chatRoom.getRoles(), chatRoom.getCreatedAt(),
+				chatRoom.getUpdatedAt(), chatRoom.getDeletedAt());
 	}
 }

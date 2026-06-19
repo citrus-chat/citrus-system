@@ -16,7 +16,10 @@ public final class CreateChatRoomWebMapper {
 	}
 
 	public static CreateChatRoomResponse toResponse(CreateChatRoomResult result) {
-		return new CreateChatRoomResponse(result.id(), result.name(), result.type().toString(), result.createdAt(),
-				result.updatedAt());
+		return new CreateChatRoomResponse(result.id().value(), result.type().toString(), result.name(),
+				result.createdBy().value(),
+				// result.participants(),
+				// result.roles(),
+				result.createdAt(), result.updatedAt(), result.deletedAt());
 	}
 }
