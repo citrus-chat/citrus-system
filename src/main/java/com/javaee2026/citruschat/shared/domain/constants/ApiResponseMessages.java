@@ -6,6 +6,7 @@ public final class ApiResponseMessages {
 	}
 
 	public static String LOGIN_SUCCESS = "Login successful.";
+	public static String LOGOUT_SUCCESS = "Logout successful.";
 
 	public static String REGISTRATION_SUCCESS = "Registration successful";
 

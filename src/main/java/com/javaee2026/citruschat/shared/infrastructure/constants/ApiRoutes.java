@@ -23,6 +23,7 @@ public final class ApiRoutes {
 	public static final String API_AUTH_VALIDATE_ACCOUNT = API_AUTH_BASE + "/validate-account"; // =>
 																								// /api/v1/auth/validate-account
 	public static final String API_AUTH_LOGIN = API_AUTH_BASE + "/login"; // => /api/v1/auth/login
+	public static final String API_AUTH_LOGOUT = API_AUTH_BASE + "/logout"; // => /api/v1/auth/logout
 	public static final String API_AUTH_ME = API_AUTH_BASE + "/me"; // => /api/v1/auth/me
 	public static final String API_AUTH_DEVICES = API_AUTH_BASE + "/devices";
 	// ===================== END API Routes ====================
