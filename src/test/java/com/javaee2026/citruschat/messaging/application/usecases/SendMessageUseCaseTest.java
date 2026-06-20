@@ -5,6 +5,7 @@ import com.javaee2026.citruschat.identity.application.ports.IUserRepository;
 import com.javaee2026.citruschat.identity.domain.enums.DeviceType;
 import com.javaee2026.citruschat.identity.domain.model.User;
 import com.javaee2026.citruschat.identity.domain.model.UserDevice;
+import com.javaee2026.citruschat.identity.domain.valueobjects.PublicKey;
 import com.javaee2026.citruschat.messaging.application.commands.MessageDevicePayloadCommand;
 import com.javaee2026.citruschat.messaging.application.commands.SendMessageCommand;
 import com.javaee2026.citruschat.messaging.application.ports.IChatRoomRepository;
@@ -45,12 +46,14 @@ class SendMessageUseCaseTest {
 		UUID senderDeviceId = UUID.randomUUID();
 		UUID targetDeviceId = UUID.randomUUID();
 		UUID chatRoomId = UUID.randomUUID();
+		String senderPublicKey = "l7sW4w4Qj0f0H5qKJr9z3tD7NwV6g1sYc2mF8rLpQa8=";
+		String targetPublicKey = "AQIDBAUGBwgJCgsMDQ4PEBESExQVFhcYGRobHB0eHyA=";
 
 		User sender = mock(User.class);
 		when(sender.getId()).thenReturn(new UserId(senderUserId));
 
-		UserDevice senderDevice = createDevice(senderUserId, senderDeviceId);
-		UserDevice receiverDevice = createDevice(UUID.randomUUID(), targetDeviceId);
+		UserDevice senderDevice = createDevice(senderUserId, senderDeviceId, senderPublicKey);
+		UserDevice receiverDevice = createDevice(UUID.randomUUID(), targetDeviceId, targetPublicKey);
 
 		ChatRoom chatRoom = createValidChatRoom(senderUserId);
 
@@ -163,11 +166,12 @@ class SendMessageUseCaseTest {
 
 		UUID senderUserId = UUID.randomUUID();
 		UUID senderDeviceId = UUID.randomUUID();
+		String publicKey = "AQIDBAUGBwgJCgsMDQ4PEBESExQVFhcYGRobHB0eHyA=";
 
 		User sender = mock(User.class);
 		when(sender.getId()).thenReturn(new UserId(senderUserId));
 
-		UserDevice senderDevice = createDevice(senderUserId, senderDeviceId);
+		UserDevice senderDevice = createDevice(senderUserId, senderDeviceId, publicKey);
 
 		ChatRoom chatRoom = createValidChatRoom(senderUserId);
 
@@ -212,9 +216,9 @@ class SendMessageUseCaseTest {
 		return createValidChatRoom(otherUser);
 	}
 
-	private UserDevice createDevice(UUID userId, UUID deviceId) {
+	private UserDevice createDevice(UUID userId, UUID deviceId, String publicKey) {
 
-		return UserDevice.reconstitute(new DeviceId(deviceId), new UserId(userId), "device", DeviceType.WEB,
-				Instant.now(), Instant.now(), null);
+		return UserDevice.reconstitute(new DeviceId(deviceId), new UserId(userId), new PublicKey(publicKey), "device",
+				DeviceType.WEB, Instant.now(), Instant.now(), null);
 	}
 }

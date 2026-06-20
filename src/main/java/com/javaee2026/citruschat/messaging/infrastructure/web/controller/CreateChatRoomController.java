@@ -1,5 +1,6 @@
 package com.javaee2026.citruschat.messaging.infrastructure.web.controller;
 
+import com.javaee2026.citruschat.messaging.application.results.CreateChatRoomResult;
 import com.javaee2026.citruschat.messaging.application.usecases.CreateChatRoomUseCase;
 import com.javaee2026.citruschat.messaging.infrastructure.web.dto.request.CreateChatRoomRequest;
 import com.javaee2026.citruschat.messaging.infrastructure.web.dto.response.CreateChatRoomResponse;
@@ -12,9 +13,7 @@ import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
 
@@ -32,9 +31,10 @@ public class CreateChatRoomController {
 			@Valid @RequestBody CreateChatRoomRequest request) {
 		UUID creatorId = UUID.fromString(jwt.getSubject());
 
-		createChatRoomUseCase.execute(CreateChatRoomWebMapper.toCommand(request, creatorId));
+		CreateChatRoomResult result = createChatRoomUseCase
+				.execute(CreateChatRoomWebMapper.toCommand(request, creatorId));
 
 		return ApiResponses.created(ApiResponseMessages.CHAT_ROOM_CREATION_SUCCESS,
-				CreateChatRoomWebMapper.toResponse());
+				CreateChatRoomWebMapper.toResponse(result));
 	}
 }

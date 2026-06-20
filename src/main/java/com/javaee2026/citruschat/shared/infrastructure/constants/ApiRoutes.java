@@ -11,6 +11,7 @@ public final class ApiRoutes {
 	private static final String API_AUTH_BASE = API_BASE + "/auth"; // => /api/v1/auth
 	private static final String API_MESSAGES_BASE = API_BASE + "/messages"; // => /api/v1/auth
 	private static final String API_CHATROOM_BASE = API_BASE + "/chatroom";
+	private static final String API_USER_BASE = API_BASE + "/users";
 	// ===================== END BASE API Routes ====================
 
 	// ===================== ADMIN API Routes ====================
@@ -27,6 +28,13 @@ public final class ApiRoutes {
 	public static final String API_AUTH_DEVICES = API_AUTH_BASE + "/devices";
 	// ===================== END API Routes ====================
 
+	// ===================== DOCS API Routes ====================
+	public static final String API_DOCS_SWAGGER_BASE = "/swagger-ui.html";
+	public static final String API_DOCS_SWAGGER = "/swagger-ui/**";
+	public static final String API_DOCS_V3_BASE = "/v3/api-docs";
+	public static final String API_DOCS_V3 = "/v3/api-docs/**";
+	// ===================== END API Routes ====================
+
 	// ===================== MESSAGES API Routes ====================
 	public static final String API_MESSAGES = API_MESSAGES_BASE; // => /api/v1/messages
 	// ===================== END API Routes ====================
@@ -38,6 +46,15 @@ public final class ApiRoutes {
 	public static final String API_CHAT_ROOM_MESSAGES = API_CHATROOM_BASE + "/{chatRoomId}/messages";
 	public static final String API_CHAT_MESSAGES = "/api/v1/chats/{chatRoomId}/messages";
 	// ===================== END API ROUTES ====================
+
+	// ===================== USER API ROUTES =======================
+	public static final String API_USER_ME = API_USER_BASE + "/me"; // => /api/v1/users/me
+	public static final String API_USER_BY_ID = API_USER_BASE + "/{id}"; // => /api/v1/users/{id}
+	public static final String API_USERS_SEARCH = API_USER_BASE; // => /api/v1/users
+	public static final String API_USER_UPDATE = API_USER_BASE + "/{id}"; // => /api/v1/users/{id}
+	public static final String API_USER_DELETE = API_USER_BASE + "/{id}"; // => /api/v1/users/{id}
+	public static final String API_USER_CREATE = API_USER_BASE; // => /api/v1/users
+	// ===================== END API Routes ====================
 
 	// ===================== WEBSOCKET ROUTES ====================
 	public static final String WS_ENDPOINT = "/ws";
