@@ -30,7 +30,7 @@ public class RegisterOrRefreshUserDeviceUseCase {
 			if (existing.isPresent()) {
 				UserDevice device = existing.get();
 
-				if (!device.getPublicKey().toString().equals(command.publicKey())) {
+				if (!device.getPublicKey().value().equals(command.publicKey())) {
 					throw new IllegalPublicKeyException();
 				}
 
@@ -42,9 +42,8 @@ public class RegisterOrRefreshUserDeviceUseCase {
 			}
 		}
 
-		UserDevice newDevice = UserDevice.createNew(new UserId(command.userId()),
-				new PublicKey(command.publicKey().toString()), normalizeDeviceName(command.deviceName()), deviceType,
-				now);
+		UserDevice newDevice = UserDevice.createNew(new UserId(command.userId()), new PublicKey(command.publicKey()),
+				normalizeDeviceName(command.deviceName()), deviceType, now);
 
 		UserDevice saved = userDeviceRepository.save(newDevice);
 
