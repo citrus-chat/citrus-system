@@ -27,6 +27,7 @@ public class User {
 	private PhoneNumber phoneNumber;
 	private Username username;
 	private String passwordHash;
+	private String avatarUrl;
 
 	private final Instant createdAt;
 	private Instant updatedAt;
@@ -34,12 +35,13 @@ public class User {
 	private Instant deletedAt;
 
 	public User(UserId id, UserEmail email, Username username, PhoneNumber phoneNumber, String passwordHash,
-			Instant createdAt, Instant updatedAt, Instant validatedAt, Instant deletedAt) {
+			String avatarUrl, Instant createdAt, Instant updatedAt, Instant validatedAt, Instant deletedAt) {
 		this.id = requireNonNull(id, ErrorMessages.USER_ID_CANNOT_BE_NULL);
 		this.email = requireNonNull(email, ErrorMessages.EMAIL_CANNOT_BE_NULL);
 		this.username = requireNonNull(username, ErrorMessages.USERNAME_CANNOT_BE_NULL);
 		this.phoneNumber = requireNonNull(phoneNumber, ErrorMessages.PHONE_NUMBER_CANNOT_BE_NULL);
 		this.passwordHash = requireNonNull(passwordHash, ErrorMessages.PASSWORD_HASH_CANNOT_BE_NULL);
+		this.avatarUrl = avatarUrl;
 		this.createdAt = requireNonNull(createdAt, ErrorMessages.CREATED_AT_CANNOT_BE_NULL);
 		this.updatedAt = requireNonNull(updatedAt, ErrorMessages.UPDATED_AT_CANNOT_BE_NULL);
 		this.validatedAt = validatedAt;
@@ -89,6 +91,20 @@ public class User {
 
 	public void changeUsername(Username newUsername) {
 		this.username = requireNonNull(newUsername, ErrorMessages.USERNAME_CANNOT_BE_NULL);
+		touch();
+	}
+
+	public void changeAvatarUrl(String newAvatarUrl) {
+		if (newAvatarUrl == null || newAvatarUrl.isBlank()) {
+			throw new InvalidUserException("Avatar URL cannot be blank");
+		}
+
+		this.avatarUrl = newAvatarUrl;
+		touch();
+	}
+
+	public void deleteAvatar() {
+		this.avatarUrl = null;
 		touch();
 	}
 

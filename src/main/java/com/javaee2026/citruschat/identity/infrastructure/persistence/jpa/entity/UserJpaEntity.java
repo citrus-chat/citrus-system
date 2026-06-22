@@ -31,6 +31,9 @@ public class UserJpaEntity {
 	@Column(nullable = false)
 	private String passwordHash;
 
+	@Column(name = "avatar_url")
+	private String avatarUrl;
+
 	@Column(nullable = true)
 	private Instant validatedAt;
 

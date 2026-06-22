@@ -14,6 +14,8 @@ public final class ApiResponseMessages {
 
 	public static final String CURRENT_USER_SUCCESS = "Current user retrieved successfully.";
 	public static final String USER_LIST_RETRIEVED_SUCCESS = "User list retrieved successfully.";
+	public static final String USER_AVATAR_UPDATED_SUCCESS = "User avatar updated successfully.";
+	public static final String USER_AVATAR_DELETED_SUCCESS = "User avatar deleted successfully.";
 
 	public static final String MESSAGE_SENT_SUCCESS = "Message sent successfully.";
 

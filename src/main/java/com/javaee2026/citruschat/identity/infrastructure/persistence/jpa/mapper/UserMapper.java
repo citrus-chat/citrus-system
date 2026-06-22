@@ -21,7 +21,8 @@ public final class UserMapper {
 	public User toDomain(UserJpaEntity entity) {
 		return userFactory.reconstitute(new UserId(entity.getId()), new UserEmail(entity.getEmail()),
 				new Username(entity.getUsername()), new PhoneNumber(entity.getPhoneNumber()), entity.getPasswordHash(),
-				entity.getCreatedAt(), entity.getUpdatedAt(), entity.getDeletedAt(), entity.getValidatedAt());
+				entity.getAvatarUrl(), entity.getCreatedAt(), entity.getUpdatedAt(), entity.getValidatedAt(),
+				entity.getDeletedAt());
 	}
 
 	public UserJpaEntity toJpa(User user) {
@@ -32,6 +33,7 @@ public final class UserMapper {
 		entity.setUsername(user.getUsername().getValue());
 		entity.setPhoneNumber(user.getPhoneNumber().getValue());
 		entity.setPasswordHash(user.getPasswordHash());
+		entity.setAvatarUrl(user.getAvatarUrl());
 
 		entity.setCreatedAt(user.getCreatedAt());
 		entity.setUpdatedAt(user.getUpdatedAt());

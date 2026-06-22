@@ -15,14 +15,16 @@ public class UserFactory {
 	public User createNew(UserEmail email, Username username, PhoneNumber phoneNumber, String passwordHash) {
 		Instant now = Instant.now();
 
-		return new User(UserId.newId(), email, username, phoneNumber, passwordHash, now, now, null, null);
+		return new User(UserId.newId(), email, username, phoneNumber, passwordHash, null, now, now, null, null);
 	}
 
 	// reconstitute = reconstruir desde la base de datos
 	// Es el método que usás cuando ya existe el objeto y lo estás trayendo desde
 	// persistencia.
 	public User reconstitute(UserId id, UserEmail email, Username username, PhoneNumber phoneNumber,
-			String passwordHash, Instant createdAt, Instant updatedAt, Instant validatedAt, Instant deletedAt) {
-		return new User(id, email, username, phoneNumber, passwordHash, createdAt, updatedAt, validatedAt, deletedAt);
+			String passwordHash, String avatarUrl, Instant createdAt, Instant updatedAt, Instant validatedAt,
+			Instant deletedAt) {
+		return new User(id, email, username, phoneNumber, passwordHash, avatarUrl, createdAt, updatedAt, validatedAt,
+				deletedAt);
 	}
 }
