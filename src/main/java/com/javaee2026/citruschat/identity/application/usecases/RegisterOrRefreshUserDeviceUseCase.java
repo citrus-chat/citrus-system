@@ -7,6 +7,7 @@ import com.javaee2026.citruschat.identity.application.results.RegisterOrRefreshU
 import com.javaee2026.citruschat.identity.domain.enums.DeviceType;
 import com.javaee2026.citruschat.identity.domain.model.UserDevice;
 import com.javaee2026.citruschat.identity.domain.valueobjects.PublicKey;
+import com.javaee2026.citruschat.shared.domain.valueobjects.DeviceId;
 import com.javaee2026.citruschat.shared.domain.valueobjects.UserId;
 
 import java.time.Instant;
@@ -24,26 +25,25 @@ public class RegisterOrRefreshUserDeviceUseCase {
 
 		DeviceType deviceType = command.deviceType() != null ? command.deviceType() : DeviceType.WEB;
 
-		if (command.deviceId() != null) {
-			var existing = userDeviceRepository.findActiveByIdAndUserId(command.deviceId(), command.userId());
+		var existing = userDeviceRepository.findActiveByIdAndUserId(command.deviceId(), command.userId());
 
-			if (existing.isPresent()) {
-				UserDevice device = existing.get();
+		if (existing.isPresent()) {
+			UserDevice device = existing.get();
 
-				if (!device.getPublicKey().value().equals(command.publicKey())) {
-					throw new IllegalPublicKeyException();
-				}
-
-				refreshDevice(device, command, now);
-
-				UserDevice saved = userDeviceRepository.save(device);
-
-				return new RegisterOrRefreshUserDeviceResult(saved.getId().value());
+			if (!device.getPublicKey().value().equals(command.publicKey())) {
+				throw new IllegalPublicKeyException();
 			}
+
+			refreshDevice(device, command, now);
+
+			UserDevice saved = userDeviceRepository.save(device);
+
+			return new RegisterOrRefreshUserDeviceResult(saved.getId().value());
 		}
 
-		UserDevice newDevice = UserDevice.createNew(new UserId(command.userId()), new PublicKey(command.publicKey()),
-				normalizeDeviceName(command.deviceName()), deviceType, now);
+		// Always needs to pass a deviceId
+		UserDevice newDevice = UserDevice.createNew(new DeviceId(command.deviceId()), new UserId(command.userId()),
+				new PublicKey(command.publicKey()), normalizeDeviceName(command.deviceName()), deviceType, now);
 
 		UserDevice saved = userDeviceRepository.save(newDevice);
 

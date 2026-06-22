@@ -42,7 +42,7 @@ public final class ApiRoutes {
 	// ===================== CHAT_ROOM API ROUTES ====================
 	public static final String API_CHAT_ROOMS = API_CHATROOM_BASE;
 	public static final String API_CHAT_ROOMS_CREATE = API_CHATROOM_BASE + "/create"; // => /api/v1/chatroom/create
-	public static final String API_CHAT_ROOMS_ME = API_CHATROOM_BASE + "/me";
+	public static final String API_CHAT_ROOMS_SYNC = API_CHATROOM_BASE + "/sync"; // => /api/v1/chatroom/sync
 	public static final String API_CHAT_ROOM_MESSAGES = API_CHATROOM_BASE + "/{chatRoomId}/messages";
 	public static final String API_CHAT_MESSAGES = "/api/v1/chats/{chatRoomId}/messages";
 	// ===================== END API ROUTES ====================

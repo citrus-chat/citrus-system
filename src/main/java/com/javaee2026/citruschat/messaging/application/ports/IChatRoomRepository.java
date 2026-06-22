@@ -5,6 +5,7 @@ import com.javaee2026.citruschat.messaging.domain.model.ChatRoom;
 import com.javaee2026.citruschat.shared.domain.valueobjects.ChatRoomId;
 import com.javaee2026.citruschat.shared.domain.valueobjects.UserId;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,6 +18,8 @@ public interface IChatRoomRepository {
 
 	public Boolean existsDirectChatBetweenParticipants(UserId participant1, UserId participant2);
 	// List<ChatRoomSummaryResult> findActiveChatRoomsByUserId(UUID userId);
+
+	List<ChatRoom> findUpdatedChatRooms(UserId userId, Instant since);
 
 	void save(ChatRoom chatRoom);
 }

@@ -30,6 +30,9 @@ public class UserDeviceJpaEntity {
 	@Column(name = "device_type", nullable = false)
 	private DeviceType deviceType;
 
+	@Column(name = "last_sync")
+	private Instant lastSync;
+
 	@Column(name = "last_seen", nullable = false)
 	private Instant lastSeen;
 
