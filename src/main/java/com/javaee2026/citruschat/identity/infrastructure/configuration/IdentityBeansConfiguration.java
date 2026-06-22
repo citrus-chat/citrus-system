@@ -119,6 +119,23 @@ public class IdentityBeansConfiguration {
 	}
 
 	@Bean
+	public GetCurrentUserUseCase getCurrentUserUseCase(IUserRepository userRepository) {
+		return new GetCurrentUserUseCase(userRepository);
+	}
+
+	@Bean
+	public UpdateUserAvatarUseCase updateUserAvatarUseCase(IUserRepository userRepository,
+			IUserAvatarStorage avatarStorage) {
+		return new UpdateUserAvatarUseCase(userRepository, avatarStorage);
+	}
+
+	@Bean
+	public DeleteUserAvatarUseCase deleteUserAvatarUseCase(IUserRepository userRepository,
+			IUserAvatarStorage avatarStorage) {
+		return new DeleteUserAvatarUseCase(userRepository, avatarStorage);
+	}
+
+	@Bean
 	public GetCurrentUserDevicesUseCase getCurrentUserDevicesUseCase(IUserDeviceRepository userDeviceRepository) {
 		return new GetCurrentUserDevicesUseCase(userDeviceRepository);
 	}

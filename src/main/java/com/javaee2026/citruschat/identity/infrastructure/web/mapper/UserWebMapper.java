@@ -11,7 +11,8 @@ public final class UserWebMapper {
 	}
 
 	public static UserResponse toResponse(UserResult result) {
-		return new UserResponse(result.getId().toString(), result.getUsername(), result.getEmail(), result.isActive());
+		return new UserResponse(result.getId().toString(), result.getUsername(), result.getEmail(), result.isActive(),
+				result.getAvatarUrl());
 	}
 
 	public static List<UserResponse> toResponseList(List<UserResult> results) {

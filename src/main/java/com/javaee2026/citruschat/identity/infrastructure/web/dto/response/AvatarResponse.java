@@ -2,6 +2,5 @@ package com.javaee2026.citruschat.identity.infrastructure.web.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public record CurrentUserResponse(String userId, String email, String username,
-		@JsonProperty("avatar_url") String avatarUrl) {
+public record AvatarResponse(@JsonProperty("avatar_url") String avatarUrl) {
 }
