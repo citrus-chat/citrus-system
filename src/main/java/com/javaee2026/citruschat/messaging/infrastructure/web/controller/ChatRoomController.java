@@ -1,11 +1,16 @@
 package com.javaee2026.citruschat.messaging.infrastructure.web.controller;
 
 import com.javaee2026.citruschat.messaging.application.results.CreateChatRoomResult;
+import com.javaee2026.citruschat.messaging.application.results.SyncChatRoomResult;
 import com.javaee2026.citruschat.messaging.application.usecases.CreateChatRoomUseCase;
+import com.javaee2026.citruschat.messaging.application.usecases.SyncChatRoomUseCase;
 import com.javaee2026.citruschat.messaging.infrastructure.web.dto.request.CreateChatRoomRequest;
 import com.javaee2026.citruschat.messaging.infrastructure.web.dto.response.CreateChatRoomResponse;
+import com.javaee2026.citruschat.messaging.infrastructure.web.dto.response.SyncChatRoomResponse;
 import com.javaee2026.citruschat.messaging.infrastructure.web.mapper.CreateChatRoomWebMapper;
+import com.javaee2026.citruschat.messaging.infrastructure.web.mapper.SyncChatRoomWebMapper;
 import com.javaee2026.citruschat.shared.domain.constants.ApiResponseMessages;
+import com.javaee2026.citruschat.shared.domain.valueobjects.DeviceId;
 import com.javaee2026.citruschat.shared.infrastructure.constants.ApiRoutes;
 import com.javaee2026.citruschat.shared.infrastructure.web.ApiResponses;
 import com.javaee2026.citruschat.shared.infrastructure.web.dto.response.ApiResponse;
@@ -18,12 +23,14 @@ import org.springframework.web.bind.annotation.*;
 import java.util.UUID;
 
 @RestController
-public class CreateChatRoomController {
+public class ChatRoomController {
 
 	private final CreateChatRoomUseCase createChatRoomUseCase;
+	private final SyncChatRoomUseCase syncChatRoomUseCase;
 
-	public CreateChatRoomController(CreateChatRoomUseCase createChatRoomUseCase) {
+	public ChatRoomController(CreateChatRoomUseCase createChatRoomUseCase, SyncChatRoomUseCase syncChatRoomUseCase) {
 		this.createChatRoomUseCase = createChatRoomUseCase;
+		this.syncChatRoomUseCase = syncChatRoomUseCase;
 	}
 
 	@PostMapping(ApiRoutes.API_CHAT_ROOMS_CREATE)
@@ -36,5 +43,14 @@ public class CreateChatRoomController {
 
 		return ApiResponses.created(ApiResponseMessages.CHAT_ROOM_CREATION_SUCCESS,
 				CreateChatRoomWebMapper.toResponse(result));
+	}
+
+	@GetMapping(ApiRoutes.API_CHAT_ROOMS_SYNC)
+	public ResponseEntity<ApiResponse<SyncChatRoomResponse>> sync(@RequestParam UUID deviceId) {
+
+		SyncChatRoomResult result = syncChatRoomUseCase.execute(new DeviceId(deviceId));
+
+		return ApiResponses.ok(ApiResponseMessages.CHAT_ROOM_RETRIEVED_SUCCESS,
+				SyncChatRoomWebMapper.toResponse(result));
 	}
 }

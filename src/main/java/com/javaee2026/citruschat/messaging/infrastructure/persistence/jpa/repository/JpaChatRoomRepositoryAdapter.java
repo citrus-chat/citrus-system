@@ -9,6 +9,7 @@ import com.javaee2026.citruschat.shared.domain.valueobjects.ChatRoomId;
 import com.javaee2026.citruschat.shared.domain.valueobjects.UserId;
 import jakarta.transaction.Transactional;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 
@@ -49,6 +50,13 @@ public class JpaChatRoomRepositoryAdapter implements IChatRoomRepository {
 	// public List<ChatRoomSummaryResult> findActiveChatRoomsByUserId(UUID userId) {
 	// return chatRoomRepository.findActiveChatRoomsByUserId(userId);
 	// }
+
+	@Override
+	@Transactional
+	public List<ChatRoom> findUpdatedChatRooms(UserId userId, Instant since) {
+		return chatRoomRepository.findUpdatedChatRooms(userId.value(), since).stream().map(chatRoomMapper::toDomain)
+				.toList();
+	}
 
 	@Override
 	public Optional<ChatRoom> findById(ChatRoomId id) {

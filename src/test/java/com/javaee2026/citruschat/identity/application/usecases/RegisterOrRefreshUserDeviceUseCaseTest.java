@@ -81,6 +81,6 @@ class RegisterOrRefreshUserDeviceUseCaseTest {
 	private UserDevice createDevice(UUID userId, UUID deviceId, String publicKey) {
 		Instant now = Instant.now();
 		return UserDevice.reconstitute(new DeviceId(deviceId), new UserId(userId), new PublicKey(publicKey), "device",
-				DeviceType.MOBILE, now, now, null);
+				DeviceType.MOBILE, now, now, now, null);
 	}
 }

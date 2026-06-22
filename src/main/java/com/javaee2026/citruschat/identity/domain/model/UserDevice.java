@@ -21,30 +21,37 @@ public class UserDevice {
 
 	// private Instant lastSecurityChange; // Not implemented yet, if a user changes
 	// his password, ALL OF HIS DEVICES SHOULD BE 'NOT SECURE'
+	private Instant lastSync;
 	private Instant lastSeen;
 	private final Instant createdAt;
 	private Instant revokedAt;
 
 	private UserDevice(DeviceId id, UserId userId, PublicKey publicKey, String deviceName, DeviceType deviceType,
-			Instant lastSeen, Instant createdAt, Instant revokedAt) {
+			Instant lastSync, Instant lastSeen, Instant createdAt, Instant revokedAt) {
 		this.id = id;
 		this.userId = userId;
 		this.publicKey = publicKey;
 		this.deviceName = deviceName;
 		this.deviceType = deviceType;
+		this.lastSync = lastSync;
 		this.lastSeen = lastSeen;
 		this.createdAt = createdAt;
 		this.revokedAt = revokedAt;
 	}
 
+	public static UserDevice createNew(DeviceId deviceId, UserId userId, PublicKey publicKey, String deviceName,
+			DeviceType deviceType, Instant now) {
+		return new UserDevice(deviceId, userId, publicKey, deviceName, deviceType, null, now, now, null);
+	}
+
 	public static UserDevice createNew(UserId userId, PublicKey publicKey, String deviceName, DeviceType deviceType,
 			Instant now) {
-		return new UserDevice(DeviceId.newId(), userId, publicKey, deviceName, deviceType, now, now, null);
+		return new UserDevice(DeviceId.newId(), userId, publicKey, deviceName, deviceType, null, now, now, null);
 	}
 
 	public static UserDevice reconstitute(DeviceId id, UserId userId, PublicKey publicKey, String deviceName,
-			DeviceType deviceType, Instant lastSeen, Instant createdAt, Instant revokedAt) {
-		return new UserDevice(id, userId, publicKey, deviceName, deviceType, lastSeen, createdAt, revokedAt);
+			DeviceType deviceType, Instant lastSync, Instant lastSeen, Instant createdAt, Instant revokedAt) {
+		return new UserDevice(id, userId, publicKey, deviceName, deviceType, lastSync, lastSeen, createdAt, revokedAt);
 	}
 
 	public void refreshLastSeen(Instant now) {
@@ -57,6 +64,10 @@ public class UserDevice {
 		}
 
 		this.deviceName = deviceName;
+	}
+
+	public void sync() {
+		this.lastSync = Instant.now();
 	}
 
 	public void revoke(Instant now) {

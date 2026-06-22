@@ -67,6 +67,7 @@ public class ChatRoom {
 			roles.put(roleName, ChatRole.createDefault(id, roleDefault, rolePermissions, rolePriority));
 		}
 		System.out.println("Roles initialized: " + roles);
+		touch();
 	}
 
 	public void touch() {
@@ -82,6 +83,7 @@ public class ChatRoom {
 			throw new InvalidMessageException(ErrorMessages.CHATROOM_ALREADY_DELETED);
 		}
 
+		touch();
 		this.deletedAt = Instant.now();
 	}
 
@@ -106,6 +108,7 @@ public class ChatRoom {
 
 		ChatParticipant owner = ChatParticipant.createNew(id, userId, ownerRoles, Instant.now());
 		participants.add(owner);
+		touch();
 	}
 
 	public void addMember(UserId userId, ChatRole memberRole) {
@@ -114,6 +117,7 @@ public class ChatRoom {
 
 		ChatParticipant member = ChatParticipant.createNew(id, userId, memberRoles, Instant.now());
 		participants.add(member);
+		touch();
 	}
 
 	public ChatRole getRole(RoleId roleId) {

@@ -109,4 +109,10 @@ public class MessagingBeansConfiguration {
 			SpringDataChatParticipantRepository springDataChatParticipantRepository) {
 		return new JpaChatParticipantRepositoryAdapter(springDataChatParticipantRepository);
 	}
+
+	@Bean
+	public SyncChatRoomUseCase syncChatRoomUseCase(IUserRepository userRepository,
+			IChatRoomRepository chatRoomRepository, IUserDeviceRepository deviceRepository) {
+		return new SyncChatRoomUseCase(chatRoomRepository, deviceRepository, userRepository);
+	}
 }
