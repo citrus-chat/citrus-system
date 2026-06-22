@@ -46,16 +46,11 @@ public class ChatRoomController {
 	}
 
 	@GetMapping(ApiRoutes.API_CHAT_ROOMS_SYNC)
-	public ResponseEntity<ApiResponse<SyncChatRoomResponse>> sync(
-			@RequestParam UUID deviceId) {
+	public ResponseEntity<ApiResponse<SyncChatRoomResponse>> sync(@RequestParam UUID deviceId) {
 
-		SyncChatRoomResult result = syncChatRoomUseCase.execute(
-				new DeviceId(deviceId)
-		);
+		SyncChatRoomResult result = syncChatRoomUseCase.execute(new DeviceId(deviceId));
 
-		return ApiResponses.ok(
-				ApiResponseMessages.CHAT_ROOM_RETRIEVED_SUCCESS,
-				SyncChatRoomWebMapper.toResponse(result)
-		);
+		return ApiResponses.ok(ApiResponseMessages.CHAT_ROOM_RETRIEVED_SUCCESS,
+				SyncChatRoomWebMapper.toResponse(result));
 	}
 }
