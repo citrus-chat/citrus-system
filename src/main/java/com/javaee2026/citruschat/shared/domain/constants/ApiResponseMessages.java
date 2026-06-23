@@ -23,4 +23,8 @@ public final class ApiResponseMessages {
 	public static final String CHAT_ROOM_RETRIEVED_SUCCESS = "Chat room retrieved successfully.";
 
 	public static final String ADMIN_ACCESS_CHECKED_SUCCESSFULLY = "Admin access checked successfully";
+
+	public static final String USER_RETRIEVED_SUCCESS = "User retrieved successfully.";
+	public static final String USER_PROFILE_UPDATED_SUCCESS = "Profile updated successfully.";
+	public static final String USER_PROFILE_RETRIEVED_SUCCESS = "Profile retrieved successfully.";
 }

@@ -51,7 +51,7 @@ public class IdentityBeansConfiguration {
 	 * Creates the {@link UserMapper} bean.
 	 *
 	 * @param userFactory
-	 *            factory used to reconstitute domain objects
+	 *                    factory used to reconstitute domain objects
 	 * @return a configured {@link UserMapper}
 	 */
 	@Bean
@@ -68,15 +68,16 @@ public class IdentityBeansConfiguration {
 	 * </p>
 	 *
 	 * @param userRepository
-	 *            repository used to persist users
+	 *                                 repository used to persist users
 	 * @param defaultPasswordGenerator
-	 *            generator for temporary passwords
+	 *                                 generator for tempora
+	 *                                 ry passwords
 	 * @param passwordHasher
-	 *            component used to hash passwords
+	 *                                 component used to hash passwords
 	 * @param userFactory
-	 *            factory to create user domain objects
+	 *                                 factory to create user domain objects
 	 * @param usernameFactory
-	 *            factory to generate usernames
+	 *                                 factory to generate usernames
 	 * @return a configured {@link RegisterUserUseCase}
 	 */
 	@Bean
@@ -96,9 +97,9 @@ public class IdentityBeansConfiguration {
 	 * </p>
 	 *
 	 * @param userRepository
-	 *            repository used to retrieve and persist users
+	 *                       repository used to retrieve and persist users
 	 * @param passwordHasher
-	 *            component used to verify and hash passwords
+	 *                       component used to verify and hash passwords
 	 * @return a configured {@link ValidateUserAccountUseCase}
 	 */
 	@Bean
@@ -139,9 +140,35 @@ public class IdentityBeansConfiguration {
 	public GetCurrentUserDevicesUseCase getCurrentUserDevicesUseCase(IUserDeviceRepository userDeviceRepository) {
 		return new GetCurrentUserDevicesUseCase(userDeviceRepository);
 	}
+
 	@Bean
 	public ValidateUserDeviceOwnershipUseCase validateUserDeviceOwnershipUseCase(
 			IUserDeviceRepository userDeviceRepository) {
 		return new ValidateUserDeviceOwnershipUseCase(userDeviceRepository);
+	}
+
+	@Bean
+	public SearchUsersUseCase searchUsersUseCase(IUserRepository userRepository) {
+		return new SearchUsersUseCase(userRepository);
+	}
+
+	@Bean
+	public GetUserProfileUseCase getUserProfileUseCase(
+			IUserProfileRepository userProfileRepository,
+			IUserRepository userRepository) {
+
+		return new GetUserProfileUseCase(
+				userProfileRepository,
+				userRepository);
+	}
+
+	@Bean
+	public UpdateUserProfileUseCase updateUserProfileUseCase(
+			IUserProfileRepository userProfileRepository,
+			IUserRepository userRepository) {
+
+		return new UpdateUserProfileUseCase(
+				userProfileRepository,
+				userRepository);
 	}
 }

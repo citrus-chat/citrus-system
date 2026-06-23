@@ -58,6 +58,7 @@ public final class ApiRoutes {
 	public static final String API_USER_AVATAR_IMAGE = API_USER_BASE + "/avatars/{filename}";
 	public static final String API_USER_AVATAR_IMAGE_BASE = API_USER_BASE + "/avatars";
 	public static final String API_USER_AVATAR_IMAGE_PATTERN = API_USER_AVATAR_IMAGE_BASE + "/**";
+	public static final String API_USER_ME_PROFILE = API_USER_BASE + "/me/profile";
 	// ===================== END API Routes ====================
 
 	// ===================== WEBSOCKET ROUTES ====================
