@@ -5,6 +5,7 @@ import com.javaee2026.citruschat.messaging.domain.model.ChatParticipant;
 import com.javaee2026.citruschat.messaging.domain.model.ChatRole;
 import com.javaee2026.citruschat.messaging.domain.model.ChatRoom;
 import com.javaee2026.citruschat.messaging.infrastructure.persistence.jpa.entity.ChatParticipantJpaEntity;
+import com.javaee2026.citruschat.messaging.infrastructure.persistence.jpa.entity.ChatPermissionJpaEntity;
 import com.javaee2026.citruschat.messaging.infrastructure.persistence.jpa.entity.ChatRoleJpaEntity;
 import com.javaee2026.citruschat.messaging.infrastructure.persistence.jpa.entity.ChatRoomJpaEntity;
 import com.javaee2026.citruschat.shared.domain.valueobjects.ChatRoomId;
@@ -12,6 +13,8 @@ import com.javaee2026.citruschat.shared.domain.valueobjects.UserId;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 public final class ChatRoomMapper {
@@ -33,7 +36,7 @@ public final class ChatRoomMapper {
 				entity.getCreatedAt(), entity.getUpdatedAt(), entity.getDeletedAt());
 	}
 
-	public static ChatRoomJpaEntity toJpa(ChatRoom chatRoom) {
+	public static ChatRoomJpaEntity toJpa(ChatRoom chatRoom, Map<UUID, ChatPermissionJpaEntity> permissionsById) {
 		ChatRoomJpaEntity entity = new ChatRoomJpaEntity();
 
 		entity.setId(chatRoom.getId().value());
@@ -45,7 +48,8 @@ public final class ChatRoomMapper {
 
 		for (ChatRole role : chatRoom.getRoles().values()) {
 
-			ChatRoleJpaEntity roleEntity = ChatRoleMapper.toJpa(role, entity);
+			ChatRoleJpaEntity roleEntity = ChatRoleMapper.toJpa(role, entity, permissionsById);
+
 			roleEntity.setChatRoom(entity);
 
 			roles.add(roleEntity);

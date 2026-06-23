@@ -30,6 +30,9 @@ public class MessageJpaEntity implements Persistable<UUID> {
 	@Column(name = "reply_to_message_id")
 	private UUID replyToMessageId;
 
+	@Embedded
+	private EncryptedContentJpaEmbeddable content;
+
 	@Column(name = "created_at", nullable = false)
 	private Instant createdAt;
 

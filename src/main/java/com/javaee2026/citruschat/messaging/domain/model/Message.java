@@ -1,6 +1,7 @@
 package com.javaee2026.citruschat.messaging.domain.model;
 
 import com.javaee2026.citruschat.messaging.domain.exceptions.InvalidMessageException;
+import com.javaee2026.citruschat.messaging.domain.valueobjects.EncryptedContent;
 import com.javaee2026.citruschat.shared.domain.constants.ErrorMessages;
 import com.javaee2026.citruschat.shared.domain.valueobjects.ChatRoomId;
 import com.javaee2026.citruschat.shared.domain.valueobjects.DeviceId;
@@ -25,22 +26,26 @@ public class Message {
 	private final DeviceId senderDeviceId;
 	private final MessageId replyToMessageId;
 
+	private final EncryptedContent content;
+
 	private final Instant createdAt;
 	private Instant editedAt;
 	private Instant deletedAt;
 
 	public Message(MessageId id, ChatRoomId chatRoomId, UserId senderUserId, DeviceId senderDeviceId,
-			MessageId replyToMessageId, Instant createdAt) {
-		this(id, chatRoomId, senderUserId, senderDeviceId, replyToMessageId, createdAt, null, null);
+			MessageId replyToMessageId, EncryptedContent content, Instant createdAt) {
+		this(id, chatRoomId, senderUserId, senderDeviceId, replyToMessageId, content, createdAt, null, null);
 	}
 
 	public Message(MessageId id, ChatRoomId chatRoomId, UserId senderUserId, DeviceId senderDeviceId,
-			MessageId replyToMessageId, Instant createdAt, Instant editedAt, Instant deletedAt) {
+			MessageId replyToMessageId, EncryptedContent content, Instant createdAt, Instant editedAt,
+			Instant deletedAt) {
 		this.id = requireNonNull(id, ErrorMessages.MESSAGE_ID_CANNOT_BE_NULL);
 		this.chatRoomId = requireNonNull(chatRoomId, ErrorMessages.CHATROOM_ID_CANNOT_BE_NULL);
 		this.senderUserId = requireNonNull(senderUserId, ErrorMessages.USER_ID_CANNOT_BE_NULL);
 		this.senderDeviceId = requireNonNull(senderDeviceId, ErrorMessages.DEVICE_ID_CANNOT_BE_NULL);
 		this.replyToMessageId = replyToMessageId; // This can be null
+		this.content = requireNonNull(content, ErrorMessages.ENCRYPTED_CONTENT_CANNOT_BE_NULL);
 		this.createdAt = requireNonNull(createdAt, ErrorMessages.CREATED_AT_CANNOT_BE_NULL);
 		this.editedAt = editedAt;
 		this.deletedAt = deletedAt;

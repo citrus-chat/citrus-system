@@ -27,13 +27,14 @@ public class SendMessageController {
 		this.sendMessageUseCase = sendMessageUseCase;
 	}
 
-	@PostMapping(ApiRoutes.API_CHAT_MESSAGES)
+	@PostMapping(ApiRoutes.API_MESSAGES_SEND)
 	public ResponseEntity<ApiResponse<SendMessageResponse>> send(@AuthenticationPrincipal Jwt jwt,
-			@PathVariable UUID chatRoomId, @Valid @RequestBody SendMessageRequest request) {
-		UUID senderUserId = UUID.fromString(jwt.getSubject());
+			@Valid @RequestBody SendMessageRequest request) {
 
-		sendMessageUseCase.execute(SendMessageWebMapper.toCommand(chatRoomId, request, senderUserId));
+		UUID senderId = UUID.fromString(jwt.getSubject());
 
-		return ApiResponses.created(ApiResponseMessages.MESSAGE_SENT_SUCCESS, SendMessageWebMapper.toResponse());
+		sendMessageUseCase.execute(SendMessageWebMapper.toCommand(request, senderId));
+
+		return ApiResponses.ok(ApiResponseMessages.MESSAGE_SENT_SUCCESS, SendMessageWebMapper.toResponse());
 	}
 }

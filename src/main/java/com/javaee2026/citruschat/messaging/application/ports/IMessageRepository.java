@@ -2,12 +2,17 @@ package com.javaee2026.citruschat.messaging.application.ports;
 
 import com.javaee2026.citruschat.messaging.application.results.ChatMessageResult;
 import com.javaee2026.citruschat.messaging.domain.model.Message;
-import com.javaee2026.citruschat.messaging.domain.model.MessageDevicePayload;
+import com.javaee2026.citruschat.shared.domain.valueobjects.ChatRoomId;
+import com.javaee2026.citruschat.shared.domain.valueobjects.MessageId;
 
 import java.util.List;
-import java.util.UUID;
 
 public interface IMessageRepository {
-	List<ChatMessageResult> findMessagesByChatRoomId(UUID chatRoomId, int page, int size);
-	void save(Message message, List<MessageDevicePayload> payloads);
+
+	List<ChatMessageResult> findMessagesByChatRoomId(ChatRoomId chatRoomId, int page, int size);
+
+	boolean existsById(MessageId messageId);
+
+	void save(Message message);
+
 }

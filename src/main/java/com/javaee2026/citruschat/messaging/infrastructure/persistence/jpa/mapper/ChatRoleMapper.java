@@ -1,11 +1,15 @@
 package com.javaee2026.citruschat.messaging.infrastructure.persistence.jpa.mapper;
 
 import com.javaee2026.citruschat.messaging.domain.model.ChatRole;
+import com.javaee2026.citruschat.messaging.infrastructure.persistence.jpa.entity.ChatPermissionJpaEntity;
 import com.javaee2026.citruschat.messaging.infrastructure.persistence.jpa.entity.ChatRoleJpaEntity;
 import com.javaee2026.citruschat.messaging.infrastructure.persistence.jpa.entity.ChatRoomJpaEntity;
 import com.javaee2026.citruschat.shared.domain.valueobjects.ChatRoomId;
 import com.javaee2026.citruschat.shared.domain.valueobjects.RoleId;
 
+import java.util.Map;
+import java.util.Set;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 public final class ChatRoleMapper {
@@ -23,7 +27,8 @@ public final class ChatRoleMapper {
 				entity.getName(), entity.getPriority(), entity.getCreatedAt());
 	}
 
-	public static ChatRoleJpaEntity toJpa(ChatRole chatRole, ChatRoomJpaEntity chatRoom) {
+	public static ChatRoleJpaEntity toJpa(ChatRole chatRole, ChatRoomJpaEntity chatRoom,
+			Map<UUID, ChatPermissionJpaEntity> permissionsById) {
 
 		ChatRoleJpaEntity entity = new ChatRoleJpaEntity();
 
@@ -32,6 +37,11 @@ public final class ChatRoleMapper {
 		entity.setName(chatRole.getName());
 		entity.setPriority(chatRole.getPriority());
 		entity.setCreatedAt(chatRole.getCreatedAt());
+
+		Set<ChatPermissionJpaEntity> permissions = chatRole.getRolePermissions().stream()
+				.map(p -> permissionsById.get(p.getId().value())).collect(Collectors.toSet());
+
+		entity.setPermissions(permissions);
 
 		return entity;
 	}

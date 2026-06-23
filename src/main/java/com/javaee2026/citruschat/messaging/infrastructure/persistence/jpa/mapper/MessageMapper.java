@@ -19,10 +19,9 @@ public final class MessageMapper {
 	public Message toDomain(MessageJpaEntity entity) {
 		return messageFactory.reconstitute(new MessageId(entity.getId()), new ChatRoomId(entity.getChatRoomId()),
 				new UserId(entity.getSenderUserId()), new DeviceId(entity.getSenderDeviceId()),
-
 				entity.getReplyToMessageId() != null ? new MessageId(entity.getReplyToMessageId()) : null,
-
-				entity.getCreatedAt(), entity.getEditedAt(), entity.getDeletedAt());
+				EncryptedContentJpaMapper.toDomain(entity.getContent()), entity.getCreatedAt(), entity.getEditedAt(),
+				entity.getDeletedAt());
 	}
 
 	public static MessageJpaEntity toJpa(Message message) {
@@ -35,6 +34,9 @@ public final class MessageMapper {
 
 		entity.setReplyToMessageId(
 				message.getReplyToMessageId() != null ? message.getReplyToMessageId().value() : null);
+
+		entity.setContent(EncryptedContentJpaMapper.toEmbeddable(message.getContent())); // toEmbeddable == toJpa in
+																							// other classes.
 
 		entity.setCreatedAt(message.getCreatedAt());
 		entity.setEditedAt(message.getEditedAt());
