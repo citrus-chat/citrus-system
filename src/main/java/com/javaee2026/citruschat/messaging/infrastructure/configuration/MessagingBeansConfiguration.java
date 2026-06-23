@@ -11,6 +11,7 @@ import com.javaee2026.citruschat.messaging.domain.factory.*;
 import com.javaee2026.citruschat.messaging.infrastructure.persistence.jpa.mapper.ChatPermissionMapper;
 import com.javaee2026.citruschat.messaging.infrastructure.persistence.jpa.mapper.ChatRoleMapper;
 import com.javaee2026.citruschat.messaging.infrastructure.persistence.jpa.mapper.ChatRoomMapper;
+import com.javaee2026.citruschat.messaging.infrastructure.persistence.jpa.mapper.MessageMapper;
 import com.javaee2026.citruschat.messaging.infrastructure.persistence.jpa.repository.*;
 
 import org.springframework.context.annotation.Bean;
@@ -25,8 +26,14 @@ public class MessagingBeansConfiguration {
 	}
 
 	@Bean
-	public IMessageRepository messageRepository(SpringDataMessageRepository messageRepository) {
-		return new JpaMessageRepositoryAdapter(messageRepository);
+	public MessageMapper messageMapper(MessageFactory messageFactory) {
+		return new MessageMapper(messageFactory);
+	}
+
+	@Bean
+	public IMessageRepository messageRepository(SpringDataMessageRepository messageRepository,
+			MessageMapper messageMapper) {
+		return new JpaMessageRepositoryAdapter(messageRepository, messageMapper);
 	}
 
 	@Bean
@@ -35,6 +42,12 @@ public class MessagingBeansConfiguration {
 			MessageFactory messageFactory) {
 		return new SendMessageUseCase(deviceRepository, userRepository, chatRoomRepository, messageRepository,
 				messageFactory);
+	}
+
+	@Bean
+	public SyncMessagesUseCase SyncMessagesUseCase(IMessageRepository messageRepository,
+			IChatRoomRepository chatRoomRepository) {
+		return new SyncMessagesUseCase(messageRepository, chatRoomRepository);
 	}
 
 	@Bean

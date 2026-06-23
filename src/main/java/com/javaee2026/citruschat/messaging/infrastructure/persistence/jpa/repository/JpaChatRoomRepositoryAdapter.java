@@ -70,6 +70,7 @@ public class JpaChatRoomRepositoryAdapter implements IChatRoomRepository {
 	}
 
 	@Override
+	@Transactional
 	public Optional<ChatRoom> findById(ChatRoomId id) {
 		return chatRoomRepository.findById(id.value()).map(chatRoomMapper::toDomain);
 	}

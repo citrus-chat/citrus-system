@@ -18,6 +18,7 @@ public final class ApiResponseMessages {
 	public static final String USER_AVATAR_DELETED_SUCCESS = "User avatar deleted successfully.";
 
 	public static final String MESSAGE_SENT_SUCCESS = "Message sent successfully.";
+	public static final String MESSAGES_RETRIEVED_SUCCESS = "Messages retrieved successfully.";
 
 	public static final String CHAT_ROOM_CREATION_SUCCESS = "Chat room created successfully.";
 	public static final String CHAT_ROOM_RETRIEVED_SUCCESS = "Chat room retrieved successfully.";
