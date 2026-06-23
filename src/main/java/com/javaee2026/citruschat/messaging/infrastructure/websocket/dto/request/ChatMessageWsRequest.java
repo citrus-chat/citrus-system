@@ -1,8 +1,11 @@
 package com.javaee2026.citruschat.messaging.infrastructure.websocket.dto.request;
 
-import java.util.List;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+
 import java.util.UUID;
 
-public record ChatMessageWsRequest(UUID chatRoomId, UUID senderDeviceId, UUID replyToMessageId,
-		List<ChatMessageDevicePayloadWsRequest> payloads) {
+public record ChatMessageWsRequest(@NotNull UUID messageId, @NotNull UUID chatRoomId, @NotNull UUID senderDeviceId,
+		UUID replyMessageId, // This can be null
+		@NotNull Integer keyVersion, @NotBlank String iv, @NotBlank String ciphertext) {
 }

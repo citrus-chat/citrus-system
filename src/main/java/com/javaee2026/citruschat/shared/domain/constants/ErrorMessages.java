@@ -43,6 +43,16 @@ public final class ErrorMessages {
 	public static final String MESSAGE_ID_CANNOT_BE_NULL = "Message cannot be null";
 	public static final String MESSAGE_CANNOT_BE_EDITED = "Message cannot be edited";
 	public static final String MESSAGE_ALREADY_DELETED = "Message already deleted";
+	public static final String ENCRYPTED_CONTENT_CANNOT_BE_NULL = "Encrypted content cannot be null";
+
+	public static final String KEY_VERSION_CANNOT_BE_NULL = "Key version cannot be null";
+	public static final String INVALID_KEY_VERSION = "Invalid key version";
+
+	public static final String IV_CANNOT_BE_NULL = "IV cannot be null";
+	public static final String IV_CANNOT_BE_EMPTY = "IV cannot be empty";
+
+	public static final String CIPHERTEXT_CANNOT_BE_NULL = "Ciphertext cannot be null";
+	public static final String CIPHERTEXT_CANNOT_BE_EMPTY = "Ciphertext cannot be empty";
 
 	public static final String DEVICE_ID_NOT_FOUND = "Device id not found";
 	public static final String DEVICE_ID_CANNOT_BE_NULL = "Device id cannot be null";

@@ -2,6 +2,7 @@ package com.javaee2026.citruschat.messaging.application.usecases;
 
 import com.javaee2026.citruschat.messaging.application.ports.IMessageRepository;
 import com.javaee2026.citruschat.messaging.application.results.ChatMessageResult;
+import com.javaee2026.citruschat.shared.domain.valueobjects.ChatRoomId;
 
 import java.util.List;
 import java.util.UUID;
@@ -29,6 +30,6 @@ public class GetChatRoomMessagesUseCase {
 		int safePage = Math.max(page, 0);
 		int safeSize = Math.min(Math.max(size, 1), 100);
 
-		return messageRepository.findMessagesByChatRoomId(chatRoomId, safePage, safeSize);
+		return messageRepository.findMessagesByChatRoomId(new ChatRoomId(chatRoomId), safePage, safeSize);
 	}
 }

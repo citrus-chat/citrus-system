@@ -25,22 +25,16 @@ public class MessagingBeansConfiguration {
 	}
 
 	@Bean
-	public MessageDevicePayloadFactory messageDevicePayloadFactory() {
-		return new MessageDevicePayloadFactory();
-	}
-
-	@Bean
-	public IMessageRepository messageRepository(SpringDataMessageRepository messageRepository,
-			SpringDataMessageDevicePayloadRepository payloadRepository) {
-		return new JpaMessageRepositoryAdapter(messageRepository, payloadRepository);
+	public IMessageRepository messageRepository(SpringDataMessageRepository messageRepository) {
+		return new JpaMessageRepositoryAdapter(messageRepository);
 	}
 
 	@Bean
 	public SendMessageUseCase sendMessageUseCase(IUserDeviceRepository deviceRepository, IUserRepository userRepository,
-			IChatRoomRepository chatRoomRepository, IMessageRepository messageRepository, MessageFactory messageFactory,
-			MessageDevicePayloadFactory payloadFactory) {
+			IChatRoomRepository chatRoomRepository, IMessageRepository messageRepository,
+			MessageFactory messageFactory) {
 		return new SendMessageUseCase(deviceRepository, userRepository, chatRoomRepository, messageRepository,
-				messageFactory, payloadFactory);
+				messageFactory);
 	}
 
 	@Bean
@@ -70,8 +64,8 @@ public class MessagingBeansConfiguration {
 
 	@Bean
 	public IChatRoomRepository chatRoomRepository(SpringDataChatRoomRepository springDataChatRoomRepository,
-			ChatRoomMapper chatRoomMapper) {
-		return new JpaChatRoomRepositoryAdapter(springDataChatRoomRepository, chatRoomMapper);
+			ChatRoomMapper chatRoomMapper, SpingDataChatPermissionRepository chatPermissionRepository) {
+		return new JpaChatRoomRepositoryAdapter(springDataChatRoomRepository, chatRoomMapper, chatPermissionRepository);
 	}
 
 	@Bean

@@ -8,6 +8,7 @@ import jakarta.transaction.Transactional;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 
 public class JpaChatPermissionRepositoryAdapter implements IChatPermissionRepository {
 
@@ -34,8 +35,20 @@ public class JpaChatPermissionRepositoryAdapter implements IChatPermissionReposi
 			if (entity == null) {
 				throw new IllegalStateException("Permission not found: " + code);
 			}
-			ChatPermission chatPermission = chatPermissionMapper.toDomain(entity);
-			permissions.add(chatPermission);
+			permissions.add(chatPermissionMapper.toDomain(entity));
+		}
+		return permissions;
+	}
+
+	@Override
+	public Set<ChatPermission> findAllById(Set<UUID> ids) {
+		Set<ChatPermission> permissions = new HashSet<>();
+		for (UUID id : ids) {
+			ChatPermissionJpaEntity entity = chatPermissionRepository.findById(id).orElse(null);
+			if (entity == null) {
+				throw new IllegalStateException("Permission not found: " + id);
+			}
+			permissions.add(chatPermissionMapper.toDomain(entity));
 		}
 		return permissions;
 	}
