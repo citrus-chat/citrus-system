@@ -10,7 +10,6 @@ public class MessageId {
 	private final UUID value;
 
 	public MessageId(UUID value) {
-		System.out.println("Creando messageID: " + value);
 		if (value == null) {
 			throw new InvalidMessageException(ErrorMessages.MESSAGE_ID_CANNOT_BE_NULL);
 		}

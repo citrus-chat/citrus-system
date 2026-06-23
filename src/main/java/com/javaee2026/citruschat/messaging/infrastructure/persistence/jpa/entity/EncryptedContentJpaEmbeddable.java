@@ -2,7 +2,6 @@ package com.javaee2026.citruschat.messaging.infrastructure.persistence.jpa.entit
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
-import jakarta.persistence.Lob;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,8 +17,7 @@ public class EncryptedContentJpaEmbeddable {
 	@Column(name = "iv", nullable = false, length = 1024)
 	private String iv;
 
-	@Lob
-	@Column(name = "ciphertext", nullable = false)
+	@Column(name = "ciphertext", nullable = false, length = 10000)
 	private String ciphertext;
 
 	public EncryptedContentJpaEmbeddable(Integer keyVersion, String iv, String ciphertext) {

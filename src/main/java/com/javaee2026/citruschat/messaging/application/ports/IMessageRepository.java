@@ -11,6 +11,8 @@ public interface IMessageRepository {
 
 	List<ChatMessageResult> findMessagesByChatRoomId(ChatRoomId chatRoomId, int page, int size);
 
+	List<Message> findMessagesAfter(ChatRoomId chatRoomId, MessageId lastMessageId, int limit);
+
 	boolean existsById(MessageId messageId);
 
 	void save(Message message);

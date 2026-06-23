@@ -26,4 +26,10 @@ public interface SpringDataMessageRepository extends JpaRepository<MessageJpaEnt
 			ORDER BY m.createdAt DESC
 			""")
 	List<ChatMessageResult> findMessagesByChatRoomId(UUID chatRoomId, Pageable pageable);
+
+	List<MessageJpaEntity> findByChatRoomIdOrderByIdAsc(UUID chatRoomId, Pageable pageable);
+
+	List<MessageJpaEntity> findByChatRoomIdAndIdGreaterThanOrderByIdAsc(UUID chatRoomId, UUID lastMessageId,
+			Pageable pageable);
+
 }
