@@ -169,4 +169,9 @@ public class IdentityBeansConfiguration {
 
 		return new UpdateUserProfileUseCase(userProfileRepository, userRepository);
 	}
+
+	@Bean
+	public GetDevicePublicKeyUseCase getDevicePublicKeyUseCase(IUserDeviceRepository userDeviceRepository) {
+		return new GetDevicePublicKeyUseCase(userDeviceRepository);
+	}
 }

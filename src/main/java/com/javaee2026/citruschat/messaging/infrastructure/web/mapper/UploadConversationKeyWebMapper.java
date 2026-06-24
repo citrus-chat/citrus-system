@@ -16,8 +16,8 @@ public final class UploadConversationKeyWebMapper {
 	public static UploadConversationKeyCommand toCommand(UploadConversationKeyRequest request) {
 
 		return new UploadConversationKeyCommand(new ChatRoomId(request.conversationId()),
-				new UserId(request.targetUserId()), new DeviceId(request.targetDeviceId()), request.keyVersion(),
-				request.ciphertext(), request.iv());
+				new UserId(request.targetUserId()), new DeviceId(request.targetDeviceId()),
+				new DeviceId(request.senderDeviceId()), request.keyVersion(), request.ciphertext(), request.iv());
 	}
 
 	public static UploadConversationKeyResponse toResponse(UploadConversationKeyResult result) {

@@ -4,6 +4,8 @@ import com.javaee2026.citruschat.messaging.domain.model.ConversationKeyDistribut
 import com.javaee2026.citruschat.shared.domain.valueobjects.ChatRoomId;
 import com.javaee2026.citruschat.shared.domain.valueobjects.DeviceId;
 
+import java.time.Instant;
+import java.util.List;
 import java.util.Optional;
 
 public interface IConversationKeyDistributionRepository {
@@ -12,4 +14,6 @@ public interface IConversationKeyDistributionRepository {
 
 	Optional<ConversationKeyDistribution> findByConversationAndDeviceAndVersion(ChatRoomId conversationId,
 			DeviceId deviceId, Integer keyVersion);
+
+	List<ConversationKeyDistribution> findByTargetDeviceAndCreatedAfter(DeviceId deviceId, Instant createdAt);
 }

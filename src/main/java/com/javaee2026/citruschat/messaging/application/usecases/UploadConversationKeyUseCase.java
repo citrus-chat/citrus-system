@@ -55,8 +55,8 @@ public class UploadConversationKeyUseCase {
 		}
 
 		ConversationKeyDistribution distribution = new ConversationKeyDistribution(UUID.randomUUID(),
-				command.conversationId(), command.targetUserId(), command.targetDeviceId(), command.keyVersion(),
-				command.ciphertext(), command.iv(), Instant.now());
+				command.conversationId(), command.targetUserId(), command.targetDeviceId(), command.senderDeviceId(),
+				command.keyVersion(), command.ciphertext(), command.iv(), Instant.now());
 
 		ConversationKeyDistribution saved = conversationRepository.save(distribution);
 
