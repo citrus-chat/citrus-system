@@ -120,4 +120,11 @@ public class MessagingBeansConfiguration {
 			IConversationKeyDistributionRepository conversationKeyRepository) {
 		return new SyncChatRoomUseCase(chatRoomRepository, deviceRepository, userRepository, conversationKeyRepository);
 	}
+
+	@Bean
+	public GetParticipantPermissionsUseCase getParticipantPermissionsUseCase(
+			IChatPermissionRepository chatPermissionRepository,
+			ValidateChatParticipantUseCase validateChatParticipantUseCase) {
+		return new GetParticipantPermissionsUseCase(chatPermissionRepository, validateChatParticipantUseCase);
+	}
 }

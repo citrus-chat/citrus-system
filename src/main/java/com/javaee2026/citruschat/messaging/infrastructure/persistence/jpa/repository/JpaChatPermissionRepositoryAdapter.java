@@ -4,11 +4,14 @@ import com.javaee2026.citruschat.messaging.application.ports.IChatPermissionRepo
 import com.javaee2026.citruschat.messaging.domain.model.ChatPermission;
 import com.javaee2026.citruschat.messaging.infrastructure.persistence.jpa.entity.ChatPermissionJpaEntity;
 import com.javaee2026.citruschat.messaging.infrastructure.persistence.jpa.mapper.ChatPermissionMapper;
+import com.javaee2026.citruschat.shared.domain.valueobjects.ChatRoomId;
+import com.javaee2026.citruschat.shared.domain.valueobjects.ParticipantId;
 import jakarta.transaction.Transactional;
 
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 public class JpaChatPermissionRepositoryAdapter implements IChatPermissionRepository {
 
@@ -51,5 +54,14 @@ public class JpaChatPermissionRepositoryAdapter implements IChatPermissionReposi
 			permissions.add(chatPermissionMapper.toDomain(entity));
 		}
 		return permissions;
+	}
+
+	@Override
+	public Set<ChatPermission> findPermissionsByChatRoomAndParticipant(ChatRoomId chatRoomId,
+			ParticipantId participantId) {
+
+		return chatPermissionRepository
+				.findPermissionsByChatRoomAndParticipant(chatRoomId.value(), participantId.value()).stream()
+				.map(chatPermissionMapper::toDomain).collect(Collectors.toSet());
 	}
 }
