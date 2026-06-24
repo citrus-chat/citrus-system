@@ -1,9 +1,11 @@
 package com.javaee2026.citruschat.identity.application.ports;
 
+import com.javaee2026.citruschat.identity.application.dto.UserPageQuery;
 import com.javaee2026.citruschat.identity.domain.model.User;
 import com.javaee2026.citruschat.identity.domain.valueobjects.PhoneNumber;
 import com.javaee2026.citruschat.identity.domain.valueobjects.UserEmail;
 import com.javaee2026.citruschat.identity.domain.valueobjects.Username;
+import com.javaee2026.citruschat.shared.application.results.PagedResult;
 import com.javaee2026.citruschat.shared.domain.valueobjects.UserId;
 
 import java.util.List;
@@ -22,6 +24,8 @@ public interface IUserRepository {
 	boolean existsByPhoneNumber(PhoneNumber phoneNumber);
 
 	List<User> findAll(int page, int size);
+
+	PagedResult<User> findPage(UserPageQuery query);
 
 	List<User> search(String search, int page, int size);
 }

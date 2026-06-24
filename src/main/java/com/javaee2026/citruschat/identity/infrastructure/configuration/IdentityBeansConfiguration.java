@@ -152,6 +152,11 @@ public class IdentityBeansConfiguration {
 	}
 
 	@Bean
+	public GetAdminUsersUseCase getAdminUsersUseCase(IUserRepository userRepository) {
+		return new GetAdminUsersUseCase(userRepository);
+	}
+
+	@Bean
 	public GetUserProfileUseCase getUserProfileUseCase(IUserProfileRepository userProfileRepository,
 			IUserRepository userRepository) {
 
