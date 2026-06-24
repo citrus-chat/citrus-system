@@ -47,9 +47,9 @@ public final class ApiRoutes {
 	public static final String API_CHAT_ROOMS_SYNC = API_CHATROOM_BASE + "/sync"; // => /api/v1/chatroom/sync
 	public static final String API_CHAT_ROOM_MESSAGES_SYNC = API_CHATROOM_BASE + "/{chatroomId}/sync/messages"; // =>
 	public static final String API_CHAT_ROOM_CONVERSATION_KEY = API_CHATROOM_BASE + "/conversation-keys"; // =>
-																											// /api/v1/chatroom/conversation-keys
-																											// //
-																											// /api/v1/chatroom/{chatroomId}/sync/messages
+	public static final String API_CHAT_ROOM_PARTICIPANT_PERMISSION = API_CHATROOM_BASE
+			+ "/{chatroomId}/participant/{participantId}/permission"; // =>
+																		// /api/v1/chatroom/{chatroomId}/participant/{participantId}/permission
 	// ===================== END API ROUTES ====================
 
 	// ===================== USER API ROUTES =======================
