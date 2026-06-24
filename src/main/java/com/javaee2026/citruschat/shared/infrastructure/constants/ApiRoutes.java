@@ -12,6 +12,7 @@ public final class ApiRoutes {
 	private static final String API_MESSAGES_BASE = API_BASE + "/messages"; // => /api/v1/auth
 	private static final String API_CHATROOM_BASE = API_BASE + "/chatroom";
 	private static final String API_USER_BASE = API_BASE + "/users";
+	private static final String API_DEVICE_BASE = API_BASE + "/devices";
 	// ===================== END BASE API Routes ====================
 
 	// ===================== ADMIN API Routes ====================
@@ -65,6 +66,10 @@ public final class ApiRoutes {
 	public static final String API_USER_AVATAR_IMAGE_PATTERN = API_USER_AVATAR_IMAGE_BASE + "/**";
 	public static final String API_USER_ME_PROFILE = API_USER_BASE + "/me/profile";
 	// ===================== END API Routes ====================
+
+	// ===================== DEVICE API ROUTES =======================
+	public static final String API_DEVICE_KEYS = API_DEVICE_BASE + "/{deviceId}/keys";
+	// ===================== END API ROUTES ====================
 
 	// ===================== WEBSOCKET ROUTES ====================
 	public static final String WS_ENDPOINT = "/ws";

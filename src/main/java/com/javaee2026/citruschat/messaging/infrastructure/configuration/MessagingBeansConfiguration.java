@@ -2,10 +2,7 @@ package com.javaee2026.citruschat.messaging.infrastructure.configuration;
 
 import com.javaee2026.citruschat.identity.application.ports.IUserDeviceRepository;
 import com.javaee2026.citruschat.identity.application.ports.IUserRepository;
-import com.javaee2026.citruschat.messaging.application.ports.IChatParticipantRepository;
-import com.javaee2026.citruschat.messaging.application.ports.IChatPermissionRepository;
-import com.javaee2026.citruschat.messaging.application.ports.IChatRoomRepository;
-import com.javaee2026.citruschat.messaging.application.ports.IMessageRepository;
+import com.javaee2026.citruschat.messaging.application.ports.*;
 import com.javaee2026.citruschat.messaging.application.usecases.*;
 import com.javaee2026.citruschat.messaging.domain.factory.*;
 import com.javaee2026.citruschat.messaging.infrastructure.persistence.jpa.mapper.ChatPermissionMapper;
@@ -119,7 +116,8 @@ public class MessagingBeansConfiguration {
 
 	@Bean
 	public SyncChatRoomUseCase syncChatRoomUseCase(IUserRepository userRepository,
-			IChatRoomRepository chatRoomRepository, IUserDeviceRepository deviceRepository) {
-		return new SyncChatRoomUseCase(chatRoomRepository, deviceRepository, userRepository);
+			IChatRoomRepository chatRoomRepository, IUserDeviceRepository deviceRepository,
+			IConversationKeyDistributionRepository conversationKeyRepository) {
+		return new SyncChatRoomUseCase(chatRoomRepository, deviceRepository, userRepository, conversationKeyRepository);
 	}
 }

@@ -19,6 +19,7 @@ public final class ConversationKeyDistributionJpaMapper {
 		entity.setConversationId(distribution.getConversationId().value());
 		entity.setTargetUserId(distribution.getTargetUserId().value());
 		entity.setTargetDeviceId(distribution.getTargetDeviceId().value());
+		entity.setSenderDeviceId(distribution.getSenderDeviceId().value());
 		entity.setKeyVersion(distribution.getKeyVersion());
 		entity.setCiphertext(distribution.getCiphertext());
 		entity.setIv(distribution.getIv());
@@ -32,7 +33,8 @@ public final class ConversationKeyDistributionJpaMapper {
 	public static ConversationKeyDistribution toDomain(ConversationKeyDistributionJpaEntity entity) {
 
 		return new ConversationKeyDistribution(entity.getId(), new ChatRoomId(entity.getConversationId()),
-				new UserId(entity.getTargetUserId()), new DeviceId(entity.getTargetDeviceId()), entity.getKeyVersion(),
-				entity.getCiphertext(), entity.getIv(), entity.getCreatedAt());
+				new UserId(entity.getTargetUserId()), new DeviceId(entity.getTargetDeviceId()),
+				new DeviceId(entity.getSenderDeviceId()), entity.getKeyVersion(), entity.getCiphertext(),
+				entity.getIv(), entity.getCreatedAt());
 	}
 }

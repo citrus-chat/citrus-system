@@ -13,6 +13,8 @@ public record UploadConversationKeyRequest(
 
 		@NotNull UUID targetDeviceId,
 
+		@NotNull UUID senderDeviceId,
+
 		@NotNull Integer keyVersion,
 
 		@NotBlank String ciphertext,

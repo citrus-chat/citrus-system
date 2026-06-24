@@ -7,6 +7,8 @@ import com.javaee2026.citruschat.shared.domain.valueobjects.ChatRoomId;
 import com.javaee2026.citruschat.shared.domain.valueobjects.DeviceId;
 import org.springframework.stereotype.Repository;
 
+import java.time.Instant;
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -30,5 +32,11 @@ public class JpaConversationKeyDistributionRepositoryAdapter implements IConvers
 			DeviceId deviceId, Integer keyVersion) {
 		return repository.findByConversationIdAndTargetDeviceIdAndKeyVersion(conversationId.value(), deviceId.value(),
 				keyVersion).map(ConversationKeyDistributionJpaMapper::toDomain);
+	}
+
+	@Override
+	public List<ConversationKeyDistribution> findByTargetDeviceAndCreatedAfter(DeviceId deviceId, Instant createdAt) {
+		return repository.findByTargetDeviceIdAndCreatedAtAfterOrderByCreatedAtAsc(deviceId.value(), createdAt).stream()
+				.map(ConversationKeyDistributionJpaMapper::toDomain).toList();
 	}
 }

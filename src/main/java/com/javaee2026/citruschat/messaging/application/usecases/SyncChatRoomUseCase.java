@@ -5,6 +5,7 @@ import com.javaee2026.citruschat.identity.application.ports.IUserRepository;
 import com.javaee2026.citruschat.identity.domain.model.User;
 import com.javaee2026.citruschat.identity.domain.model.UserDevice;
 import com.javaee2026.citruschat.messaging.application.ports.IChatRoomRepository;
+import com.javaee2026.citruschat.messaging.application.ports.IConversationKeyDistributionRepository;
 import com.javaee2026.citruschat.messaging.application.results.SyncChatRoomResult;
 import com.javaee2026.citruschat.shared.domain.valueobjects.DeviceId;
 import com.javaee2026.citruschat.shared.domain.valueobjects.UserId;
@@ -16,15 +17,18 @@ public class SyncChatRoomUseCase {
 	private final IChatRoomRepository chatRoomRepository;
 	private final IUserDeviceRepository deviceRepository;
 	private final IUserRepository userRepository;
+	private final IConversationKeyDistributionRepository conversationKeyRepository;
 
 	public SyncChatRoomUseCase(IChatRoomRepository chatRoomRepository, IUserDeviceRepository deviceRepository,
-			IUserRepository userRepository) {
+			IUserRepository userRepository, IConversationKeyDistributionRepository conversationKeyRepository) {
 		this.chatRoomRepository = chatRoomRepository;
 		this.deviceRepository = deviceRepository;
 		this.userRepository = userRepository;
+		this.conversationKeyRepository = conversationKeyRepository;
 	}
 
 	public SyncChatRoomResult execute(DeviceId deviceId) {
+
 		UserDevice device = deviceRepository.findActiveById(deviceId.value())
 				.orElseThrow(() -> new IllegalArgumentException("Device not found with id: " + deviceId.value()));
 
@@ -34,6 +38,7 @@ public class SyncChatRoomUseCase {
 		if (since == null) {
 			User user = userRepository.findById(userId)
 					.orElseThrow(() -> new IllegalArgumentException("User not found with id: " + userId.value()));
+
 			since = user.getCreatedAt();
 		}
 
@@ -41,16 +46,13 @@ public class SyncChatRoomUseCase {
 			throw new IllegalArgumentException("Invalid since date: " + since);
 		}
 
-		if (userId == null) {
-			throw new IllegalArgumentException("UserId cannot be null");
-		}
+		var chatRooms = chatRoomRepository.findUpdatedChatRooms(userId, since);
 
-		// Update lastSync
+		var conversationKeys = conversationKeyRepository.findByTargetDeviceAndCreatedAfter(deviceId, since);
+
 		device.sync();
 		deviceRepository.save(device);
 
-		return new SyncChatRoomResult(
-				// findUpdatedChatRooms validates that the user exists.
-				chatRoomRepository.findUpdatedChatRooms(userId, since));
+		return new SyncChatRoomResult(chatRooms, conversationKeys);
 	}
 }

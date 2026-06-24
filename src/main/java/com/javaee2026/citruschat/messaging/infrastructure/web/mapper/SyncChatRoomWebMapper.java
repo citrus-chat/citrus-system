@@ -4,6 +4,7 @@ import com.javaee2026.citruschat.messaging.application.commands.SyncChatRoomComm
 import com.javaee2026.citruschat.messaging.application.results.SyncChatRoomResult;
 import com.javaee2026.citruschat.messaging.infrastructure.web.dto.request.SyncChatRoomRequest;
 import com.javaee2026.citruschat.messaging.infrastructure.web.dto.response.ChatRoomResponse;
+import com.javaee2026.citruschat.messaging.infrastructure.web.dto.response.ConversationKeyDistributionResponse;
 import com.javaee2026.citruschat.messaging.infrastructure.web.dto.response.SyncChatRoomResponse;
 import com.javaee2026.citruschat.shared.domain.valueobjects.DeviceId;
 
@@ -21,6 +22,9 @@ public final class SyncChatRoomWebMapper {
 
 		List<ChatRoomResponse> chatRooms = result.chatRooms().stream().map(ChatRoomResponseMapper::toResponse).toList();
 
-		return new SyncChatRoomResponse(chatRooms);
+		List<ConversationKeyDistributionResponse> conversationKeys = result.conversationKeys().stream()
+				.map(ConversationKeyDistributionResponseMapper::toResponse).toList();
+
+		return new SyncChatRoomResponse(chatRooms, conversationKeys);
 	}
 }
