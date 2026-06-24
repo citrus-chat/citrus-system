@@ -55,6 +55,7 @@ public final class ApiRoutes {
 	public static final String API_USER_UPDATE = API_USER_BASE + "/{id}"; // => /api/v1/users/{id}
 	public static final String API_USER_DELETE = API_USER_BASE + "/{id}"; // => /api/v1/users/{id}
 	public static final String API_USER_CREATE = API_USER_BASE; // => /api/v1/users
+	public static final String API_USER_KEYS = API_USER_BASE + "/{userId}/keys"; // => /api/v1/users/{id}/keys
 	public static final String API_USER_ME_AVATAR = API_USER_BASE + "/me/avatar";
 	public static final String API_USER_AVATAR_IMAGE = API_USER_BASE + "/avatars/{filename}";
 	public static final String API_USER_AVATAR_IMAGE_BASE = API_USER_BASE + "/avatars";
