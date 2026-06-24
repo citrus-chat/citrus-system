@@ -4,16 +4,11 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
-public record UpdateUserProfileRequest(
-        String username,
+public record UpdateUserProfileRequest(String username,
 
-        @Size(max = 500) String description,
+		@Size(max = 500) String description,
 
-        @NotNull @Pattern(regexp = "public|contacts|private") String privacy,
+		@NotNull @Pattern(regexp = "public|contacts|private") String privacy,
 
-        boolean showPhone,
-        boolean showEmail,
-        boolean showStatus,
-        boolean showDescription,
-        boolean allowGroupInvites) {
+		boolean showPhone, boolean showEmail, boolean showStatus, boolean showDescription, boolean allowGroupInvites) {
 }

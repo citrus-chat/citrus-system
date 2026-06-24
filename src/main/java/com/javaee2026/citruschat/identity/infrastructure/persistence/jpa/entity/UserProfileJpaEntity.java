@@ -16,31 +16,31 @@ import java.util.UUID;
 @NoArgsConstructor
 public class UserProfileJpaEntity {
 
-    @Id
-    @Column(name = "user_id")
-    private UUID userId;
+	@Id
+	@Column(name = "user_id")
+	private UUID userId;
 
-    @Column(nullable = false, columnDefinition = "TEXT")
-    private String description = "";
+	@Column(nullable = false, columnDefinition = "TEXT")
+	private String description = "";
 
-    @Column(nullable = false, length = 20)
-    private String privacy = "public";
+	@Column(nullable = false, length = 20)
+	private String privacy = "public";
 
-    @Column(nullable = false)
-    private boolean showPhone = true;
+	@Column(nullable = false)
+	private boolean showPhone = true;
 
-    @Column(nullable = false)
-    private boolean showEmail = true;
+	@Column(nullable = false)
+	private boolean showEmail = true;
 
-    @Column(nullable = false)
-    private boolean showStatus = true;
+	@Column(nullable = false)
+	private boolean showStatus = true;
 
-    @Column(nullable = false)
-    private boolean showDescription = true;
+	@Column(nullable = false)
+	private boolean showDescription = true;
 
-    @Column(nullable = false)
-    private boolean allowGroupInvites = true;
+	@Column(nullable = false)
+	private boolean allowGroupInvites = true;
 
-    @Column(nullable = false)
-    private Instant updatedAt = Instant.now();
+	@Column(nullable = false)
+	private Instant updatedAt = Instant.now();
 }

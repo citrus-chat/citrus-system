@@ -6,7 +6,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface IUserProfileRepository {
-    UserProfileJpaEntity save(UserProfileJpaEntity profile);
+	UserProfileJpaEntity save(UserProfileJpaEntity profile);
 
-    Optional<UserProfileJpaEntity> findByUserId(UUID userId);
+	Optional<UserProfileJpaEntity> findByUserId(UUID userId);
 }

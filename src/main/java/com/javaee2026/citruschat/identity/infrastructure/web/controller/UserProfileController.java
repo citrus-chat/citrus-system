@@ -21,39 +21,33 @@ import java.util.UUID;
 @RestController
 public class UserProfileController {
 
-    private final GetUserProfileUseCase getUserProfileUseCase;
-    private final UpdateUserProfileUseCase updateUserProfileUseCase;
+	private final GetUserProfileUseCase getUserProfileUseCase;
+	private final UpdateUserProfileUseCase updateUserProfileUseCase;
 
-    public UserProfileController(
-            GetUserProfileUseCase getUserProfileUseCase,
-            UpdateUserProfileUseCase updateUserProfileUseCase) {
-        this.getUserProfileUseCase = getUserProfileUseCase;
-        this.updateUserProfileUseCase = updateUserProfileUseCase;
-    }
+	public UserProfileController(GetUserProfileUseCase getUserProfileUseCase,
+			UpdateUserProfileUseCase updateUserProfileUseCase) {
+		this.getUserProfileUseCase = getUserProfileUseCase;
+		this.updateUserProfileUseCase = updateUserProfileUseCase;
+	}
 
-    @GetMapping(ApiRoutes.API_USER_ME_PROFILE)
-    public ResponseEntity<ApiResponse<UserProfileResponse>> getMyProfile(
-            @AuthenticationPrincipal Jwt jwt) {
+	@GetMapping(ApiRoutes.API_USER_ME_PROFILE)
+	public ResponseEntity<ApiResponse<UserProfileResponse>> getMyProfile(@AuthenticationPrincipal Jwt jwt) {
 
-        UUID userId = UUID.fromString(jwt.getSubject());
-        UserProfileResult result = getUserProfileUseCase.execute(userId);
+		UUID userId = UUID.fromString(jwt.getSubject());
+		UserProfileResult result = getUserProfileUseCase.execute(userId);
 
-        return ApiResponses.ok(
-                ApiResponseMessages.USER_PROFILE_RETRIEVED_SUCCESS,
-                UserProfileWebMapper.toResponse(result));
-    }
+		return ApiResponses.ok(ApiResponseMessages.USER_PROFILE_RETRIEVED_SUCCESS,
+				UserProfileWebMapper.toResponse(result));
+	}
 
-    @PutMapping(ApiRoutes.API_USER_ME_PROFILE)
-    public ResponseEntity<ApiResponse<UserProfileResponse>> updateMyProfile(
-            @AuthenticationPrincipal Jwt jwt,
-            @Valid @RequestBody UpdateUserProfileRequest request) {
+	@PutMapping(ApiRoutes.API_USER_ME_PROFILE)
+	public ResponseEntity<ApiResponse<UserProfileResponse>> updateMyProfile(@AuthenticationPrincipal Jwt jwt,
+			@Valid @RequestBody UpdateUserProfileRequest request) {
 
-        UUID userId = UUID.fromString(jwt.getSubject());
-        UserProfileResult result = updateUserProfileUseCase.execute(
-                UserProfileWebMapper.toCommand(userId, request));
+		UUID userId = UUID.fromString(jwt.getSubject());
+		UserProfileResult result = updateUserProfileUseCase.execute(UserProfileWebMapper.toCommand(userId, request));
 
-        return ApiResponses.ok(
-                ApiResponseMessages.USER_PROFILE_UPDATED_SUCCESS,
-                UserProfileWebMapper.toResponse(result));
-    }
+		return ApiResponses.ok(ApiResponseMessages.USER_PROFILE_UPDATED_SUCCESS,
+				UserProfileWebMapper.toResponse(result));
+	}
 }
