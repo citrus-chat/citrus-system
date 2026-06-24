@@ -45,7 +45,10 @@ public final class ApiRoutes {
 	public static final String API_CHAT_ROOMS_CREATE = API_CHATROOM_BASE + "/create"; // => /api/v1/chatroom/create
 	public static final String API_CHAT_ROOMS_SYNC = API_CHATROOM_BASE + "/sync"; // => /api/v1/chatroom/sync
 	public static final String API_CHAT_ROOM_MESSAGES_SYNC = API_CHATROOM_BASE + "/{chatroomId}/sync/messages"; // =>
-																												// /api/v1/chatroom/{chatroomId}/sync/messages
+	public static final String API_CHAT_ROOM_CONVERSATION_KEY = API_CHATROOM_BASE + "/conversation-keys"; // =>
+																											// /api/v1/chatroom/conversation-keys
+																											// //
+																											// /api/v1/chatroom/{chatroomId}/sync/messages
 	// ===================== END API ROUTES ====================
 
 	// ===================== USER API ROUTES =======================
