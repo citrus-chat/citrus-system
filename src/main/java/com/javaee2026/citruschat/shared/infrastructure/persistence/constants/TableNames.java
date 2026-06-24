@@ -8,7 +8,7 @@ public final class TableNames {
 	public static final class Messaging {
 		public static final String MESSAGES = "messages";
 		public static final String CHAT_ROOMS = "chat_rooms";
-		public static final String MESSAGE_DEVICE_PAYLOADS = "message_device_payloads";
+		public static final String CONVERSATION_KEY_DISTRIBUTIONS = "conversation_key_distributions";
 	};
 
 	public static final class Identity {

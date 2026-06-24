@@ -4,16 +4,21 @@ import com.javaee2026.citruschat.messaging.application.commands.SyncMessagesComm
 import com.javaee2026.citruschat.messaging.application.results.CreateChatRoomResult;
 import com.javaee2026.citruschat.messaging.application.results.SyncChatRoomResult;
 import com.javaee2026.citruschat.messaging.application.results.SyncMessagesResult;
+import com.javaee2026.citruschat.messaging.application.results.UploadConversationKeyResult;
 import com.javaee2026.citruschat.messaging.application.usecases.CreateChatRoomUseCase;
 import com.javaee2026.citruschat.messaging.application.usecases.SyncChatRoomUseCase;
 import com.javaee2026.citruschat.messaging.application.usecases.SyncMessagesUseCase;
+import com.javaee2026.citruschat.messaging.application.usecases.UploadConversationKeyUseCase;
 import com.javaee2026.citruschat.messaging.infrastructure.web.dto.request.CreateChatRoomRequest;
+import com.javaee2026.citruschat.messaging.infrastructure.web.dto.request.UploadConversationKeyRequest;
 import com.javaee2026.citruschat.messaging.infrastructure.web.dto.response.CreateChatRoomResponse;
 import com.javaee2026.citruschat.messaging.infrastructure.web.dto.response.SyncChatRoomResponse;
 import com.javaee2026.citruschat.messaging.infrastructure.web.dto.response.SyncMessagesResponse;
+import com.javaee2026.citruschat.messaging.infrastructure.web.dto.response.UploadConversationKeyResponse;
 import com.javaee2026.citruschat.messaging.infrastructure.web.mapper.CreateChatRoomWebMapper;
 import com.javaee2026.citruschat.messaging.infrastructure.web.mapper.SyncChatRoomWebMapper;
 import com.javaee2026.citruschat.messaging.infrastructure.web.mapper.SyncMessagesWebMapper;
+import com.javaee2026.citruschat.messaging.infrastructure.web.mapper.UploadConversationKeyWebMapper;
 import com.javaee2026.citruschat.shared.domain.constants.ApiResponseMessages;
 import com.javaee2026.citruschat.shared.domain.valueobjects.ChatRoomId;
 import com.javaee2026.citruschat.shared.domain.valueobjects.DeviceId;
@@ -35,12 +40,14 @@ public class ChatRoomController {
 	private final CreateChatRoomUseCase createChatRoomUseCase;
 	private final SyncChatRoomUseCase syncChatRoomUseCase;
 	private final SyncMessagesUseCase syncMessagesUseCase;
+	private final UploadConversationKeyUseCase uploadConversationKeyUseCase;
 
 	public ChatRoomController(CreateChatRoomUseCase createChatRoomUseCase, SyncChatRoomUseCase syncChatRoomUseCase,
-			SyncMessagesUseCase syncMessagesUseCase) {
+			SyncMessagesUseCase syncMessagesUseCase, UploadConversationKeyUseCase uploadConversationKeyUseCase) {
 		this.createChatRoomUseCase = createChatRoomUseCase;
 		this.syncChatRoomUseCase = syncChatRoomUseCase;
 		this.syncMessagesUseCase = syncMessagesUseCase;
+		this.uploadConversationKeyUseCase = uploadConversationKeyUseCase;
 	}
 
 	@PostMapping(ApiRoutes.API_CHAT_ROOMS_CREATE)
@@ -73,5 +80,16 @@ public class ChatRoomController {
 
 		return ApiResponses.ok(ApiResponseMessages.MESSAGES_RETRIEVED_SUCCESS,
 				SyncMessagesWebMapper.toResponse(result));
+	}
+
+	@PostMapping(ApiRoutes.API_CHAT_ROOM_CONVERSATION_KEY)
+	public ResponseEntity<ApiResponse<UploadConversationKeyResponse>> uploadConversationKey(
+			@Valid @RequestBody UploadConversationKeyRequest request) {
+
+		UploadConversationKeyResult result = uploadConversationKeyUseCase
+				.execute(UploadConversationKeyWebMapper.toCommand(request));
+
+		return ApiResponses.created(ApiResponseMessages.CONVERSATION_KEY_UPLOADED_SUCCESS,
+				UploadConversationKeyWebMapper.toResponse(result));
 	}
 }
