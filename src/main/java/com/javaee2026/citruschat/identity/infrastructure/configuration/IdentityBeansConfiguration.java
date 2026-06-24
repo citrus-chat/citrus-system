@@ -70,7 +70,7 @@ public class IdentityBeansConfiguration {
 	 * @param userRepository
 	 *            repository used to persist users
 	 * @param defaultPasswordGenerator
-	 *            generator for temporary passwords
+	 *            generator for tempora ry passwords
 	 * @param passwordHasher
 	 *            component used to hash passwords
 	 * @param userFactory
@@ -139,9 +139,29 @@ public class IdentityBeansConfiguration {
 	public GetCurrentUserDevicesUseCase getCurrentUserDevicesUseCase(IUserDeviceRepository userDeviceRepository) {
 		return new GetCurrentUserDevicesUseCase(userDeviceRepository);
 	}
+
 	@Bean
 	public ValidateUserDeviceOwnershipUseCase validateUserDeviceOwnershipUseCase(
 			IUserDeviceRepository userDeviceRepository) {
 		return new ValidateUserDeviceOwnershipUseCase(userDeviceRepository);
+	}
+
+	@Bean
+	public SearchUsersUseCase searchUsersUseCase(IUserRepository userRepository) {
+		return new SearchUsersUseCase(userRepository);
+	}
+
+	@Bean
+	public GetUserProfileUseCase getUserProfileUseCase(IUserProfileRepository userProfileRepository,
+			IUserRepository userRepository) {
+
+		return new GetUserProfileUseCase(userProfileRepository, userRepository);
+	}
+
+	@Bean
+	public UpdateUserProfileUseCase updateUserProfileUseCase(IUserProfileRepository userProfileRepository,
+			IUserRepository userRepository) {
+
+		return new UpdateUserProfileUseCase(userProfileRepository, userRepository);
 	}
 }
