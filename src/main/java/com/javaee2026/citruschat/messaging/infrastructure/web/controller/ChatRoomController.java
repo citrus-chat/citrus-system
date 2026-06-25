@@ -11,7 +11,6 @@ import com.javaee2026.citruschat.messaging.infrastructure.web.mapper.*;
 import com.javaee2026.citruschat.shared.domain.constants.ApiResponseMessages;
 import com.javaee2026.citruschat.shared.domain.valueobjects.ChatRoomId;
 import com.javaee2026.citruschat.shared.domain.valueobjects.DeviceId;
-import com.javaee2026.citruschat.shared.domain.valueobjects.MessageId;
 import com.javaee2026.citruschat.shared.domain.valueobjects.ParticipantId;
 import com.javaee2026.citruschat.shared.infrastructure.constants.ApiRoutes;
 import com.javaee2026.citruschat.shared.infrastructure.web.ApiResponses;
@@ -22,6 +21,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.Instant;
 import java.util.UUID;
 
 @RestController
@@ -66,10 +66,10 @@ public class ChatRoomController {
 
 	@GetMapping(ApiRoutes.API_CHAT_ROOM_MESSAGES_SYNC)
 	public ResponseEntity<ApiResponse<SyncMessagesResponse>> syncMessages(@PathVariable UUID chatroomId,
-			@RequestParam(required = false) UUID lastMessageId) {
+			@RequestParam(required = false) Instant lastCreatedAt) {
 
-		SyncMessagesResult result = syncMessagesUseCase.execute(new SyncMessagesCommand(new ChatRoomId(chatroomId),
-				lastMessageId != null ? new MessageId(lastMessageId) : null));
+		SyncMessagesResult result = syncMessagesUseCase
+				.execute(new SyncMessagesCommand(new ChatRoomId(chatroomId), lastCreatedAt));
 
 		return ApiResponses.ok(ApiResponseMessages.MESSAGES_RETRIEVED_SUCCESS,
 				SyncMessagesWebMapper.toResponse(result));

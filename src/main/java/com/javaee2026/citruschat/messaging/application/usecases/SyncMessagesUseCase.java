@@ -5,7 +5,8 @@ import com.javaee2026.citruschat.messaging.application.ports.IChatRoomRepository
 import com.javaee2026.citruschat.messaging.application.ports.IMessageRepository;
 import com.javaee2026.citruschat.messaging.application.results.SyncMessagesResult;
 import com.javaee2026.citruschat.shared.domain.valueobjects.ChatRoomId;
-import com.javaee2026.citruschat.shared.domain.valueobjects.MessageId;
+
+import java.time.Instant;
 
 public class SyncMessagesUseCase {
 
@@ -19,11 +20,11 @@ public class SyncMessagesUseCase {
 
 	public SyncMessagesResult execute(SyncMessagesCommand command) {
 		ChatRoomId chatRoomId = command.chatRoomId();
-		MessageId lastMessageId = command.lastMessageId();
+		Instant lastCreatedAt = command.lastCreatedAt();
 
 		chatRoomRepository.findById(chatRoomId)
 				.orElseThrow(() -> new IllegalArgumentException("Chat room not found with id: " + chatRoomId.value()));
 
-		return new SyncMessagesResult(messageRepository.findMessagesAfter(chatRoomId, lastMessageId, 100));
+		return new SyncMessagesResult(messageRepository.findMessagesAfter(chatRoomId, lastCreatedAt, 100));
 	}
 }
