@@ -11,6 +11,7 @@ import com.javaee2026.citruschat.messaging.infrastructure.persistence.jpa.mapper
 import com.javaee2026.citruschat.messaging.infrastructure.persistence.jpa.mapper.MessageMapper;
 import com.javaee2026.citruschat.messaging.infrastructure.persistence.jpa.repository.*;
 
+import com.javaee2026.citruschat.messaging.infrastructure.websocket.ports.IMessageRealtimeNotifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -35,10 +36,10 @@ public class MessagingBeansConfiguration {
 
 	@Bean
 	public SendMessageUseCase sendMessageUseCase(IUserDeviceRepository deviceRepository, IUserRepository userRepository,
-			IChatRoomRepository chatRoomRepository, IMessageRepository messageRepository,
-			MessageFactory messageFactory) {
+			IChatRoomRepository chatRoomRepository, IMessageRepository messageRepository, MessageFactory messageFactory,
+			IMessageRealtimeNotifier messageRealtimeNotifier) {
 		return new SendMessageUseCase(deviceRepository, userRepository, chatRoomRepository, messageRepository,
-				messageFactory);
+				messageFactory, messageRealtimeNotifier);
 	}
 
 	@Bean

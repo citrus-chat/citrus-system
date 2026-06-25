@@ -10,6 +10,7 @@ import com.javaee2026.citruschat.messaging.domain.factory.MessageFactory;
 import com.javaee2026.citruschat.messaging.domain.model.*;
 import com.javaee2026.citruschat.messaging.domain.policy.permissions.ChatPermissionList;
 import com.javaee2026.citruschat.messaging.domain.valueobjects.EncryptedContent;
+import com.javaee2026.citruschat.messaging.infrastructure.websocket.ports.IMessageRealtimeNotifier;
 import com.javaee2026.citruschat.shared.domain.valueobjects.*;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,16 +24,17 @@ public class SendMessageUseCase {
 	private final IChatRoomRepository chatRoomRepository;
 	private final IMessageRepository messageRepository;
 	private final MessageFactory messageFactory;
+	private final IMessageRealtimeNotifier realtimeNotifier;
 
 	public SendMessageUseCase(IUserDeviceRepository deviceRepository, IUserRepository userRepository,
-			IChatRoomRepository chatRoomRepository, IMessageRepository messageRepository,
-			MessageFactory messageFactory) {
+			IChatRoomRepository chatRoomRepository, IMessageRepository messageRepository, MessageFactory messageFactory,
+			IMessageRealtimeNotifier realtimeNotifier) {
 		this.deviceRepository = deviceRepository;
 		this.userRepository = userRepository;
 		this.chatRoomRepository = chatRoomRepository;
 		this.messageRepository = messageRepository;
 		this.messageFactory = messageFactory;
-
+		this.realtimeNotifier = realtimeNotifier;
 	}
 
 	private User validateSender(UserId userId) {
@@ -102,5 +104,7 @@ public class SendMessageUseCase {
 		System.out.println("Mensaje creado: " + message);
 
 		messageRepository.save(message);
+
+		realtimeNotifier.notifyMessageCreated(message.getChatRoomId());
 	}
 }

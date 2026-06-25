@@ -80,7 +80,6 @@ public final class ApiRoutes {
 	public static final String WS_APP_PREFIX = "/app";
 	public static final String WS_USER_PREFIX = "/user";
 
-	public static final String WS_CHAT_SEND_MESSAGE = "/chat/sendMessage";
 	public static final String WS_CHATROOM_TOPIC_PREFIX = WS_TOPIC_BASE + "/chatrooms/";
 	// ===================== END WEBSOCKET ROUTES ====================
 }
