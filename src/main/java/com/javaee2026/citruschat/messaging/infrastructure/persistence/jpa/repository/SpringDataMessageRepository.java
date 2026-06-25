@@ -6,6 +6,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import org.springframework.data.domain.Pageable;
+
+import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
 
@@ -27,9 +29,9 @@ public interface SpringDataMessageRepository extends JpaRepository<MessageJpaEnt
 			""")
 	List<ChatMessageResult> findMessagesByChatRoomId(UUID chatRoomId, Pageable pageable);
 
-	List<MessageJpaEntity> findByChatRoomIdOrderByIdAsc(UUID chatRoomId, Pageable pageable);
+	List<MessageJpaEntity> findByChatRoomIdAndDeletedAtIsNullOrderByCreatedAtAsc(UUID chatRoomId, Pageable pageable);
 
-	List<MessageJpaEntity> findByChatRoomIdAndIdGreaterThanOrderByIdAsc(UUID chatRoomId, UUID lastMessageId,
-			Pageable pageable);
+	List<MessageJpaEntity> findByChatRoomIdAndCreatedAtGreaterThanAndDeletedAtIsNullOrderByCreatedAtAsc(UUID chatRoomId,
+			Instant createdAt, Pageable pageable);
 
 }
