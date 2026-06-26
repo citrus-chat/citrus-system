@@ -17,7 +17,7 @@ public interface SpingDataChatPermissionRepository extends JpaRepository<ChatPer
 			        JOIN cp.roles r
 			        JOIN r.permissions p
 			    WHERE cp.chatRoom.id = :chatRoomId
-			      AND cp.userId = :participantId
+			      AND cp.id = :participantId
 			""")
 	Set<ChatPermissionJpaEntity> findPermissionsByChatRoomAndParticipant(@Param("chatRoomId") UUID chatRoomId,
 			@Param("participantId") UUID participantId);
