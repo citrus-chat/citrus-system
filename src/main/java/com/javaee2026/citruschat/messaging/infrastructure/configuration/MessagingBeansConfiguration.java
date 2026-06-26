@@ -93,6 +93,11 @@ public class MessagingBeansConfiguration {
 	}
 
 	@Bean
+	public UpdateChatRoomUseCase updateChatRoomUseCase(IChatRoomRepository chatRoomRepository) {
+		return new UpdateChatRoomUseCase(chatRoomRepository);
+	}
+
+	@Bean
 	public ValidateChatParticipantUseCase validateChatParticipantUseCase(
 			IChatParticipantRepository chatParticipantRepository) {
 		return new ValidateChatParticipantUseCase(chatParticipantRepository);

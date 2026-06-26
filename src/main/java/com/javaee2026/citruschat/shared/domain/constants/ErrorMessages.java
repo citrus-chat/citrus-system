@@ -60,6 +60,8 @@ public final class ErrorMessages {
 	public static final String CHATROOM_ID_NOT_FOUND = "Chatroom id not found";
 	public static final String CHATROOM_ID_CANNOT_BE_NULL = "Chatroom id cannot be null";
 	public static final String CHATROOM_CANNOT_BE_EDITED = "Chatroom cannot be edited";
+	public static final String CHATROOM_NAME_CANNOT_BE_EMPTY = "Chatroom name cannot be empty";
+	public static final String CHATROOM_AVATAR_CANNOT_BE_EMPTY = "Chatroom avatar cannot be empty";
 	public static final String CHATROOM_ALREADY_DELETED = "Chatroom already deleted";
 	public static final String CHATROOM_DOES_NOT_HAVE_ROLES = "Chatroom does not have roles";
 	public static final String CHATROOM_ROLES_ALREADY_INITIALIZED = "Chatroom roles already initialized";
