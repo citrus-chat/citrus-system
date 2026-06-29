@@ -55,7 +55,7 @@ public final class ApiRoutes {
 	// ===================== USER API ROUTES =======================
 	public static final String API_USER_ME = API_USER_BASE + "/me"; // => /api/v1/users/me
 	public static final String API_USER_BY_ID = API_USER_BASE + "/{id}"; // => /api/v1/users/{id}
-	public static final String API_USERS_SEARCH = API_USER_BASE; // => /api/v1/users
+	public static final String API_USERS_SEARCH = API_USER_BASE; // => /api/v1/users/search
 	public static final String API_USER_UPDATE = API_USER_BASE + "/{id}"; // => /api/v1/users/{id}
 	public static final String API_USER_DELETE = API_USER_BASE + "/{id}"; // => /api/v1/users/{id}
 	public static final String API_USER_CREATE = API_USER_BASE; // => /api/v1/users

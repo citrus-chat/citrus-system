@@ -87,7 +87,12 @@ public class CreateChatRoomUseCase {
 
 		validate(command, creatorId, userIds);
 
-		ChatRoom chatRoom = chatRoomFactory.createNew(command.chatRoomType(), command.name(), creatorId);
+		String chatRoomName = command.name();
+
+		if (command.chatRoomType() == ChatRoomType.DIRECT) {
+			chatRoomName = "Mensaje Directo";
+		}
+		ChatRoom chatRoom = chatRoomFactory.createNew(command.chatRoomType(), chatRoomName, creatorId);
 
 		Map<ChatRoleDefault, Set<ChatPermission>> rolesDefaultPermissions = resolvePermision();
 
