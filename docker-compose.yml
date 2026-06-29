@@ -40,10 +40,10 @@ services:
       DB_USER: ${POSTGRES_USER:-citrus_user}
       DB_PASSWORD: ${POSTGRES_PASSWORD}
 
-      SPRING_PROFILES_ACTIVE: prod
+      SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE:-prod}
 
       AVATAR_STORAGE_DIR: /app/uploads/avatars
-      AVATAR_MAX_SIZE_BYTES: 5242880
+      AVATAR_MAX_SIZE_BYTES: ${AVATAR_MAX_SIZE_BYTES:-5242880}
 
       JAVA_OPTS: ${JAVA_OPTS:-"-Xms256m -Xmx512m"}
 
@@ -56,6 +56,7 @@ services:
 
 volumes:
   postgres_data:
+  avatar_uploads:
 
 networks:
   citrus_internal:
