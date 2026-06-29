@@ -29,7 +29,7 @@ public class WebSocketConfiguration implements WebSocketMessageBrokerConfigurer 
 	@Override
 	public void registerStompEndpoints(StompEndpointRegistry registry) {
 		registry.addEndpoint(ApiRoutes.WS_ENDPOINT)
-				.setAllowedOrigins(ConfigConstants.CORS_ALLOWED_ORIGINS.toArray(String[]::new)).withSockJS();
+				.setAllowedOrigins(ConfigConstants.CORS_ALLOWED_ORIGINS.toArray(String[]::new));
 	}
 
 	@Override

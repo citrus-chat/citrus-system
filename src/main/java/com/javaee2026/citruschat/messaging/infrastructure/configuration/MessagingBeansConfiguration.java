@@ -2,10 +2,7 @@ package com.javaee2026.citruschat.messaging.infrastructure.configuration;
 
 import com.javaee2026.citruschat.identity.application.ports.IUserDeviceRepository;
 import com.javaee2026.citruschat.identity.application.ports.IUserRepository;
-import com.javaee2026.citruschat.messaging.application.ports.IChatParticipantRepository;
-import com.javaee2026.citruschat.messaging.application.ports.IChatPermissionRepository;
-import com.javaee2026.citruschat.messaging.application.ports.IChatRoomRepository;
-import com.javaee2026.citruschat.messaging.application.ports.IMessageRepository;
+import com.javaee2026.citruschat.messaging.application.ports.*;
 import com.javaee2026.citruschat.messaging.application.usecases.*;
 import com.javaee2026.citruschat.messaging.domain.factory.*;
 import com.javaee2026.citruschat.messaging.infrastructure.persistence.jpa.mapper.ChatPermissionMapper;
@@ -14,6 +11,7 @@ import com.javaee2026.citruschat.messaging.infrastructure.persistence.jpa.mapper
 import com.javaee2026.citruschat.messaging.infrastructure.persistence.jpa.mapper.MessageMapper;
 import com.javaee2026.citruschat.messaging.infrastructure.persistence.jpa.repository.*;
 
+import com.javaee2026.citruschat.messaging.infrastructure.websocket.ports.IMessageRealtimeNotifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -38,10 +36,10 @@ public class MessagingBeansConfiguration {
 
 	@Bean
 	public SendMessageUseCase sendMessageUseCase(IUserDeviceRepository deviceRepository, IUserRepository userRepository,
-			IChatRoomRepository chatRoomRepository, IMessageRepository messageRepository,
-			MessageFactory messageFactory) {
+			IChatRoomRepository chatRoomRepository, IMessageRepository messageRepository, MessageFactory messageFactory,
+			IMessageRealtimeNotifier messageRealtimeNotifier) {
 		return new SendMessageUseCase(deviceRepository, userRepository, chatRoomRepository, messageRepository,
-				messageFactory);
+				messageFactory, messageRealtimeNotifier);
 	}
 
 	@Bean
@@ -119,7 +117,15 @@ public class MessagingBeansConfiguration {
 
 	@Bean
 	public SyncChatRoomUseCase syncChatRoomUseCase(IUserRepository userRepository,
-			IChatRoomRepository chatRoomRepository, IUserDeviceRepository deviceRepository) {
-		return new SyncChatRoomUseCase(chatRoomRepository, deviceRepository, userRepository);
+			IChatRoomRepository chatRoomRepository, IUserDeviceRepository deviceRepository,
+			IConversationKeyDistributionRepository conversationKeyRepository) {
+		return new SyncChatRoomUseCase(chatRoomRepository, deviceRepository, userRepository, conversationKeyRepository);
+	}
+
+	@Bean
+	public GetParticipantPermissionsUseCase getParticipantPermissionsUseCase(
+			IChatPermissionRepository chatPermissionRepository,
+			ValidateChatParticipantUseCase validateChatParticipantUseCase) {
+		return new GetParticipantPermissionsUseCase(chatPermissionRepository, validateChatParticipantUseCase);
 	}
 }

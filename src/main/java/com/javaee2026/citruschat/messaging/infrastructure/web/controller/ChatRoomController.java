@@ -1,28 +1,17 @@
 package com.javaee2026.citruschat.messaging.infrastructure.web.controller;
 
+import com.javaee2026.citruschat.messaging.application.commands.GetParticipantPermissionsCommand;
 import com.javaee2026.citruschat.messaging.application.commands.SyncMessagesCommand;
-import com.javaee2026.citruschat.messaging.application.results.CreateChatRoomResult;
-import com.javaee2026.citruschat.messaging.application.results.SyncChatRoomResult;
-import com.javaee2026.citruschat.messaging.application.results.SyncMessagesResult;
-import com.javaee2026.citruschat.messaging.application.results.UploadConversationKeyResult;
-import com.javaee2026.citruschat.messaging.application.usecases.CreateChatRoomUseCase;
-import com.javaee2026.citruschat.messaging.application.usecases.SyncChatRoomUseCase;
-import com.javaee2026.citruschat.messaging.application.usecases.SyncMessagesUseCase;
-import com.javaee2026.citruschat.messaging.application.usecases.UploadConversationKeyUseCase;
+import com.javaee2026.citruschat.messaging.application.results.*;
+import com.javaee2026.citruschat.messaging.application.usecases.*;
 import com.javaee2026.citruschat.messaging.infrastructure.web.dto.request.CreateChatRoomRequest;
 import com.javaee2026.citruschat.messaging.infrastructure.web.dto.request.UploadConversationKeyRequest;
-import com.javaee2026.citruschat.messaging.infrastructure.web.dto.response.CreateChatRoomResponse;
-import com.javaee2026.citruschat.messaging.infrastructure.web.dto.response.SyncChatRoomResponse;
-import com.javaee2026.citruschat.messaging.infrastructure.web.dto.response.SyncMessagesResponse;
-import com.javaee2026.citruschat.messaging.infrastructure.web.dto.response.UploadConversationKeyResponse;
-import com.javaee2026.citruschat.messaging.infrastructure.web.mapper.CreateChatRoomWebMapper;
-import com.javaee2026.citruschat.messaging.infrastructure.web.mapper.SyncChatRoomWebMapper;
-import com.javaee2026.citruschat.messaging.infrastructure.web.mapper.SyncMessagesWebMapper;
-import com.javaee2026.citruschat.messaging.infrastructure.web.mapper.UploadConversationKeyWebMapper;
+import com.javaee2026.citruschat.messaging.infrastructure.web.dto.response.*;
+import com.javaee2026.citruschat.messaging.infrastructure.web.mapper.*;
 import com.javaee2026.citruschat.shared.domain.constants.ApiResponseMessages;
 import com.javaee2026.citruschat.shared.domain.valueobjects.ChatRoomId;
 import com.javaee2026.citruschat.shared.domain.valueobjects.DeviceId;
-import com.javaee2026.citruschat.shared.domain.valueobjects.MessageId;
+import com.javaee2026.citruschat.shared.domain.valueobjects.ParticipantId;
 import com.javaee2026.citruschat.shared.infrastructure.constants.ApiRoutes;
 import com.javaee2026.citruschat.shared.infrastructure.web.ApiResponses;
 import com.javaee2026.citruschat.shared.infrastructure.web.dto.response.ApiResponse;
@@ -32,6 +21,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.Instant;
 import java.util.UUID;
 
 @RestController
@@ -41,13 +31,16 @@ public class ChatRoomController {
 	private final SyncChatRoomUseCase syncChatRoomUseCase;
 	private final SyncMessagesUseCase syncMessagesUseCase;
 	private final UploadConversationKeyUseCase uploadConversationKeyUseCase;
+	private final GetParticipantPermissionsUseCase getParticipantPermissionsUseCase;
 
 	public ChatRoomController(CreateChatRoomUseCase createChatRoomUseCase, SyncChatRoomUseCase syncChatRoomUseCase,
-			SyncMessagesUseCase syncMessagesUseCase, UploadConversationKeyUseCase uploadConversationKeyUseCase) {
+			SyncMessagesUseCase syncMessagesUseCase, UploadConversationKeyUseCase uploadConversationKeyUseCase,
+			GetParticipantPermissionsUseCase getParticipantPermissionsUseCase) {
 		this.createChatRoomUseCase = createChatRoomUseCase;
 		this.syncChatRoomUseCase = syncChatRoomUseCase;
 		this.syncMessagesUseCase = syncMessagesUseCase;
 		this.uploadConversationKeyUseCase = uploadConversationKeyUseCase;
+		this.getParticipantPermissionsUseCase = getParticipantPermissionsUseCase;
 	}
 
 	@PostMapping(ApiRoutes.API_CHAT_ROOMS_CREATE)
@@ -73,10 +66,10 @@ public class ChatRoomController {
 
 	@GetMapping(ApiRoutes.API_CHAT_ROOM_MESSAGES_SYNC)
 	public ResponseEntity<ApiResponse<SyncMessagesResponse>> syncMessages(@PathVariable UUID chatroomId,
-			@RequestParam(required = false) UUID lastMessageId) {
+			@RequestParam(required = false) Instant lastCreatedAt) {
 
-		SyncMessagesResult result = syncMessagesUseCase.execute(new SyncMessagesCommand(new ChatRoomId(chatroomId),
-				lastMessageId != null ? new MessageId(lastMessageId) : null));
+		SyncMessagesResult result = syncMessagesUseCase
+				.execute(new SyncMessagesCommand(new ChatRoomId(chatroomId), lastCreatedAt));
 
 		return ApiResponses.ok(ApiResponseMessages.MESSAGES_RETRIEVED_SUCCESS,
 				SyncMessagesWebMapper.toResponse(result));
@@ -91,5 +84,16 @@ public class ChatRoomController {
 
 		return ApiResponses.created(ApiResponseMessages.CONVERSATION_KEY_UPLOADED_SUCCESS,
 				UploadConversationKeyWebMapper.toResponse(result));
+	}
+
+	@GetMapping(ApiRoutes.API_CHAT_ROOM_PARTICIPANT_PERMISSION)
+	public ResponseEntity<ApiResponse<ParticipantPermissionsResponse>> getParticipantPermissions(
+			@PathVariable UUID chatroomId, @PathVariable UUID participantId) {
+
+		GetParticipantPermissionsResult result = getParticipantPermissionsUseCase.execute(
+				new GetParticipantPermissionsCommand(new ChatRoomId(chatroomId), new ParticipantId(participantId)));
+
+		return ApiResponses.ok(ApiResponseMessages.PARTICIPANT_PERMISSIONS_RETRIEVED_SUCCESS,
+				GetParticipantPermissionsWebMapper.toResponse(result));
 	}
 }

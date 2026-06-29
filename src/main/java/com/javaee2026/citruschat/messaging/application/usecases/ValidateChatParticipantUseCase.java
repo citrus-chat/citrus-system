@@ -12,11 +12,11 @@ public class ValidateChatParticipantUseCase {
 		this.chatParticipantRepository = chatParticipantRepository;
 	}
 
-	public boolean execute(UUID chatRoomId, UUID userId) {
-		if (chatRoomId == null || userId == null) {
+	public boolean execute(UUID chatRoomId, UUID participantId) {
+		if (chatRoomId == null || participantId == null) {
 			return false;
 		}
 
-		return chatParticipantRepository.existsActiveByChatRoomIdAndUserId(chatRoomId, userId);
+		return chatParticipantRepository.existsActiveByChatRoomIdAndParticipantId(chatRoomId, participantId);
 	}
 }

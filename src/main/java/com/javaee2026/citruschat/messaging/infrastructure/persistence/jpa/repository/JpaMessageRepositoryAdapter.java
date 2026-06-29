@@ -9,6 +9,7 @@ import com.javaee2026.citruschat.shared.domain.valueobjects.MessageId;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
+import java.time.Instant;
 import java.util.List;
 
 public class JpaMessageRepositoryAdapter implements IMessageRepository {
@@ -27,16 +28,17 @@ public class JpaMessageRepositoryAdapter implements IMessageRepository {
 	}
 
 	@Override
-	public List<Message> findMessagesAfter(ChatRoomId chatRoomId, MessageId lastMessageId, int limit) {
+	public List<Message> findMessagesAfter(ChatRoomId chatRoomId, Instant lastCreatedAt, int limit) {
 		Pageable pageable = PageRequest.of(0, limit);
 
-		if (lastMessageId == null) {
-			return messageRepository.findByChatRoomIdOrderByIdAsc(chatRoomId.value(), pageable).stream()
-					.map(messageMapper::toDomain).toList();
+		if (lastCreatedAt == null) {
+			return messageRepository.findByChatRoomIdAndDeletedAtIsNullOrderByCreatedAtAsc(chatRoomId.value(), pageable)
+					.stream().map(messageMapper::toDomain).toList();
 		}
 
 		return messageRepository
-				.findByChatRoomIdAndIdGreaterThanOrderByIdAsc(chatRoomId.value(), lastMessageId.value(), pageable)
+				.findByChatRoomIdAndCreatedAtGreaterThanAndDeletedAtIsNullOrderByCreatedAtAsc(chatRoomId.value(),
+						lastCreatedAt, pageable)
 				.stream().map(messageMapper::toDomain).toList();
 	}
 

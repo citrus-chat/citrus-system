@@ -12,6 +12,7 @@ public final class ApiRoutes {
 	private static final String API_MESSAGES_BASE = API_BASE + "/messages"; // => /api/v1/auth
 	private static final String API_CHATROOM_BASE = API_BASE + "/chatroom";
 	private static final String API_USER_BASE = API_BASE + "/users";
+	private static final String API_DEVICE_BASE = API_BASE + "/devices";
 	// ===================== END BASE API Routes ====================
 
 	// ===================== ADMIN API Routes ====================
@@ -46,9 +47,9 @@ public final class ApiRoutes {
 	public static final String API_CHAT_ROOMS_SYNC = API_CHATROOM_BASE + "/sync"; // => /api/v1/chatroom/sync
 	public static final String API_CHAT_ROOM_MESSAGES_SYNC = API_CHATROOM_BASE + "/{chatroomId}/sync/messages"; // =>
 	public static final String API_CHAT_ROOM_CONVERSATION_KEY = API_CHATROOM_BASE + "/conversation-keys"; // =>
-																											// /api/v1/chatroom/conversation-keys
-																											// //
-																											// /api/v1/chatroom/{chatroomId}/sync/messages
+	public static final String API_CHAT_ROOM_PARTICIPANT_PERMISSION = API_CHATROOM_BASE
+			+ "/{chatroomId}/participant/{participantId}/permission"; // =>
+																		// /api/v1/chatroom/{chatroomId}/participant/{participantId}/permission
 	// ===================== END API ROUTES ====================
 
 	// ===================== USER API ROUTES =======================
@@ -68,6 +69,10 @@ public final class ApiRoutes {
 	public static final String API_USER_PUBLIC_PROFILE = API_USER_BASE + "/{userId}/profile"; // =>/api/v1/users/{userId}/
 	// ===================== END API Routes ====================
 
+	// ===================== DEVICE API ROUTES =======================
+	public static final String API_DEVICE_KEYS = API_DEVICE_BASE + "/{deviceId}/keys";
+	// ===================== END API ROUTES ====================
+
 	// ===================== WEBSOCKET ROUTES ====================
 	public static final String WS_ENDPOINT = "/ws";
 	public static final String WS_ENDPOINT_PATTERN = WS_ENDPOINT + "/**";
@@ -77,7 +82,6 @@ public final class ApiRoutes {
 	public static final String WS_APP_PREFIX = "/app";
 	public static final String WS_USER_PREFIX = "/user";
 
-	public static final String WS_CHAT_SEND_MESSAGE = "/chat/sendMessage";
 	public static final String WS_CHATROOM_TOPIC_PREFIX = WS_TOPIC_BASE + "/chatrooms/";
 	// ===================== END WEBSOCKET ROUTES ====================
 }

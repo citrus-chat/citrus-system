@@ -11,7 +11,8 @@ public final class ChatRoomResponseMapper {
 	public static ChatRoomResponse toResponse(ChatRoom chatRoom) {
 
 		return new ChatRoomResponse(chatRoom.getId().value(), chatRoom.getType().toString(), chatRoom.getName(),
-				chatRoom.getCreatedBy().value(), chatRoom.getCreatedAt(), chatRoom.getUpdatedAt(),
-				chatRoom.getDeletedAt());
+				chatRoom.getCreatedBy().value(),
+				chatRoom.getParticipants().stream().map(ChatParticipantResponseMapper::toResponse).toList(),
+				chatRoom.getCreatedAt(), chatRoom.getUpdatedAt(), chatRoom.getDeletedAt());
 	}
 }

@@ -28,6 +28,9 @@ public class ConversationKeyDistributionJpaEntity {
 	private UUID targetDeviceId;
 
 	@Column(nullable = false)
+	private UUID senderDeviceId;
+
+	@Column(nullable = false)
 	private Integer keyVersion;
 
 	@Column(nullable = false, length = 4096)
