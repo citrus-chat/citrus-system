@@ -5,6 +5,8 @@ import com.javaee2026.citruschat.identity.application.usecases.*;
 import com.javaee2026.citruschat.identity.domain.factory.UserFactory;
 import com.javaee2026.citruschat.identity.domain.factory.UsernameFactory;
 import com.javaee2026.citruschat.identity.infrastructure.persistence.jpa.mapper.UserMapper;
+import com.javaee2026.citruschat.identity.infrastructure.persistence.jpa.repository.SpringDataUserOrganizationRepository;
+import com.javaee2026.citruschat.identity.infrastructure.persistence.jpa.repository.SpringDataUserRepository;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -168,5 +170,13 @@ public class IdentityBeansConfiguration {
 			IUserRepository userRepository) {
 
 		return new UpdateUserProfileUseCase(userProfileRepository, userRepository);
+	}
+
+	@Bean
+	public GetPublicUserProfileUseCase getPublicUserProfileUseCase(IUserRepository userRepository,
+			IUserProfileRepository userProfileRepository, SpringDataUserOrganizationRepository orgRepository,
+			SpringDataUserRepository userJpaRepository) {
+
+		return new GetPublicUserProfileUseCase(userRepository, userProfileRepository, orgRepository, userJpaRepository);
 	}
 }

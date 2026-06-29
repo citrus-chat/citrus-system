@@ -55,6 +55,7 @@ public final class ApiRoutes {
 	public static final String API_USER_ME = API_USER_BASE + "/me"; // => /api/v1/users/me
 	public static final String API_USER_BY_ID = API_USER_BASE + "/{id}"; // => /api/v1/users/{id}
 	public static final String API_USERS_SEARCH = API_USER_BASE; // => /api/v1/users
+	public static final String API_USERS_ORG = API_USER_BASE + "/org";
 	public static final String API_USER_UPDATE = API_USER_BASE + "/{id}"; // => /api/v1/users/{id}
 	public static final String API_USER_DELETE = API_USER_BASE + "/{id}"; // => /api/v1/users/{id}
 	public static final String API_USER_CREATE = API_USER_BASE; // => /api/v1/users
@@ -64,6 +65,7 @@ public final class ApiRoutes {
 	public static final String API_USER_AVATAR_IMAGE_BASE = API_USER_BASE + "/avatars";
 	public static final String API_USER_AVATAR_IMAGE_PATTERN = API_USER_AVATAR_IMAGE_BASE + "/**";
 	public static final String API_USER_ME_PROFILE = API_USER_BASE + "/me/profile";
+	public static final String API_USER_PUBLIC_PROFILE = API_USER_BASE + "/{userId}/profile"; // =>/api/v1/users/{userId}/
 	// ===================== END API Routes ====================
 
 	// ===================== WEBSOCKET ROUTES ====================
