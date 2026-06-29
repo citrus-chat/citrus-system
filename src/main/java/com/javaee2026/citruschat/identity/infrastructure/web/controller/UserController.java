@@ -3,6 +3,7 @@ package com.javaee2026.citruschat.identity.infrastructure.web.controller;
 import com.javaee2026.citruschat.identity.application.results.UserDeviceKeysResult;
 import com.javaee2026.citruschat.identity.application.results.UserResult;
 import com.javaee2026.citruschat.identity.application.usecases.GetUserDeviceKeysUseCase;
+import com.javaee2026.citruschat.identity.application.usecases.GetUserUseCase;
 import com.javaee2026.citruschat.identity.application.usecases.SearchUsersUseCase;
 import com.javaee2026.citruschat.identity.infrastructure.persistence.jpa.entity.UserOrganizationJpaEntity;
 import com.javaee2026.citruschat.identity.infrastructure.persistence.jpa.repository.SpringDataUserOrganizationRepository;
@@ -31,13 +32,14 @@ public class UserController {
 	private final GetUserDeviceKeysUseCase getUserDeviceKeysUseCase;
 	private final SpringDataUserRepository userRepository;
 	private final SpringDataUserOrganizationRepository orgRepository;
+	private final GetUserUseCase getUserUseCase;
 
 	public UserController(SearchUsersUseCase searchUsersUseCase, GetUserDeviceKeysUseCase getUserDeviceKeysUseCase,
-			SpringDataUserRepository userRepository, SpringDataUserOrganizationRepository orgRepository) {
+			SpringDataUserRepository userRepository, SpringDataUserOrganizationRepository orgRepository, GetUserUseCase getUserUseCase) {
 		this.searchUsersUseCase = searchUsersUseCase;
 		this.getUserDeviceKeysUseCase = getUserDeviceKeysUseCase;
 		this.userRepository = userRepository;
-		this.orgRepository = orgRepository;
+		this.getUserUseCase = getUserUseCase;
 	}
 
 	@GetMapping(ApiRoutes.API_USERS_SEARCH)
@@ -46,6 +48,13 @@ public class UserController {
 		List<UserResult> results = searchUsersUseCase.execute(search, page, size);
 
 		return ApiResponses.ok(ApiResponseMessages.USER_LIST_RETRIEVED_SUCCESS, UserWebMapper.toResponseList(results));
+	}
+
+	@GetMapping(ApiRoutes.API_USER_BY_ID)
+	public ResponseEntity<ApiResponse<UserResponse>> getUser(@PathVariable UUID id) {
+		UserResult result = getUserUseCase.execute(id);
+
+		return ApiResponses.ok(ApiResponseMessages.USER_RETRIEVED_SUCCESS, UserWebMapper.toResponse(result));
 	}
 
 	@GetMapping(ApiRoutes.API_USER_KEYS)

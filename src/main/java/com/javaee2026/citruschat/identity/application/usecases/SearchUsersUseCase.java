@@ -20,6 +20,7 @@ public class SearchUsersUseCase {
 
 		List<User> users;
 
+		// Users retrieves require to have a device not revoked.
 		if (search == null || search.isBlank()) {
 			users = userRepository.findAll(page, size);
 		} else {

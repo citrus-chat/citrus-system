@@ -149,6 +149,11 @@ public class IdentityBeansConfiguration {
 	}
 
 	@Bean
+	public GetUserUseCase getUserUseCase(IUserRepository userRepository) {
+		return new GetUserUseCase(userRepository);
+	}
+
+	@Bean
 	public SearchUsersUseCase searchUsersUseCase(IUserRepository userRepository) {
 		return new SearchUsersUseCase(userRepository);
 	}
