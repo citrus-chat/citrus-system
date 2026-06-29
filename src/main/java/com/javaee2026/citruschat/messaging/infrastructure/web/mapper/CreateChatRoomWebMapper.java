@@ -27,6 +27,7 @@ public final class CreateChatRoomWebMapper {
 				Collectors.toMap(Map.Entry::getKey, entry -> ChatRoleResponseMapper.toResponse(entry.getValue())));
 
 		return new CreateChatRoomResponse(result.id().value(), result.type().toString(), result.name(),
-				result.createdBy().value(), result.createdAt(), result.updatedAt(), result.deletedAt());
+				result.createdBy().value(), participants, roles, result.createdAt(), result.updatedAt(),
+				result.deletedAt());
 	}
 }
