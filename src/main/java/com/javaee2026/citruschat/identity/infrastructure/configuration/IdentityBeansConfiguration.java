@@ -173,23 +173,16 @@ public class IdentityBeansConfiguration {
 	}
 
 	@Bean
-public GetPublicUserProfileUseCase getPublicUserProfileUseCase(
-        IUserRepository userRepository,
-        IUserProfileRepository userProfileRepository,
-        SpringDataUserOrganizationRepository orgRepository,
-        SpringDataUserRepository userJpaRepository) {
+	public GetPublicUserProfileUseCase getPublicUserProfileUseCase(IUserRepository userRepository,
+			IUserProfileRepository userProfileRepository, SpringDataUserOrganizationRepository orgRepository,
+			SpringDataUserRepository userJpaRepository) {
 
-    return new GetPublicUserProfileUseCase(
-            userRepository,
-            userProfileRepository,
-            orgRepository,
-            userJpaRepository);
-}
+		return new GetPublicUserProfileUseCase(userRepository, userProfileRepository, orgRepository, userJpaRepository);
+	}
 
-@Bean
-public GetDevicePublicKeyUseCase getDevicePublicKeyUseCase(
-        IUserDeviceRepository userDeviceRepository) {
+	@Bean
+	public GetDevicePublicKeyUseCase getDevicePublicKeyUseCase(IUserDeviceRepository userDeviceRepository) {
 
-    return new GetDevicePublicKeyUseCase(userDeviceRepository);
-  }
+		return new GetDevicePublicKeyUseCase(userDeviceRepository);
+	}
 }
