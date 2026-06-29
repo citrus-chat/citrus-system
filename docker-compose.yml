@@ -1,53 +1,66 @@
 services:
-
   postgres:
     image: postgres:17
     container_name: citrus-postgres
-
     restart: unless-stopped
 
     environment:
-      POSTGRES_DB: citruschat
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: admin
-
-    ports:
-      - "5432:5432"
+      POSTGRES_DB: ${POSTGRES_DB:-citruschat}
+      POSTGRES_USER: ${POSTGRES_USER:-citrus_user}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
 
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres -d citruschat"]
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-citrus_user} -d ${POSTGRES_DB:-citruschat}"]
       interval: 10s
       timeout: 5s
       retries: 5
 
+    networks:
+      - citrus_internal
+
   backend:
     build:
       context: .
-      dockerfile: Dockerfile.dev
+      dockerfile: Dockerfile
 
     container_name: citrus-backend
+    restart: unless-stopped
 
     depends_on:
       postgres:
         condition: service_healthy
 
     environment:
-      DB_URL: jdbc:postgresql://postgres:5432/citruschat
-      DB_USER: postgres
-      DB_PASSWORD: admin
+      SERVER_PORT: 8200
 
-    ports:
-      - "8200:8200"
+      DB_URL: jdbc:postgresql://postgres:5432/${POSTGRES_DB:-citruschat}
+      DB_USER: ${POSTGRES_USER:-citrus_user}
+      DB_PASSWORD: ${POSTGRES_PASSWORD}
+
+      SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE:-prod}
+
+      AVATAR_STORAGE_DIR: /app/uploads/avatars
+      AVATAR_MAX_SIZE_BYTES: ${AVATAR_MAX_SIZE_BYTES:-5242880}
+
+      JAVA_OPTS: ${JAVA_OPTS:-"-Xms256m -Xmx512m"}
 
     volumes:
-      - .:/app
-      - maven_cache:/root/.m2
+      - avatar_uploads:/app/uploads/avatars
 
-    command: ./mvnw spring-boot:run
+    networks:
+      - citrus_internal
+      - public
 
 volumes:
   postgres_data:
-  maven_cache:
+  avatar_uploads:
+
+networks:
+  citrus_internal:
+    driver: bridge
+
+  public:
+    external: true
