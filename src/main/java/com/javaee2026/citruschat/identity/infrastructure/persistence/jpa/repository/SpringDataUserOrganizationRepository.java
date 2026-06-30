@@ -5,9 +5,21 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.Optional;
 import java.util.UUID;
 
 public interface SpringDataUserOrganizationRepository extends JpaRepository<UserOrganizationJpaEntity, UUID> {
+
+	// Buscar la organización de un usuario por su userId
+	java.util.Optional<UserOrganizationJpaEntity> findByUserId(UUID userId);
+
+	@Query("""
+			    SELECT uo
+			    FROM UserOrganizationJpaEntity uo
+			    LEFT JOIN FETCH uo.position
+			    WHERE uo.userId = :userId
+			""")
+	Optional<UserOrganizationJpaEntity> findByUserIdWithPosition(@Param("userId") UUID userId);
 
 	@Query("""
 			    SELECT CASE WHEN COUNT(uo) > 0 THEN true ELSE false END

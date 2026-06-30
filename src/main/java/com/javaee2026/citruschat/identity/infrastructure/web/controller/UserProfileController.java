@@ -1,9 +1,12 @@
 package com.javaee2026.citruschat.identity.infrastructure.web.controller;
 
+import com.javaee2026.citruschat.identity.application.results.PublicUserProfileResult;
 import com.javaee2026.citruschat.identity.application.results.UserProfileResult;
+import com.javaee2026.citruschat.identity.application.usecases.GetPublicUserProfileUseCase;
 import com.javaee2026.citruschat.identity.application.usecases.GetUserProfileUseCase;
 import com.javaee2026.citruschat.identity.application.usecases.UpdateUserProfileUseCase;
 import com.javaee2026.citruschat.identity.infrastructure.web.dto.request.UpdateUserProfileRequest;
+import com.javaee2026.citruschat.identity.infrastructure.web.dto.response.PublicUserProfileResponse;
 import com.javaee2026.citruschat.identity.infrastructure.web.dto.response.UserProfileResponse;
 import com.javaee2026.citruschat.identity.infrastructure.web.mapper.UserProfileWebMapper;
 import com.javaee2026.citruschat.shared.domain.constants.ApiResponseMessages;
@@ -23,11 +26,14 @@ public class UserProfileController {
 
 	private final GetUserProfileUseCase getUserProfileUseCase;
 	private final UpdateUserProfileUseCase updateUserProfileUseCase;
+	private final GetPublicUserProfileUseCase getPublicUserProfileUseCase;
 
 	public UserProfileController(GetUserProfileUseCase getUserProfileUseCase,
-			UpdateUserProfileUseCase updateUserProfileUseCase) {
+			UpdateUserProfileUseCase updateUserProfileUseCase,
+			GetPublicUserProfileUseCase getPublicUserProfileUseCase) {
 		this.getUserProfileUseCase = getUserProfileUseCase;
 		this.updateUserProfileUseCase = updateUserProfileUseCase;
+		this.getPublicUserProfileUseCase = getPublicUserProfileUseCase;
 	}
 
 	@GetMapping(ApiRoutes.API_USER_ME_PROFILE)
@@ -49,5 +55,26 @@ public class UserProfileController {
 
 		return ApiResponses.ok(ApiResponseMessages.USER_PROFILE_UPDATED_SUCCESS,
 				UserProfileWebMapper.toResponse(result));
+	}
+
+	@GetMapping("/test-profile")
+	public String testProfile() {
+		return "ok";
+	}
+
+	@GetMapping(ApiRoutes.API_USER_PUBLIC_PROFILE)
+	public ResponseEntity<ApiResponse<PublicUserProfileResponse>> getUserProfile(@AuthenticationPrincipal Jwt jwt,
+			@PathVariable UUID userId) {
+
+		UUID requesterId = UUID.fromString(jwt.getSubject());
+		PublicUserProfileResult result = getPublicUserProfileUseCase.execute(userId, requesterId);
+
+		return ApiResponses.ok("Perfil de usuario obtenido correctamente", toPublicResponse(result));
+	}
+
+	private PublicUserProfileResponse toPublicResponse(PublicUserProfileResult r) {
+		return new PublicUserProfileResponse(r.userId(), r.username(), r.avatarUrl(), r.phoneNumber(), r.email(),
+				r.description(), r.status(), r.positionName(), r.department(), r.hierarchyLevel(), r.managerId(),
+				r.managerUsername(), r.showPhone(), r.showEmail(), r.showStatus(), r.showDescription());
 	}
 }

@@ -22,7 +22,7 @@ public class UserOrganizationJpaEntity {
 	@Column(name = "user_id", nullable = false)
 	private UUID userId;
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "position_id", nullable = false)
 	private PositionJpaEntity position;
 
