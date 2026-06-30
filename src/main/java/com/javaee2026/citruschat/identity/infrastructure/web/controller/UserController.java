@@ -7,6 +7,7 @@ import com.javaee2026.citruschat.identity.application.results.UserResult;
 //import com.javaee2026.citruschat.identity.infrastructure.web.dto.response.UserResponse;
 //import com.javaee2026.citruschat.identity.infrastructure.web.mapper.UserWebMapper;
 import com.javaee2026.citruschat.identity.application.usecases.GetUserDeviceKeysUseCase;
+import com.javaee2026.citruschat.identity.application.usecases.GetUserUseCase;
 import com.javaee2026.citruschat.identity.application.usecases.SearchUsersUseCase;
 import com.javaee2026.citruschat.identity.infrastructure.web.dto.response.UserDeviceKeysResponse;
 import com.javaee2026.citruschat.identity.infrastructure.web.dto.response.UserResponse;
@@ -27,10 +28,13 @@ public class UserController {
 
 	private final SearchUsersUseCase searchUsersUseCase;
 	private final GetUserDeviceKeysUseCase getUserDeviceKeysUseCase;
+	private final GetUserUseCase getUserUseCase;
 
-	public UserController(SearchUsersUseCase searchUsersUseCase, GetUserDeviceKeysUseCase getUserDeviceKeysUseCase) {
+	public UserController(SearchUsersUseCase searchUsersUseCase, GetUserDeviceKeysUseCase getUserDeviceKeysUseCase,
+			GetUserUseCase getUserUseCase) {
 		this.searchUsersUseCase = searchUsersUseCase;
 		this.getUserDeviceKeysUseCase = getUserDeviceKeysUseCase;
+		this.getUserUseCase = getUserUseCase;
 	}
 
 	@GetMapping(ApiRoutes.API_USERS_SEARCH)
@@ -39,6 +43,13 @@ public class UserController {
 		List<UserResult> results = searchUsersUseCase.execute(search, page, size);
 
 		return ApiResponses.ok(ApiResponseMessages.USER_LIST_RETRIEVED_SUCCESS, UserWebMapper.toResponseList(results));
+	}
+
+	@GetMapping(ApiRoutes.API_USER_BY_ID)
+	public ResponseEntity<ApiResponse<UserResponse>> getUser(@PathVariable UUID id) {
+		UserResult result = getUserUseCase.execute(id);
+
+		return ApiResponses.ok(ApiResponseMessages.USER_RETRIEVED_SUCCESS, UserWebMapper.toResponse(result));
 	}
 
 	@GetMapping(ApiRoutes.API_USER_KEYS)

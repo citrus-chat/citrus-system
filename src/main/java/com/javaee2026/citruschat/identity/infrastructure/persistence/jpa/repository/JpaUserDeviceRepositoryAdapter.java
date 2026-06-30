@@ -42,6 +42,11 @@ public class JpaUserDeviceRepositoryAdapter implements IUserDeviceRepository {
 	}
 
 	@Override
+	public boolean existsByUserIdAndRevokedAtIsNull(UUID userId) {
+		return repository.existsByUserIdAndRevokedAtIsNull(userId);
+	}
+
+	@Override
 	public boolean existsActiveByIdAndUserId(UUID deviceId, UUID userId) {
 		return repository.existsByIdAndUserIdAndRevokedAtIsNull(deviceId, userId);
 	}

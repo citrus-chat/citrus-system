@@ -3,6 +3,7 @@ package com.javaee2026.citruschat.identity.infrastructure.persistence.jpa.reposi
 import com.javaee2026.citruschat.identity.application.dto.SortDirection;
 import com.javaee2026.citruschat.identity.application.dto.UserPageQuery;
 import com.javaee2026.citruschat.identity.application.dto.UserSortField;
+import com.javaee2026.citruschat.identity.application.ports.IUserDeviceRepository;
 import com.javaee2026.citruschat.identity.application.ports.IUserRepository;
 import com.javaee2026.citruschat.identity.domain.model.User;
 import com.javaee2026.citruschat.identity.domain.valueobjects.PhoneNumber;
@@ -27,10 +28,13 @@ public class JpaUserRepositoryAdapter implements IUserRepository {
 
 	private final SpringDataUserRepository repository;
 	private final UserMapper userMapper;
+	private final IUserDeviceRepository deviceRepository;
 
-	public JpaUserRepositoryAdapter(SpringDataUserRepository repository, UserMapper userMapper) {
+	public JpaUserRepositoryAdapter(SpringDataUserRepository repository, UserMapper userMapper,
+			IUserDeviceRepository deviceRepository) {
 		this.repository = repository;
 		this.userMapper = userMapper;
+		this.deviceRepository = deviceRepository;
 	}
 
 	@Override
@@ -73,7 +77,9 @@ public class JpaUserRepositoryAdapter implements IUserRepository {
 
 		Pageable pageable = PageRequest.of(page, size);
 
-		return repository.search(text, pageable).stream().map(userMapper::toDomain).toList();
+		return repository.search(text, pageable).stream()
+				.filter(user -> deviceRepository.existsByUserIdAndRevokedAtIsNull(user.getId()))
+				.map(userMapper::toDomain).toList();
 	}
 
 	@Override
@@ -81,7 +87,9 @@ public class JpaUserRepositoryAdapter implements IUserRepository {
 
 		Pageable pageable = PageRequest.of(page, size);
 
-		return repository.findAll(pageable).stream().map(userMapper::toDomain).toList();
+		return repository.findAll(pageable).stream()
+				.filter(user -> deviceRepository.existsByUserIdAndRevokedAtIsNull(user.getId()))
+				.map(userMapper::toDomain).toList();
 	}
 
 	@Override

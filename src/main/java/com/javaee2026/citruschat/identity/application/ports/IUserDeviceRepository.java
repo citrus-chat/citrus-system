@@ -19,6 +19,8 @@ public interface IUserDeviceRepository {
 
 	List<UserDevice> findAllByUserId(UUID userId);
 
+	boolean existsByUserIdAndRevokedAtIsNull(UUID userId);
+
 	boolean existsActiveByIdAndUserId(UUID deviceId, UUID userId);
 	UserDevice save(UserDevice userDevice);
 }
