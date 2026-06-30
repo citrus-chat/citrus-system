@@ -36,15 +36,16 @@ public class ChatRoomController {
 	private final UpdateChatRoomUseCase updateChatRoomUseCase;
 
 	public ChatRoomController(CreateChatRoomUseCase createChatRoomUseCase, SyncChatRoomUseCase syncChatRoomUseCase,
-                              SyncMessagesUseCase syncMessagesUseCase, UploadConversationKeyUseCase uploadConversationKeyUseCase,
-                              GetParticipantPermissionsUseCase getParticipantPermissionsUseCase, UpdateChatRoomUseCase updateChatRoomUseCase) {
+			SyncMessagesUseCase syncMessagesUseCase, UploadConversationKeyUseCase uploadConversationKeyUseCase,
+			GetParticipantPermissionsUseCase getParticipantPermissionsUseCase,
+			UpdateChatRoomUseCase updateChatRoomUseCase) {
 		this.createChatRoomUseCase = createChatRoomUseCase;
 		this.syncChatRoomUseCase = syncChatRoomUseCase;
 		this.syncMessagesUseCase = syncMessagesUseCase;
 		this.uploadConversationKeyUseCase = uploadConversationKeyUseCase;
 		this.getParticipantPermissionsUseCase = getParticipantPermissionsUseCase;
-        this.updateChatRoomUseCase = updateChatRoomUseCase;
-    }
+		this.updateChatRoomUseCase = updateChatRoomUseCase;
+	}
 
 	@PostMapping(ApiRoutes.API_CHAT_ROOMS_CREATE)
 	public ResponseEntity<ApiResponse<CreateChatRoomResponse>> send(@AuthenticationPrincipal Jwt jwt,
@@ -102,7 +103,7 @@ public class ChatRoomController {
 
 	@PatchMapping(ApiRoutes.API_CHAT_ROOM_UPDATE_NAME)
 	public ResponseEntity<ApiResponse<UpdateChatRoomResponse>> updateName(@AuthenticationPrincipal Jwt jwt,
-	                                                                      @PathVariable UUID chatroomId, @Valid @RequestBody UpdateChatRoomRequest request) {
+			@PathVariable UUID chatroomId, @Valid @RequestBody UpdateChatRoomRequest request) {
 
 		UUID requesterId = UUID.fromString(jwt.getSubject());
 		UpdateChatRoomResult result = updateChatRoomUseCase
@@ -111,4 +112,4 @@ public class ChatRoomController {
 		return ApiResponses.ok(ApiResponseMessages.CHAT_ROOM_UPDATED_SUCCESS,
 				UpdateChatRoomWebMapper.toResponse(result));
 	}
-		}
+}

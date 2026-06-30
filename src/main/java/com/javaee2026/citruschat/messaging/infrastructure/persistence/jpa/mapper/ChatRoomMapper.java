@@ -28,8 +28,8 @@ public final class ChatRoomMapper {
 	}
 
 	public ChatRoom toDomain(ChatRoomJpaEntity entity) {
-		return chatRoomFactory.reconstitute(new ChatRoomId(entity.getId()), entity.getType(), entity.getName(),entity.getAvatarUrl(),
-				new UserId(entity.getCreatedBy()),
+		return chatRoomFactory.reconstitute(new ChatRoomId(entity.getId()), entity.getType(), entity.getName(),
+				entity.getAvatarUrl(), new UserId(entity.getCreatedBy()),
 				entity.getParticipants().stream().map(ChatParticipantMapper::toDomain).toList(),
 				entity.getRoles().stream().map(chatRoleMapper::toDomain)
 						.collect(Collectors.toMap(ChatRole::getName, r -> r)),

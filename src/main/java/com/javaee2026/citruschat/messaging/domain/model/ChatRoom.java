@@ -39,11 +39,12 @@ public class ChatRoom {
 	private Instant deletedAt;
 
 	public ChatRoom(ChatRoomId id, ChatRoomType type, String name, UserId createdBy, Instant createdAt) {
-		this(id, type, name, null,createdBy, null, null, createdAt, null, null);
+		this(id, type, name, null, createdBy, null, null, createdAt, null, null);
 	}
 
-	public ChatRoom(ChatRoomId id, ChatRoomType type, String name, String avatarUrl,UserId createdBy, List<ChatParticipant> participants,
-	                Map<String, ChatRole> roles, Instant createdAt, Instant updatedAt, Instant deletedAt) {
+	public ChatRoom(ChatRoomId id, ChatRoomType type, String name, String avatarUrl, UserId createdBy,
+			List<ChatParticipant> participants, Map<String, ChatRole> roles, Instant createdAt, Instant updatedAt,
+			Instant deletedAt) {
 		this.id = requireNonNull(id, ErrorMessages.CHATROOM_ID_CANNOT_BE_NULL);
 		this.type = requireNonNull(type, "ChatRoom type cannot be null");
 		this.name = requireNonNull(name, "ChatRoom name cannot be null");
@@ -73,7 +74,6 @@ public class ChatRoom {
 		touch();
 	}
 
-
 	public void touch() {
 		if (isDeleted()) {
 			throw new InvalidMessageException(ErrorMessages.CHATROOM_CANNOT_BE_EDITED);
@@ -82,16 +82,16 @@ public class ChatRoom {
 		this.updatedAt = Instant.now();
 	}
 
-	public void rename(String newName){
-		if (newName == null || newName.isBlank()){
+	public void rename(String newName) {
+		if (newName == null || newName.isBlank()) {
 			throw new InvalidChatRoomException(ErrorMessages.CHATROOM_NAME_CANNOT_BE_EMPTY);
 		}
 		touch();
 		this.name = newName;
 	}
 
-	public void changeAvatar(String newAvatar){
-		if ( newAvatar == null || newAvatar.isBlank()){
+	public void changeAvatar(String newAvatar) {
+		if (newAvatar == null || newAvatar.isBlank()) {
 			throw new InvalidChatRoomException(ErrorMessages.CHATROOM_AVATAR_CANNOT_BE_EMPTY);
 		}
 		touch();

@@ -10,39 +10,38 @@ import com.javaee2026.citruschat.shared.domain.valueobjects.ChatRoomId;
 import com.javaee2026.citruschat.shared.domain.valueobjects.UserId;
 
 public class UpdateChatRoomUseCase {
-    private final IChatRoomRepository chatRoomRepository;
+	private final IChatRoomRepository chatRoomRepository;
 
-    public UpdateChatRoomUseCase(IChatRoomRepository chatRoomRepository) {
-        this.chatRoomRepository = chatRoomRepository;
-    }
+	public UpdateChatRoomUseCase(IChatRoomRepository chatRoomRepository) {
+		this.chatRoomRepository = chatRoomRepository;
+	}
 
-    private ChatRoom validateChatRoom(ChatRoomId chatRoomId) {
-        return chatRoomRepository.findById(chatRoomId)
-                .orElseThrow(() -> new IllegalArgumentException("Chat room not found with id: " + chatRoomId.value()));
-    }
+	private ChatRoom validateChatRoom(ChatRoomId chatRoomId) {
+		return chatRoomRepository.findById(chatRoomId)
+				.orElseThrow(() -> new IllegalArgumentException("Chat room not found with id: " + chatRoomId.value()));
+	}
 
-    private ChatParticipant validateParticipant(ChatRoom chatRoom, UserId requesterId) {
-        return chatRoom.getParticipants().stream()
-                .filter(participant -> participant.getUserId().equals(requesterId))
-                .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("User is not a participant of this chat room"));
-    }
+	private ChatParticipant validateParticipant(ChatRoom chatRoom, UserId requesterId) {
+		return chatRoom.getParticipants().stream().filter(participant -> participant.getUserId().equals(requesterId))
+				.findFirst()
+				.orElseThrow(() -> new IllegalArgumentException("User is not a participant of this chat room"));
+	}
 
-    public void validatePermission(ChatRoom chatRoom,ChatParticipant participant){
-        if (!chatRoom.hasPermission(participant, ChatPermissionList.CAN_MODIFY_CHAT)) {
-            throw new IllegalArgumentException("User does not have permission to update the chat room");
-        }
-    }
+	public void validatePermission(ChatRoom chatRoom, ChatParticipant participant) {
+		if (!chatRoom.hasPermission(participant, ChatPermissionList.CAN_MODIFY_CHAT)) {
+			throw new IllegalArgumentException("User does not have permission to update the chat room");
+		}
+	}
 
-    public UpdateChatRoomResult execute(UpdateChatRoomCommand command) {
-        ChatRoom chat = validateChatRoom(new ChatRoomId(command.chatRoomId()));
-        ChatParticipant participant = validateParticipant(chat, new UserId(command.requesterId()));
+	public UpdateChatRoomResult execute(UpdateChatRoomCommand command) {
+		ChatRoom chat = validateChatRoom(new ChatRoomId(command.chatRoomId()));
+		ChatParticipant participant = validateParticipant(chat, new UserId(command.requesterId()));
 
-        validatePermission(chat, participant);
+		validatePermission(chat, participant);
 
-        chat.rename(command.name());
-        chatRoomRepository.save(chat);
+		chat.rename(command.name());
+		chatRoomRepository.save(chat);
 
-        return new UpdateChatRoomResult(chat.getId(), chat.getName(), chat.getAvatarUrl(), chat.getUpdatedAt());
-    }
+		return new UpdateChatRoomResult(chat.getId(), chat.getName(), chat.getAvatarUrl(), chat.getUpdatedAt());
+	}
 }
