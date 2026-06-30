@@ -50,6 +50,9 @@ public final class ApiRoutes {
 	public static final String API_CHAT_ROOM_PARTICIPANT_PERMISSION = API_CHATROOM_BASE
 			+ "/{chatroomId}/participant/{participantId}/permission"; // =>
 																		// /api/v1/chatroom/{chatroomId}/participant/{participantId}/permission
+
+	public static final String API_CHAT_ROOM_UPDATE_NAME = API_CHATROOM_BASE + "/{chatroomId}/name";
+
 	// ===================== END API ROUTES ====================
 
 	// ===================== USER API ROUTES =======================
