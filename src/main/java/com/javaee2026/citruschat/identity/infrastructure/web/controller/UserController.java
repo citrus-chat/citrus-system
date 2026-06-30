@@ -35,11 +35,13 @@ public class UserController {
 	private final GetUserUseCase getUserUseCase;
 
 	public UserController(SearchUsersUseCase searchUsersUseCase, GetUserDeviceKeysUseCase getUserDeviceKeysUseCase,
-			SpringDataUserRepository userRepository, SpringDataUserOrganizationRepository orgRepository, GetUserUseCase getUserUseCase) {
+			SpringDataUserRepository userRepository, SpringDataUserOrganizationRepository orgRepository,
+			GetUserUseCase getUserUseCase) {
 		this.searchUsersUseCase = searchUsersUseCase;
 		this.getUserDeviceKeysUseCase = getUserDeviceKeysUseCase;
 		this.userRepository = userRepository;
 		this.getUserUseCase = getUserUseCase;
+		this.orgRepository = orgRepository;
 	}
 
 	@GetMapping(ApiRoutes.API_USERS_SEARCH)
