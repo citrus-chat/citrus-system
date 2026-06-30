@@ -5,6 +5,7 @@ import com.javaee2026.citruschat.messaging.application.commands.SyncMessagesComm
 import com.javaee2026.citruschat.messaging.application.results.*;
 import com.javaee2026.citruschat.messaging.application.usecases.*;
 import com.javaee2026.citruschat.messaging.infrastructure.web.dto.request.CreateChatRoomRequest;
+import com.javaee2026.citruschat.messaging.infrastructure.web.dto.request.UpdateChatRoomRequest;
 import com.javaee2026.citruschat.messaging.infrastructure.web.dto.request.UploadConversationKeyRequest;
 import com.javaee2026.citruschat.messaging.infrastructure.web.dto.response.*;
 import com.javaee2026.citruschat.messaging.infrastructure.web.mapper.*;
@@ -32,15 +33,18 @@ public class ChatRoomController {
 	private final SyncMessagesUseCase syncMessagesUseCase;
 	private final UploadConversationKeyUseCase uploadConversationKeyUseCase;
 	private final GetParticipantPermissionsUseCase getParticipantPermissionsUseCase;
+	private final UpdateChatRoomUseCase updateChatRoomUseCase;
 
 	public ChatRoomController(CreateChatRoomUseCase createChatRoomUseCase, SyncChatRoomUseCase syncChatRoomUseCase,
 			SyncMessagesUseCase syncMessagesUseCase, UploadConversationKeyUseCase uploadConversationKeyUseCase,
-			GetParticipantPermissionsUseCase getParticipantPermissionsUseCase) {
+			GetParticipantPermissionsUseCase getParticipantPermissionsUseCase,
+			UpdateChatRoomUseCase updateChatRoomUseCase) {
 		this.createChatRoomUseCase = createChatRoomUseCase;
 		this.syncChatRoomUseCase = syncChatRoomUseCase;
 		this.syncMessagesUseCase = syncMessagesUseCase;
 		this.uploadConversationKeyUseCase = uploadConversationKeyUseCase;
 		this.getParticipantPermissionsUseCase = getParticipantPermissionsUseCase;
+		this.updateChatRoomUseCase = updateChatRoomUseCase;
 	}
 
 	@PostMapping(ApiRoutes.API_CHAT_ROOMS_CREATE)
@@ -95,5 +99,17 @@ public class ChatRoomController {
 
 		return ApiResponses.ok(ApiResponseMessages.PARTICIPANT_PERMISSIONS_RETRIEVED_SUCCESS,
 				GetParticipantPermissionsWebMapper.toResponse(result));
+	}
+
+	@PatchMapping(ApiRoutes.API_CHAT_ROOM_UPDATE_NAME)
+	public ResponseEntity<ApiResponse<UpdateChatRoomResponse>> updateName(@AuthenticationPrincipal Jwt jwt,
+			@PathVariable UUID chatroomId, @Valid @RequestBody UpdateChatRoomRequest request) {
+
+		UUID requesterId = UUID.fromString(jwt.getSubject());
+		UpdateChatRoomResult result = updateChatRoomUseCase
+				.execute(UpdateChatRoomWebMapper.toCommand(request, chatroomId, requesterId));
+
+		return ApiResponses.ok(ApiResponseMessages.CHAT_ROOM_UPDATED_SUCCESS,
+				UpdateChatRoomWebMapper.toResponse(result));
 	}
 }
