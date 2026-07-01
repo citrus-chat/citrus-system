@@ -45,9 +45,9 @@ public class ConfirmWebLoginTokenUseCase {
 		validateToken(webLoginToken, now);
 		validateDevice(webLoginToken, command);
 
-		registerOrRefreshUserDeviceUseCase.execute(new RegisterOrRefreshUserDeviceCommand(
-				webLoginToken.getWebDeviceId(), command.authenticatedUserId(), webLoginToken.getWebPublicKey(),
-				webLoginToken.getWebDeviceName(), DeviceType.WEB));
+		registerOrRefreshUserDeviceUseCase.execute(
+				new RegisterOrRefreshUserDeviceCommand(webLoginToken.getWebDeviceId(), command.authenticatedUserId(),
+						webLoginToken.getWebPublicKey(), webLoginToken.getWebDeviceName(), DeviceType.WEB));
 
 		webLoginToken.markUsed(now);
 		webLoginTokenRepository.save(webLoginToken);

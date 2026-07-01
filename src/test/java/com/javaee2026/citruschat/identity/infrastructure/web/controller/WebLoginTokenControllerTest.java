@@ -44,20 +44,16 @@ class WebLoginTokenControllerTest {
 		UUID webDeviceId = UUID.fromString("91ae5825-9096-4c74-9447-1bf03004c36b");
 		Instant expiresAt = Instant.parse("2026-07-01T14:30:00Z");
 
-		when(createWebLoginTokenUseCase.execute(any()))
-				.thenReturn(new CreateWebLoginTokenResult("temporary-token", webDeviceId, expiresAt,
-						"temporary-token"));
+		when(createWebLoginTokenUseCase.execute(any())).thenReturn(
+				new CreateWebLoginTokenResult("temporary-token", webDeviceId, expiresAt, "temporary-token"));
 
-		mockMvc.perform(post(ApiRoutes.API_WEB_LOGIN_TOKENS).contentType(MediaType.APPLICATION_JSON)
-				.content("""
-						{
-						  "webDeviceId": "91ae5825-9096-4c74-9447-1bf03004c36b",
-						  "deviceName": "Browser",
-						  "publicKey": "public-key"
-						}
-						"""))
-				.andExpect(status().isCreated())
-				.andExpect(jsonPath("$.success", is(true)))
+		mockMvc.perform(post(ApiRoutes.API_WEB_LOGIN_TOKENS).contentType(MediaType.APPLICATION_JSON).content("""
+				{
+				  "webDeviceId": "91ae5825-9096-4c74-9447-1bf03004c36b",
+				  "deviceName": "Browser",
+				  "publicKey": "public-key"
+				}
+				""")).andExpect(status().isCreated()).andExpect(jsonPath("$.success", is(true)))
 				.andExpect(jsonPath("$.message", is(ApiResponseMessages.WEB_LOGIN_TOKEN_CREATED)))
 				.andExpect(jsonPath("$.data.token", is("temporary-token")))
 				.andExpect(jsonPath("$.data.web_device_id", is(webDeviceId.toString())))
@@ -81,9 +77,7 @@ class WebLoginTokenControllerTest {
 						{
 						  "token": "temporary-token"
 						}
-						"""))
-				.andExpect(status().isOk())
-				.andExpect(jsonPath("$.success", is(true)))
+						""")).andExpect(status().isOk()).andExpect(jsonPath("$.success", is(true)))
 				.andExpect(jsonPath("$.message", is(ApiResponseMessages.WEB_LOGIN_TOKEN_CONFIRMED)))
 				.andExpect(jsonPath("$.data.user_id", is(userId.toString())))
 				.andExpect(jsonPath("$.data.web_device_id", is(webDeviceId.toString())));
@@ -91,12 +85,10 @@ class WebLoginTokenControllerTest {
 
 	@Test
 	void shouldRejectConfirmWebLoginTokenWithoutAuthentication() throws Exception {
-		mockMvc.perform(post(ApiRoutes.API_WEB_LOGIN_TOKENS_CONFIRM).contentType(MediaType.APPLICATION_JSON)
-				.content("""
-						{
-						  "token": "temporary-token"
-						}
-						"""))
-				.andExpect(status().isUnauthorized());
+		mockMvc.perform(post(ApiRoutes.API_WEB_LOGIN_TOKENS_CONFIRM).contentType(MediaType.APPLICATION_JSON).content("""
+				{
+				  "token": "temporary-token"
+				}
+				""")).andExpect(status().isUnauthorized());
 	}
 }

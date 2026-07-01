@@ -33,8 +33,8 @@ public class WebLoginToken {
 		this.updatedAt = updatedAt;
 	}
 
-	public static WebLoginToken createNew(String tokenHash, UUID webDeviceId, String webDeviceName,
-			String webPublicKey, Instant now, Instant expiresAt) {
+	public static WebLoginToken createNew(String tokenHash, UUID webDeviceId, String webDeviceName, String webPublicKey,
+			Instant now, Instant expiresAt) {
 		return new WebLoginToken(UUID.randomUUID(), tokenHash, webDeviceId, webDeviceName, webPublicKey,
 				WebLoginTokenStatus.PENDING, expiresAt, null, now, now);
 	}

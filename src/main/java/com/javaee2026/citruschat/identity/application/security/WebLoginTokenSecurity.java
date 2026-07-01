@@ -24,8 +24,7 @@ public class WebLoginTokenSecurity {
 			MessageDigest digest = MessageDigest.getInstance("SHA-256");
 			byte[] hash = digest.digest(token.getBytes(StandardCharsets.UTF_8));
 			return HexFormat.of().formatHex(hash);
-		}
-		catch (NoSuchAlgorithmException ex) {
+		} catch (NoSuchAlgorithmException ex) {
 			throw new IllegalStateException("SHA-256 is not available", ex);
 		}
 	}

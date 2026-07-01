@@ -23,12 +23,12 @@ public enum ErrorCode {
 																													HttpStatus.GONE), USED_WEB_LOGIN_TOKEN(
 																															HttpStatus.CONFLICT), WEB_LOGIN_DEVICE_NOT_FOUND(
 																																	HttpStatus.NOT_FOUND), INVALID_CHATROLE(
-																											HttpStatus.BAD_REQUEST), INVALID_PERMISSION(
-																													HttpStatus.BAD_REQUEST), USER_ALREADY_ACTIVE(
-																															HttpStatus.CONFLICT), USER_ALREADY_INACTIVE(
-																																	HttpStatus.CONFLICT), USER_ALREADY_VALIDATED(
-																																			HttpStatus.CONFLICT), USER_NOT_FOUND(
-																																					HttpStatus.NOT_FOUND);
+																																			HttpStatus.BAD_REQUEST), INVALID_PERMISSION(
+																																					HttpStatus.BAD_REQUEST), USER_ALREADY_ACTIVE(
+																																							HttpStatus.CONFLICT), USER_ALREADY_INACTIVE(
+																																									HttpStatus.CONFLICT), USER_ALREADY_VALIDATED(
+																																											HttpStatus.CONFLICT), USER_NOT_FOUND(
+																																													HttpStatus.NOT_FOUND);
 
 	private final HttpStatus httpStatus;
 

@@ -46,11 +46,10 @@ public class WebLoginTokenController {
 	}
 
 	@PostMapping(ApiRoutes.API_WEB_LOGIN_TOKENS_CONFIRM)
-	public ResponseEntity<ApiResponse<ConfirmWebLoginTokenResponse>> confirm(
-			@AuthenticationPrincipal Jwt jwt,
+	public ResponseEntity<ApiResponse<ConfirmWebLoginTokenResponse>> confirm(@AuthenticationPrincipal Jwt jwt,
 			@Valid @RequestBody ConfirmWebLoginTokenRequest request) {
-		ConfirmWebLoginTokenResult result = confirmWebLoginTokenUseCase.execute(
-				WebLoginTokenWebMapper.toCommand(request.token(), UUID.fromString(jwt.getSubject())));
+		ConfirmWebLoginTokenResult result = confirmWebLoginTokenUseCase
+				.execute(WebLoginTokenWebMapper.toCommand(request.token(), UUID.fromString(jwt.getSubject())));
 
 		return ApiResponses.ok(ApiResponseMessages.WEB_LOGIN_TOKEN_CONFIRMED,
 				WebLoginTokenWebMapper.toResponse(result));

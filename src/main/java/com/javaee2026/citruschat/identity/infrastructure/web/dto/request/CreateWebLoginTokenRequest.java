@@ -5,8 +5,7 @@ import jakarta.validation.constraints.NotNull;
 
 import java.util.UUID;
 
-public record CreateWebLoginTokenRequest(
-		@NotNull(message = "WebDeviceId is required") UUID webDeviceId,
+public record CreateWebLoginTokenRequest(@NotNull(message = "WebDeviceId is required") UUID webDeviceId,
 
 		@NotBlank(message = "DeviceName is required") String deviceName,
 
