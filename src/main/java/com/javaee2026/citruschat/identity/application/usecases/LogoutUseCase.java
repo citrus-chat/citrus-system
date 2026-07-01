@@ -7,21 +7,20 @@ import com.javaee2026.citruschat.identity.domain.model.UserDevice;
 import java.time.Instant;
 
 public class LogoutUseCase {
-    private final IUserDeviceRepository userDeviceRepository;
+	private final IUserDeviceRepository userDeviceRepository;
 
-    public LogoutUseCase(IUserDeviceRepository userDeviceRepository) {
-        this.userDeviceRepository = userDeviceRepository;
-    }
+	public LogoutUseCase(IUserDeviceRepository userDeviceRepository) {
+		this.userDeviceRepository = userDeviceRepository;
+	}
 
-    public void execute (LogoutCommand command){
+	public void execute(LogoutCommand command) {
 
-        UserDevice userDevice = userDeviceRepository
-                .findActiveByIdAndUserId(command.deviceId(), command.userId())
-                .orElseThrow(() -> new IllegalArgumentException("Device not found or not active for the given user."));
+		UserDevice userDevice = userDeviceRepository.findActiveByIdAndUserId(command.deviceId(), command.userId())
+				.orElseThrow(() -> new IllegalArgumentException("Device not found or not active for the given user."));
 
-        userDevice.revoke(Instant.now());
+		userDevice.revoke(Instant.now());
 
-        userDeviceRepository.save(userDevice);
+		userDeviceRepository.save(userDevice);
 
-    }
+	}
 }
