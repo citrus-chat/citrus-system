@@ -190,4 +190,9 @@ public class IdentityBeansConfiguration {
 
 		return new GetDevicePublicKeyUseCase(userDeviceRepository);
 	}
+
+	@Bean
+	public LogoutUseCase logoutUseCase(IUserDeviceRepository userDeviceRepository) {
+		return new LogoutUseCase(userDeviceRepository);
+	}
 }
