@@ -72,7 +72,7 @@ class ChatPermissionAuthorizationServiceTest {
 				chatPermissionRepository);
 		participant = ChatParticipant.reconstitute(participantId, chatRoomId, requesterUserId, List.of(roleId),
 				Instant.now(), null, null);
-		chatRoom = new ChatRoom(chatRoomId, ChatRoomType.GROUP, "Group", creatorUserId, List.of(participant),
+		chatRoom = new ChatRoom(chatRoomId, ChatRoomType.GROUP, "Group", null, creatorUserId, List.of(participant),
 				Map.of("ROLE", role(ChatPermissionList.CAN_VIEW_MESSAGE)), Instant.now(), null, null);
 	}
 
