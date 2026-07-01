@@ -16,22 +16,16 @@ public class AdminSecurityService {
 	}
 
 	public boolean isAdmin(Authentication authentication) {
-
-		if (authentication == null) {
+		if (authentication == null)
 			return false;
-		}
-
-		if (!authentication.isAuthenticated()) {
+		if (!authentication.isAuthenticated())
 			return false;
-		}
 
 		try {
-
 			UUID userId = UUID.fromString(authentication.getName());
-
 			return useCase.execute(userId);
-
 		} catch (IllegalArgumentException ex) {
+			System.out.println("Failed to parse userId: " + ex.getMessage());
 			return false;
 		}
 	}
