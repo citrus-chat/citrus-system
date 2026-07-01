@@ -16,8 +16,10 @@ public class AdminSecurityService {
 	}
 
 	public boolean isAdmin(Authentication authentication) {
-		if (authentication == null) return false;
-		if (!authentication.isAuthenticated()) return false;
+		if (authentication == null)
+			return false;
+		if (!authentication.isAuthenticated())
+			return false;
 
 		try {
 			UUID userId = UUID.fromString(authentication.getName());

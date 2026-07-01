@@ -35,7 +35,7 @@ public interface SpringDataUserOrganizationRepository extends JpaRepository<User
 			""")
 
 	boolean hasAdminAccess(@Param("userId") UUID userId, @Param("adminNameUpper") String adminNameUpper,
-	                       @Param("adminLevel") Integer adminLevel);
+			@Param("adminLevel") Integer adminLevel);
 
 	boolean existsAdminAccessByUserId(UUID userId, String adminName, Integer adminLevel);
 }

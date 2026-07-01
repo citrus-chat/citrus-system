@@ -17,8 +17,7 @@ public class JpaAdminAccessRepositoryAdapter implements IAdminAccessRepository {
 
 	@Override
 	public boolean userHasAdminAccess(UUID userId) {
-		boolean bool = repository.hasAdminAccess(userId,
-				AdminAccessPolicy.ADMIN_POSITION_NAME.toUpperCase(),
+		boolean bool = repository.hasAdminAccess(userId, AdminAccessPolicy.ADMIN_POSITION_NAME.toUpperCase(),
 				AdminAccessPolicy.ADMIN_HIERARCHY_LEVEL);
 		System.out.println("Admin check for " + userId + ": " + bool);
 		return bool;
