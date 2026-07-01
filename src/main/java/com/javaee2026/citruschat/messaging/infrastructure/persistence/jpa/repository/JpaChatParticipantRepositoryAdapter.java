@@ -15,4 +15,10 @@ public class JpaChatParticipantRepositoryAdapter implements IChatParticipantRepo
 	public boolean existsActiveByChatRoomIdAndParticipantId(UUID chatRoomId, UUID participantId) {
 		return chatParticipantRepository.existsByChatRoomIdAndIdAndLeftAtIsNull(chatRoomId, participantId);
 	}
+
+	@Override
+	public boolean existsChatParticipantByChatRoomIdAndUserId(UUID chatRoomId, UUID userId) {
+		return chatParticipantRepository.existsByChatRoomIdAndUserId(chatRoomId, userId);
+	}
+
 }

@@ -74,6 +74,7 @@ public final class ApiRoutes {
 
 	// ===================== DEVICE API ROUTES =======================
 	public static final String API_DEVICE_KEYS = API_DEVICE_BASE + "/{deviceId}/keys";
+	public static final String API_DEVICE_REQUEST_KEYS = API_DEVICE_BASE + "/request-key";
 	// ===================== END API ROUTES ====================
 
 	// ===================== WEBSOCKET ROUTES ====================

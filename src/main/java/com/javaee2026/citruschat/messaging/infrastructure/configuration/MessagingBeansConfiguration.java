@@ -35,6 +35,18 @@ public class MessagingBeansConfiguration {
 	}
 
 	@Bean
+	public IConversationKeyRequestRepository conversationKeyRequestRepository(
+			SpringDataConversationKeyRequestRepository repository) {
+		return new JpaConversationKeyRequestRepositoryAdapter(repository);
+	};
+
+	@Bean
+	public RequestConversationKeyUseCase requestConversationKeyUseCase(IConversationKeyRequestRepository keyRepository,
+			IChatParticipantRepository participantRepository, IChatRoomRepository chatRoomRepository) {
+		return new RequestConversationKeyUseCase(keyRepository, participantRepository, chatRoomRepository);
+	}
+
+	@Bean
 	public SendMessageUseCase sendMessageUseCase(IUserDeviceRepository deviceRepository, IUserRepository userRepository,
 			IChatRoomRepository chatRoomRepository, IMessageRepository messageRepository, MessageFactory messageFactory,
 			IMessageRealtimeNotifier messageRealtimeNotifier) {
