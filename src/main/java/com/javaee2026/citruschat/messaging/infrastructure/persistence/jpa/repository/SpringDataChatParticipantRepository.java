@@ -7,4 +7,7 @@ import java.util.UUID;
 
 public interface SpringDataChatParticipantRepository extends JpaRepository<ChatParticipantJpaEntity, UUID> {
 	boolean existsByChatRoomIdAndIdAndLeftAtIsNull(UUID chatRoomId, UUID id);
+
+	boolean existsByChatRoomIdAndUserId(UUID chatRoomId, UUID userId);
+
 }
