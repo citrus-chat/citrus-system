@@ -52,7 +52,7 @@ public final class ApiRoutes {
 																		// /api/v1/chatroom/{chatroomId}/participant/{participantId}/permission
 
 	public static final String API_CHAT_ROOM_UPDATE_NAME = API_CHATROOM_BASE + "/{chatroomId}/name";
-
+	public static final String API_CHAT_ROOM_PENDING_CONVERSATION_KEY = API_CHAT_ROOM_CONVERSATION_KEY + "/pending";
 	// ===================== END API ROUTES ====================
 
 	// ===================== USER API ROUTES =======================

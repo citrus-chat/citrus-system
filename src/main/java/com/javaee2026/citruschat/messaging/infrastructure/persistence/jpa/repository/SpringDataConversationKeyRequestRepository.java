@@ -12,7 +12,7 @@ public interface SpringDataConversationKeyRequestRepository
 
 	boolean existsByConversationIdAndTargetDeviceId(UUID conversationId, UUID targetDeviceId);
 
-	List<ConversationKeyRequestJpaEntity> findAllByTargetDeviceId(UUID targetDeviceId);
+	List<ConversationKeyRequestJpaEntity> findAllByConversationId(UUID conversationId);
 
 	void deleteByConversationIdAndTargetDeviceId(UUID conversationId, UUID targetDeviceId);
 

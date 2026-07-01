@@ -23,6 +23,7 @@ import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.Instant;
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -34,17 +35,20 @@ public class ChatRoomController {
 	private final UploadConversationKeyUseCase uploadConversationKeyUseCase;
 	private final GetParticipantPermissionsUseCase getParticipantPermissionsUseCase;
 	private final UpdateChatRoomUseCase updateChatRoomUseCase;
+	private final GetConversationKeysRequestsUseCase getConversationKeysRequestsUseCase;
 
 	public ChatRoomController(CreateChatRoomUseCase createChatRoomUseCase, SyncChatRoomUseCase syncChatRoomUseCase,
 			SyncMessagesUseCase syncMessagesUseCase, UploadConversationKeyUseCase uploadConversationKeyUseCase,
 			GetParticipantPermissionsUseCase getParticipantPermissionsUseCase,
-			UpdateChatRoomUseCase updateChatRoomUseCase) {
+			UpdateChatRoomUseCase updateChatRoomUseCase,
+			GetConversationKeysRequestsUseCase getConversationKeysRequestsUseCase) {
 		this.createChatRoomUseCase = createChatRoomUseCase;
 		this.syncChatRoomUseCase = syncChatRoomUseCase;
 		this.syncMessagesUseCase = syncMessagesUseCase;
 		this.uploadConversationKeyUseCase = uploadConversationKeyUseCase;
 		this.getParticipantPermissionsUseCase = getParticipantPermissionsUseCase;
 		this.updateChatRoomUseCase = updateChatRoomUseCase;
+		this.getConversationKeysRequestsUseCase = getConversationKeysRequestsUseCase;
 	}
 
 	@PostMapping(ApiRoutes.API_CHAT_ROOMS_CREATE)
@@ -111,5 +115,14 @@ public class ChatRoomController {
 
 		return ApiResponses.ok(ApiResponseMessages.CHAT_ROOM_UPDATED_SUCCESS,
 				UpdateChatRoomWebMapper.toResponse(result));
+	}
+
+	@GetMapping(ApiRoutes.API_CHAT_ROOM_PENDING_CONVERSATION_KEY)
+	public ResponseEntity<ApiResponse<List<PendingConversationKeyRequestResponse>>> getPendingRequests(
+			@RequestParam UUID conversationId) {
+		List<PendingConversationKeyRequestResult> result = getConversationKeysRequestsUseCase.execute(conversationId);
+
+		return ApiResponses.ok(ApiResponseMessages.CONVERSATION_KEYS_RETRIEVED_SUCCESSFULLY,
+				ConversationKeyRequestWebMapper.toResponse(result));
 	}
 }
