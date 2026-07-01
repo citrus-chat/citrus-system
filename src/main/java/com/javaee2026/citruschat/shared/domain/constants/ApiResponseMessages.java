@@ -23,6 +23,7 @@ public final class ApiResponseMessages {
 
 	public static final String CHAT_ROOM_CREATION_SUCCESS = "Chat room created successfully.";
 	public static final String CHAT_ROOM_RETRIEVED_SUCCESS = "Chat room retrieved successfully.";
+	public static final String CHAT_ROOM_UPDATED_SUCCESS = "Chat room updated successfully.";
 	public static final String CHAT_ROLES_RETRIEVED_SUCCESS = "Chat roles retrieved successfully.";
 	public static final String CHAT_ROLE_RETRIEVED_SUCCESS = "Chat role retrieved successfully.";
 	public static final String CHAT_ROLE_CREATED_SUCCESS = "Chat role created successfully.";
@@ -41,4 +42,6 @@ public final class ApiResponseMessages {
 	public static final String USER_PROFILE_RETRIEVED_SUCCESS = "Profile retrieved successfully.";
 
 	public static final String DEVICE_KEYS_RETRIEVED_SUCCESS = "Device keys retrieved successfully.";
+	public static final String CONVERSATION_KEY_REQUEST_CREATED = "Conversation key request created successfully.";
+	public static final String CONVERSATION_KEYS_RETRIEVED_SUCCESSFULLY = "Conversation keys retrieved successfully.";
 }

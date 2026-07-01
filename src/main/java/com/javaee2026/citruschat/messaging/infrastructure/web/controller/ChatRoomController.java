@@ -5,6 +5,7 @@ import com.javaee2026.citruschat.messaging.application.results.*;
 import com.javaee2026.citruschat.messaging.application.usecases.*;
 import com.javaee2026.citruschat.messaging.infrastructure.web.dto.request.CreateChatRoleRequest;
 import com.javaee2026.citruschat.messaging.infrastructure.web.dto.request.CreateChatRoomRequest;
+import com.javaee2026.citruschat.messaging.infrastructure.web.dto.request.UpdateChatRoomRequest;
 import com.javaee2026.citruschat.messaging.infrastructure.web.dto.request.UpdateChatRoleRequest;
 import com.javaee2026.citruschat.messaging.infrastructure.web.dto.request.UpdateParticipantRolesRequest;
 import com.javaee2026.citruschat.messaging.infrastructure.web.dto.request.UploadConversationKeyRequest;
@@ -26,6 +27,7 @@ import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.Instant;
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -36,6 +38,8 @@ public class ChatRoomController {
 	private final SyncMessagesUseCase syncMessagesUseCase;
 	private final UploadConversationKeyUseCase uploadConversationKeyUseCase;
 	private final GetParticipantPermissionsUseCase getParticipantPermissionsUseCase;
+	private final UpdateChatRoomUseCase updateChatRoomUseCase;
+	private final GetConversationKeysRequestsUseCase getConversationKeysRequestsUseCase;
 	private final UpdateParticipantRolesUseCase updateParticipantRolesUseCase;
 	private final GetChatRolesUseCase getChatRolesUseCase;
 	private final GetChatRoleUseCase getChatRoleUseCase;
@@ -47,6 +51,8 @@ public class ChatRoomController {
 	public ChatRoomController(CreateChatRoomUseCase createChatRoomUseCase, SyncChatRoomUseCase syncChatRoomUseCase,
 			SyncMessagesUseCase syncMessagesUseCase, UploadConversationKeyUseCase uploadConversationKeyUseCase,
 			GetParticipantPermissionsUseCase getParticipantPermissionsUseCase,
+			UpdateChatRoomUseCase updateChatRoomUseCase,
+			GetConversationKeysRequestsUseCase getConversationKeysRequestsUseCase,
 			UpdateParticipantRolesUseCase updateParticipantRolesUseCase, GetChatRolesUseCase getChatRolesUseCase,
 			GetChatRoleUseCase getChatRoleUseCase, CreateChatRoleUseCase createChatRoleUseCase,
 			UpdateChatRoleUseCase updateChatRoleUseCase, DeleteChatRoleUseCase deleteChatRoleUseCase,
@@ -56,6 +62,8 @@ public class ChatRoomController {
 		this.syncMessagesUseCase = syncMessagesUseCase;
 		this.uploadConversationKeyUseCase = uploadConversationKeyUseCase;
 		this.getParticipantPermissionsUseCase = getParticipantPermissionsUseCase;
+		this.updateChatRoomUseCase = updateChatRoomUseCase;
+		this.getConversationKeysRequestsUseCase = getConversationKeysRequestsUseCase;
 		this.updateParticipantRolesUseCase = updateParticipantRolesUseCase;
 		this.getChatRolesUseCase = getChatRolesUseCase;
 		this.getChatRoleUseCase = getChatRoleUseCase;
@@ -117,6 +125,27 @@ public class ChatRoomController {
 
 		return ApiResponses.ok(ApiResponseMessages.PARTICIPANT_PERMISSIONS_RETRIEVED_SUCCESS,
 				GetParticipantPermissionsWebMapper.toResponse(result));
+	}
+
+	@PatchMapping(ApiRoutes.API_CHAT_ROOM_UPDATE_NAME)
+	public ResponseEntity<ApiResponse<UpdateChatRoomResponse>> updateName(@AuthenticationPrincipal Jwt jwt,
+			@PathVariable UUID chatroomId, @Valid @RequestBody UpdateChatRoomRequest request) {
+
+		UUID requesterId = UUID.fromString(jwt.getSubject());
+		UpdateChatRoomResult result = updateChatRoomUseCase
+				.execute(UpdateChatRoomWebMapper.toCommand(request, chatroomId, requesterId));
+
+		return ApiResponses.ok(ApiResponseMessages.CHAT_ROOM_UPDATED_SUCCESS,
+				UpdateChatRoomWebMapper.toResponse(result));
+	}
+
+	@GetMapping(ApiRoutes.API_CHAT_ROOM_PENDING_CONVERSATION_KEY)
+	public ResponseEntity<ApiResponse<List<PendingConversationKeyRequestResponse>>> getPendingRequests(
+			@RequestParam UUID conversationId) {
+		List<PendingConversationKeyRequestResult> result = getConversationKeysRequestsUseCase.execute(conversationId);
+
+		return ApiResponses.ok(ApiResponseMessages.CONVERSATION_KEYS_RETRIEVED_SUCCESSFULLY,
+				ConversationKeyRequestWebMapper.toResponse(result));
 	}
 
 	@PatchMapping(ApiRoutes.API_CHAT_ROOM_PARTICIPANT_ROLES)

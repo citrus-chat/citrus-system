@@ -49,6 +49,10 @@ public final class ApiRoutes {
 	public static final String API_CHAT_ROOM_CONVERSATION_KEY = API_CHATROOM_BASE + "/conversation-keys"; // =>
 	public static final String API_CHAT_ROOM_PARTICIPANT_PERMISSION = API_CHATROOM_BASE
 			+ "/{chatroomId}/participant/{participantId}/permission"; // =>
+																		// /api/v1/chatroom/{chatroomId}/participant/{participantId}/permission
+
+	public static final String API_CHAT_ROOM_UPDATE_NAME = API_CHATROOM_BASE + "/{chatroomId}/name";
+	public static final String API_CHAT_ROOM_PENDING_CONVERSATION_KEY = API_CHAT_ROOM_CONVERSATION_KEY + "/pending";
 	// /api/v1/chatroom/{chatroomId}/participant/{participantId}/permission
 	public static final String API_CHAT_ROOM_PARTICIPANT_ROLES = API_CHATROOM_BASE
 			+ "/{chatroomId}/participant/{participantId}/roles"; // =>
@@ -61,7 +65,8 @@ public final class ApiRoutes {
 	// ===================== USER API ROUTES =======================
 	public static final String API_USER_ME = API_USER_BASE + "/me"; // => /api/v1/users/me
 	public static final String API_USER_BY_ID = API_USER_BASE + "/{id}"; // => /api/v1/users/{id}
-	public static final String API_USERS_SEARCH = API_USER_BASE; // => /api/v1/users/search
+	public static final String API_USERS_SEARCH = API_USER_BASE; // => /api/v1/users
+	public static final String API_USERS_ORG = API_USER_BASE + "/org";
 	public static final String API_USER_UPDATE = API_USER_BASE + "/{id}"; // => /api/v1/users/{id}
 	public static final String API_USER_DELETE = API_USER_BASE + "/{id}"; // => /api/v1/users/{id}
 	public static final String API_USER_CREATE = API_USER_BASE; // => /api/v1/users
@@ -71,10 +76,12 @@ public final class ApiRoutes {
 	public static final String API_USER_AVATAR_IMAGE_BASE = API_USER_BASE + "/avatars";
 	public static final String API_USER_AVATAR_IMAGE_PATTERN = API_USER_AVATAR_IMAGE_BASE + "/**";
 	public static final String API_USER_ME_PROFILE = API_USER_BASE + "/me/profile";
+	public static final String API_USER_PUBLIC_PROFILE = API_USER_BASE + "/{userId}/profile"; // =>/api/v1/users/{userId}/
 	// ===================== END API Routes ====================
 
 	// ===================== DEVICE API ROUTES =======================
 	public static final String API_DEVICE_KEYS = API_DEVICE_BASE + "/{deviceId}/keys";
+	public static final String API_DEVICE_REQUEST_KEYS = API_DEVICE_BASE + "/request-key";
 	// ===================== END API ROUTES ====================
 
 	// ===================== WEBSOCKET ROUTES ====================

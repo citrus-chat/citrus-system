@@ -13,6 +13,8 @@ import java.util.UUID;
 public interface IChatParticipantRepository {
 	boolean existsActiveByChatRoomIdAndParticipantId(UUID chatRoomId, UUID participantId);
 
+	boolean existsChatParticipantByChatRoomIdAndUserId(UUID chatRoomId, UUID userId);
+
 	Optional<ChatParticipant> findActiveByChatRoomIdAndParticipantId(ChatRoomId chatRoomId,
 			ParticipantId participantId);
 

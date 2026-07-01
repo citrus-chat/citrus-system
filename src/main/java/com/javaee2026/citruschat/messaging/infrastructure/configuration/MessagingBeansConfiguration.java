@@ -11,6 +11,7 @@ import com.javaee2026.citruschat.messaging.infrastructure.persistence.jpa.mapper
 import com.javaee2026.citruschat.messaging.infrastructure.persistence.jpa.mapper.MessageMapper;
 import com.javaee2026.citruschat.messaging.infrastructure.persistence.jpa.repository.*;
 
+import com.javaee2026.citruschat.messaging.infrastructure.websocket.ports.IChatListRealtimeNotifier;
 import com.javaee2026.citruschat.messaging.infrastructure.websocket.ports.IMessageRealtimeNotifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -32,6 +33,18 @@ public class MessagingBeansConfiguration {
 	public IMessageRepository messageRepository(SpringDataMessageRepository messageRepository,
 			MessageMapper messageMapper) {
 		return new JpaMessageRepositoryAdapter(messageRepository, messageMapper);
+	}
+
+	@Bean
+	public IConversationKeyRequestRepository conversationKeyRequestRepository(
+			SpringDataConversationKeyRequestRepository repository) {
+		return new JpaConversationKeyRequestRepositoryAdapter(repository);
+	};
+
+	@Bean
+	public RequestConversationKeyUseCase requestConversationKeyUseCase(IConversationKeyRequestRepository keyRepository,
+			IChatParticipantRepository participantRepository, IChatRoomRepository chatRoomRepository) {
+		return new RequestConversationKeyUseCase(keyRepository, participantRepository, chatRoomRepository);
 	}
 
 	@Bean
@@ -97,8 +110,14 @@ public class MessagingBeansConfiguration {
 	@Bean
 	public CreateChatRoomUseCase createChatRoomUseCase(IChatRoomRepository chatRoomRepository,
 			ChatRoomFactory chatRoomFactory, IUserRepository userRepository,
-			IChatPermissionRepository permissionRepository) {
-		return new CreateChatRoomUseCase(chatRoomRepository, chatRoomFactory, userRepository, permissionRepository);
+			IChatPermissionRepository permissionRepository, IChatListRealtimeNotifier realtimeNotifier) {
+		return new CreateChatRoomUseCase(chatRoomRepository, chatRoomFactory, userRepository, permissionRepository,
+				realtimeNotifier);
+	}
+
+	@Bean
+	public UpdateChatRoomUseCase updateChatRoomUseCase(IChatRoomRepository chatRoomRepository) {
+		return new UpdateChatRoomUseCase(chatRoomRepository);
 	}
 
 	@Bean

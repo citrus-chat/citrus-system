@@ -1,4 +1,4 @@
-package com.javaee2026.citruschat.identity.infrastructure.persistence.jpa.repository;
+package com.javaee2026.citruschat.messaging.infrastructure.persistence.jpa.repository;
 
 import com.javaee2026.citruschat.identity.application.ports.IUserProfileRepository;
 import com.javaee2026.citruschat.identity.infrastructure.persistence.jpa.entity.UserProfileJpaEntity;

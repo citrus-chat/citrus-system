@@ -11,6 +11,7 @@ import com.javaee2026.citruschat.messaging.domain.factory.ChatRoomFactory;
 import com.javaee2026.citruschat.messaging.domain.model.ChatPermission;
 import com.javaee2026.citruschat.messaging.domain.model.ChatRoom;
 import com.javaee2026.citruschat.messaging.domain.policy.ChatAuthDefaults;
+import com.javaee2026.citruschat.messaging.infrastructure.websocket.ports.IChatListRealtimeNotifier;
 import com.javaee2026.citruschat.shared.domain.valueobjects.UserId;
 
 import java.util.HashMap;
@@ -24,13 +25,16 @@ public class CreateChatRoomUseCase {
 	private final ChatRoomFactory chatRoomFactory;
 	private final IUserRepository userRepository;
 	private final IChatPermissionRepository permissionRepository;
+	private final IChatListRealtimeNotifier realtimeNotifier;
 
 	public CreateChatRoomUseCase(IChatRoomRepository chatRoomRepository, ChatRoomFactory chatRoomFactory,
-			IUserRepository userRepository, IChatPermissionRepository permissionRepository) {
+			IUserRepository userRepository, IChatPermissionRepository permissionRepository,
+			IChatListRealtimeNotifier realtimeNotifier) {
 		this.chatRoomRepository = chatRoomRepository;
 		this.chatRoomFactory = chatRoomFactory;
 		this.userRepository = userRepository;
 		this.permissionRepository = permissionRepository;
+		this.realtimeNotifier = realtimeNotifier;
 	}
 
 	public void validate(CreateChatRoomCommand command, UserId creatorId, List<UserId> userIds) {
@@ -98,6 +102,8 @@ public class CreateChatRoomUseCase {
 		chatRoom.initParticipants(creatorId, userIds); // Inicializa los participantes
 
 		chatRoomRepository.save(chatRoom);
+
+		realtimeNotifier.notifyChatroomCreated(chatRoom.getId());
 
 		return new CreateChatRoomResult(chatRoom.getId(), chatRoom.getType(), chatRoom.getName(),
 				chatRoom.getCreatedBy(), chatRoom.getParticipants(), chatRoom.getRoles(), chatRoom.getCreatedAt(),
