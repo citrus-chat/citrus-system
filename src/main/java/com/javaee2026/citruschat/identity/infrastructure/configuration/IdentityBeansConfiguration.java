@@ -1,6 +1,7 @@
 package com.javaee2026.citruschat.identity.infrastructure.configuration;
 
 import com.javaee2026.citruschat.identity.application.ports.*;
+import com.javaee2026.citruschat.identity.application.security.WebLoginTokenSecurity;
 import com.javaee2026.citruschat.identity.application.usecases.*;
 import com.javaee2026.citruschat.identity.domain.factory.UserFactory;
 import com.javaee2026.citruschat.identity.domain.factory.UsernameFactory;
@@ -118,6 +119,26 @@ public class IdentityBeansConfiguration {
 	public RegisterOrRefreshUserDeviceUseCase registerOrRefreshUserDeviceUseCase(
 			IUserDeviceRepository userDeviceRepository) {
 		return new RegisterOrRefreshUserDeviceUseCase(userDeviceRepository);
+	}
+
+	@Bean
+	public WebLoginTokenSecurity webLoginTokenSecurity() {
+		return new WebLoginTokenSecurity();
+	}
+
+	@Bean
+	public CreateWebLoginTokenUseCase createWebLoginTokenUseCase(IWebLoginTokenRepository webLoginTokenRepository,
+			WebLoginTokenSecurity webLoginTokenSecurity) {
+		return new CreateWebLoginTokenUseCase(webLoginTokenRepository, webLoginTokenSecurity);
+	}
+
+	@Bean
+	public ConfirmWebLoginTokenUseCase confirmWebLoginTokenUseCase(IWebLoginTokenRepository webLoginTokenRepository,
+			IUserDeviceRepository userDeviceRepository,
+			RegisterOrRefreshUserDeviceUseCase registerOrRefreshUserDeviceUseCase,
+			WebLoginTokenSecurity webLoginTokenSecurity) {
+		return new ConfirmWebLoginTokenUseCase(webLoginTokenRepository, userDeviceRepository,
+				registerOrRefreshUserDeviceUseCase, webLoginTokenSecurity);
 	}
 
 	@Bean

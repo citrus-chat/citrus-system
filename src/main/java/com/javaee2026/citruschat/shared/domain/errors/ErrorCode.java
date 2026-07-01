@@ -18,7 +18,11 @@ public enum ErrorCode {
 																			HttpStatus.BAD_REQUEST), INVALID_PARTICIPANT(
 																					HttpStatus.BAD_REQUEST), INVALID_CHATROOM(
 																							HttpStatus.BAD_REQUEST), INVALID_DEVICE(
-																									HttpStatus.BAD_REQUEST), INVALID_CHATROLE(
+																									HttpStatus.BAD_REQUEST), INVALID_WEB_LOGIN_TOKEN(
+																											HttpStatus.BAD_REQUEST), EXPIRED_WEB_LOGIN_TOKEN(
+																													HttpStatus.GONE), USED_WEB_LOGIN_TOKEN(
+																															HttpStatus.CONFLICT), WEB_LOGIN_DEVICE_NOT_FOUND(
+																																	HttpStatus.NOT_FOUND), INVALID_CHATROLE(
 																											HttpStatus.BAD_REQUEST), INVALID_PERMISSION(
 																													HttpStatus.BAD_REQUEST), USER_ALREADY_ACTIVE(
 																															HttpStatus.CONFLICT), USER_ALREADY_INACTIVE(

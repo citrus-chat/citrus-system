@@ -17,5 +17,6 @@ public final class TableNames {
 		public static final String POSITIONS = "positions";
 		public static final String USER_ORGANIZATION = "user_organization";
 		public static final String USER_PROFILES = "user_profiles";
+		public static final String WEB_LOGIN_TOKENS = "web_login_tokens";
 	}
 }

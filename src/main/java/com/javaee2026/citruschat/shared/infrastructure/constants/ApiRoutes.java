@@ -9,6 +9,7 @@ public final class ApiRoutes {
 	private static final String API_BASE = "/api/v1"; // => /api/v1
 	private static final String API_ADMIN_BASE = API_BASE + "/admin"; // => /api/v1/admin
 	private static final String API_AUTH_BASE = API_BASE + "/auth"; // => /api/v1/auth
+	private static final String API_WEB_LOGIN_TOKENS_BASE = API_BASE + "/web-login-tokens";
 	private static final String API_MESSAGES_BASE = API_BASE + "/messages"; // => /api/v1/auth
 	private static final String API_CHATROOM_BASE = API_BASE + "/chatroom";
 	private static final String API_USER_BASE = API_BASE + "/users";
@@ -28,6 +29,11 @@ public final class ApiRoutes {
 	public static final String API_AUTH_ME = API_AUTH_BASE + "/me"; // => /api/v1/auth/me
 	public static final String API_AUTH_DEVICES = API_AUTH_BASE + "/devices";
 	// ===================== END API Routes ====================
+
+	// ===================== WEB LOGIN TOKEN API Routes ====================
+	public static final String API_WEB_LOGIN_TOKENS = API_WEB_LOGIN_TOKENS_BASE;
+	public static final String API_WEB_LOGIN_TOKENS_CONFIRM = API_WEB_LOGIN_TOKENS_BASE + "/confirm";
+	// ===================== END WEB LOGIN TOKEN API Routes ====================
 
 	// ===================== DOCS API Routes ====================
 	public static final String API_DOCS_SWAGGER_BASE = "/swagger-ui.html";
