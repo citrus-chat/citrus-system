@@ -58,7 +58,9 @@ class WebLoginTokenControllerTest {
 				.andExpect(jsonPath("$.data.token", is("temporary-token")))
 				.andExpect(jsonPath("$.data.web_device_id", is(webDeviceId.toString())))
 				.andExpect(jsonPath("$.data.expires_at", is(expiresAt.toString())))
-				.andExpect(jsonPath("$.data.qr_payload", is("temporary-token")));
+				.andExpect(jsonPath("$.data.qr_payload", is("temporary-token")))
+				.andExpect(jsonPath("$.data.web_socket_token_header", is("X-Web-Login-Token")))
+				.andExpect(jsonPath("$.data.web_socket_queue", is("/user/queue/web-login")));
 	}
 
 	@Test

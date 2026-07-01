@@ -134,11 +134,14 @@ public class IdentityBeansConfiguration {
 
 	@Bean
 	public ConfirmWebLoginTokenUseCase confirmWebLoginTokenUseCase(IWebLoginTokenRepository webLoginTokenRepository,
-			IUserDeviceRepository userDeviceRepository,
+			IUserDeviceRepository userDeviceRepository, IUserRepository userRepository,
 			RegisterOrRefreshUserDeviceUseCase registerOrRefreshUserDeviceUseCase,
-			WebLoginTokenSecurity webLoginTokenSecurity) {
+			WebLoginTokenSecurity webLoginTokenSecurity,
+			com.javaee2026.citruschat.identity.infrastructure.security.jwt.JwtService jwtService,
+			IWebLoginSessionNotifier webLoginSessionNotifier) {
 		return new ConfirmWebLoginTokenUseCase(webLoginTokenRepository, userDeviceRepository,
-				registerOrRefreshUserDeviceUseCase, webLoginTokenSecurity);
+				userRepository, registerOrRefreshUserDeviceUseCase, webLoginTokenSecurity, jwtService,
+				webLoginSessionNotifier);
 	}
 
 	@Bean

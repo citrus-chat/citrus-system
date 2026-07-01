@@ -1,5 +1,6 @@
 package com.javaee2026.citruschat.identity.infrastructure.web.mapper;
 
+import com.javaee2026.citruschat.identity.application.constants.WebLoginSocketContract;
 import com.javaee2026.citruschat.identity.application.commands.CreateWebLoginTokenCommand;
 import com.javaee2026.citruschat.identity.application.commands.ConfirmWebLoginTokenCommand;
 import com.javaee2026.citruschat.identity.application.results.CreateWebLoginTokenResult;
@@ -25,7 +26,8 @@ public final class WebLoginTokenWebMapper {
 
 	public static CreateWebLoginTokenResponse toResponse(CreateWebLoginTokenResult result) {
 		return new CreateWebLoginTokenResponse(result.token(), result.webDeviceId().toString(),
-				result.expiresAt().toString(), result.qrPayload());
+				result.expiresAt().toString(), result.qrPayload(), WebLoginSocketContract.TOKEN_HEADER,
+				WebLoginSocketContract.CLIENT_USER_QUEUE);
 	}
 
 	public static ConfirmWebLoginTokenResponse toResponse(ConfirmWebLoginTokenResult result) {

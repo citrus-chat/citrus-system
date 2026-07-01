@@ -8,6 +8,8 @@ public interface IWebLoginTokenRepository {
 
 	boolean existsByTokenHash(String tokenHash);
 
+	Optional<WebLoginToken> findByTokenHash(String tokenHash);
+
 	Optional<WebLoginToken> findByTokenHashForUpdate(String tokenHash);
 
 	WebLoginToken save(WebLoginToken webLoginToken);

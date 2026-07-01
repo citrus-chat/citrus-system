@@ -22,6 +22,11 @@ public class JpaWebLoginTokenRepositoryAdapter implements IWebLoginTokenReposito
 	}
 
 	@Override
+	public Optional<WebLoginToken> findByTokenHash(String tokenHash) {
+		return repository.findUnlockedByTokenHash(tokenHash).map(WebLoginTokenMapper::toDomain);
+	}
+
+	@Override
 	public Optional<WebLoginToken> findByTokenHashForUpdate(String tokenHash) {
 		return repository.findByTokenHash(tokenHash).map(WebLoginTokenMapper::toDomain);
 	}

@@ -8,5 +8,9 @@ public record CreateWebLoginTokenResponse(String token,
 
 		@JsonProperty("expires_at") String expiresAt,
 
-		@JsonProperty("qr_payload") String qrPayload) {
+		@JsonProperty("qr_payload") String qrPayload,
+
+		@JsonProperty("web_socket_token_header") String webSocketTokenHeader,
+
+		@JsonProperty("web_socket_queue") String webSocketQueue) {
 }

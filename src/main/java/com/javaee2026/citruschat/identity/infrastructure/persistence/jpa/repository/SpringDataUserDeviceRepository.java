@@ -15,7 +15,7 @@ public interface SpringDataUserDeviceRepository extends JpaRepository<UserDevice
 
 	Optional<UserDeviceJpaEntity> findByIdAndRevokedAtIsNull(UUID id);
 
-	List<UserDeviceJpaEntity> findAllByUserIdAndRevokedAtIsNull(UUID userId);
+	List<UserDeviceJpaEntity> findAllByUserIdAndRevokedAtIsNullOrderByLastSeenDescCreatedAtDesc(UUID userId);
 
 	List<UserDeviceJpaEntity> findUserDeviceJpaEntitiesByUserId(UUID userId);
 
