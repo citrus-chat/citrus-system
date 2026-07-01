@@ -33,7 +33,8 @@ public class JpaUserDeviceRepositoryAdapter implements IUserDeviceRepository {
 
 	@Override
 	public List<UserDevice> findActiveByUserId(UUID userId) {
-		return repository.findAllByUserIdAndRevokedAtIsNull(userId).stream().map(UserDeviceMapper::toDomain).toList();
+		return repository.findAllByUserIdAndRevokedAtIsNullOrderByLastSeenDescCreatedAtDesc(userId).stream()
+				.map(UserDeviceMapper::toDomain).toList();
 	}
 
 	@Override

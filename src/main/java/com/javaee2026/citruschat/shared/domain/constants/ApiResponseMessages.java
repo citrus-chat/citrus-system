@@ -35,6 +35,7 @@ public final class ApiResponseMessages {
 	public static final String USER_PROFILE_RETRIEVED_SUCCESS = "Profile retrieved successfully.";
 
 	public static final String DEVICE_KEYS_RETRIEVED_SUCCESS = "Device keys retrieved successfully.";
+	public static final String USER_DEVICES_RETRIEVED_SUCCESS = "User devices retrieved successfully.";
 	public static final String CONVERSATION_KEY_REQUEST_CREATED = "Conversation key request created successfully.";
 	public static final String CONVERSATION_KEYS_RETRIEVED_SUCCESSFULLY = "Conversation keys retrieved successfully.";
 }
