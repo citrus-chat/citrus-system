@@ -29,7 +29,12 @@ public enum ErrorCode {
 																																									HttpStatus.CONFLICT), USER_ALREADY_INACTIVE(
 																																											HttpStatus.CONFLICT), USER_ALREADY_VALIDATED(
 																																													HttpStatus.CONFLICT), USER_NOT_FOUND(
-																																															HttpStatus.NOT_FOUND);
+																																															HttpStatus.NOT_FOUND), CHAT_PERMISSION_DENIED(
+																																																	HttpStatus.FORBIDDEN), CHATROOM_NOT_FOUND(
+																																																			HttpStatus.NOT_FOUND), CHATROLE_NOT_FOUND(
+																																																					HttpStatus.NOT_FOUND), CHAT_PARTICIPANT_NOT_FOUND(
+																																																							HttpStatus.NOT_FOUND), CHAT_RULE_CONFLICT(
+																																																									HttpStatus.CONFLICT);
 
 	private final HttpStatus httpStatus;
 
