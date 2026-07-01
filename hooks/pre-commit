@@ -19,10 +19,14 @@ if [ -n "$UNSTAGED_CHANGES" ]; then
     exit 1
 fi
 
-if command -v mvn >/dev/null 2>&1; then
-    MVN_CMD="mvn"
+if [ -f "./mvnw.cmd" ] && command -v cmd.exe >/dev/null 2>&1; then
+    MVN_CMD=(cmd.exe /c mvnw.cmd)
+elif [ -x "./mvnw" ]; then
+    MVN_CMD=(./mvnw)
+elif command -v mvn >/dev/null 2>&1; then
+    MVN_CMD=(mvn)
 else
-    MVN_CMD="./mvnw"
+    MVN_CMD=(./mvnw)
 fi
 
 LOG_FILE=$(mktemp)
@@ -33,7 +37,7 @@ echo -e "${BLUE}> Starting Pre-Commit Quality Checks...${NC}"
 echo -ne "  [1/3] Running Formatter (Spotless)... "
 
 # Run spotless on the whole project (Maven limitation)
-"$MVN_CMD" spotless:apply > "$LOG_FILE" 2>&1
+"${MVN_CMD[@]}" spotless:apply > "$LOG_FILE" 2>&1
 
 if [ $? -eq 0 ]; then
     echo -e "${GREEN}FIXED/OK${NC}"
@@ -54,7 +58,7 @@ fi
 
 # Linting (Checkstyle)
 echo -ne "  [2/3] Running Linter (Checkstyle)... "
-"$MVN_CMD" checkstyle:check > "$LOG_FILE" 2>&1
+"${MVN_CMD[@]}" checkstyle:check > "$LOG_FILE" 2>&1
 if [ $? -eq 0 ]; then
     echo -e "${GREEN}PASSED${NC}"
 else
@@ -67,7 +71,7 @@ fi
 
 # Unit Tests (Surefire)
 echo -ne "  [3/3] Running Tests (Surefire)... "
-"$MVN_CMD" test > "$LOG_FILE" 2>&1
+"${MVN_CMD[@]}" test > "$LOG_FILE" 2>&1
 if [ $? -eq 0 ]; then
     echo -e "${GREEN}PASSED${NC}"
 else

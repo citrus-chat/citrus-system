@@ -49,17 +49,19 @@ class CurrentUserDevicesControllerTest {
 				.expiresAt(Instant.now().plusSeconds(3600)).build();
 
 		when(getCurrentUserDevicesUseCase.execute(userId)).thenReturn(List.of(
-				UserDevice.reconstitute(new DeviceId(webDeviceId), new UserId(userId), new PublicKey("BAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA="),
+				UserDevice.reconstitute(new DeviceId(webDeviceId), new UserId(userId), new PublicKey(
+						"BAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA="),
 						"Chrome on Windows", DeviceType.WEB, null, webLastSeen, webLastSeen.minusSeconds(60), null),
-				UserDevice.reconstitute(new DeviceId(mobileDeviceId), new UserId(userId),
-						new PublicKey("BAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA="), "Pixel 8", DeviceType.MOBILE, null, mobileLastSeen,
-						mobileLastSeen.minusSeconds(60), null)));
+				UserDevice.reconstitute(new DeviceId(mobileDeviceId), new UserId(userId), new PublicKey(
+						"BAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA="),
+						"Pixel 8", DeviceType.MOBILE, null, mobileLastSeen, mobileLastSeen.minusSeconds(60), null)));
 
 		mockMvc.perform(get(ApiRoutes.API_AUTH_DEVICES).with(jwt().jwt(jwt))).andExpect(status().isOk())
 				.andExpect(jsonPath("$.success", is(true)))
 				.andExpect(jsonPath("$.message", is(ApiResponseMessages.USER_DEVICES_RETRIEVED_SUCCESS)))
 				.andExpect(jsonPath("$.data[0].id", is(webDeviceId.toString())))
-				.andExpect(jsonPath("$.data[0].public_key", is("BAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=")))
+				.andExpect(jsonPath("$.data[0].public_key",
+						is("BAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=")))
 				.andExpect(jsonPath("$.data[0].device_name", is("Chrome on Windows")))
 				.andExpect(jsonPath("$.data[0].device_type", is("WEB")))
 				.andExpect(jsonPath("$.data[0].last_seen", is(webLastSeen.toString())))

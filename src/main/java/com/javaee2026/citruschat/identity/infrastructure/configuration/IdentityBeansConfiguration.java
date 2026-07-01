@@ -139,9 +139,8 @@ public class IdentityBeansConfiguration {
 			WebLoginTokenSecurity webLoginTokenSecurity,
 			com.javaee2026.citruschat.identity.infrastructure.security.jwt.JwtService jwtService,
 			IWebLoginSessionNotifier webLoginSessionNotifier) {
-		return new ConfirmWebLoginTokenUseCase(webLoginTokenRepository, userDeviceRepository,
-				userRepository, registerOrRefreshUserDeviceUseCase, webLoginTokenSecurity, jwtService,
-				webLoginSessionNotifier);
+		return new ConfirmWebLoginTokenUseCase(webLoginTokenRepository, userDeviceRepository, userRepository,
+				registerOrRefreshUserDeviceUseCase, webLoginTokenSecurity, jwtService, webLoginSessionNotifier);
 	}
 
 	@Bean

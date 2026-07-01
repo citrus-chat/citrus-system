@@ -2,8 +2,7 @@ package com.javaee2026.citruschat.identity.infrastructure.websocket.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public record WebLoginConfirmedEvent(
-		String type,
+public record WebLoginConfirmedEvent(String type,
 
 		@JsonProperty("user_id") String userId,
 

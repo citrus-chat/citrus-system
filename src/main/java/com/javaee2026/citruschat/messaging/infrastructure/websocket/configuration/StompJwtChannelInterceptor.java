@@ -59,8 +59,8 @@ public class StompJwtChannelInterceptor implements ChannelInterceptor {
 				return message;
 			}
 
-			throw new IllegalArgumentException("Missing Authorization or " + WebLoginSocketContract.TOKEN_HEADER
-					+ " header");
+			throw new IllegalArgumentException(
+					"Missing Authorization or " + WebLoginSocketContract.TOKEN_HEADER + " header");
 		}
 
 		return message;
