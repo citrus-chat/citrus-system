@@ -33,9 +33,9 @@ public class JpaConversationKeyRequestRepositoryAdapter implements IConversation
 	}
 
 	@Override
-	public List<ConversationKeyRequest> findAllByTargetDeviceId(DeviceId targetDeviceId) {
+	public List<ConversationKeyRequest> findAllByConversationId(ChatRoomId conversationId) {
 
-		return repository.findAllByTargetDeviceId(targetDeviceId.value()).stream()
+		return repository.findAllByConversationId(conversationId.value()).stream()
 				.map(ConversationKeyRequestJpaMapper::toDomain).toList();
 	}
 

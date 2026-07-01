@@ -8,7 +8,10 @@ import java.util.Set;
 import java.util.UUID;
 
 public interface IChatPermissionRepository {
+	Set<ChatPermission> findAll();
+
 	Set<ChatPermission> findByCodes(Set<String> codes);
+
 	Set<ChatPermission> findAllById(Set<UUID> ids);
 
 	Set<ChatPermission> findPermissionsByChatRoomAndParticipant(ChatRoomId chatRoomId, ParticipantId participantId);

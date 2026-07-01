@@ -26,8 +26,15 @@ public final class ApiResponseMessages {
 	public static final String CHAT_ROOM_CREATION_SUCCESS = "Chat room created successfully.";
 	public static final String CHAT_ROOM_RETRIEVED_SUCCESS = "Chat room retrieved successfully.";
 	public static final String CHAT_ROOM_UPDATED_SUCCESS = "Chat room updated successfully.";
+	public static final String CHAT_ROLES_RETRIEVED_SUCCESS = "Chat roles retrieved successfully.";
+	public static final String CHAT_ROLE_RETRIEVED_SUCCESS = "Chat role retrieved successfully.";
+	public static final String CHAT_ROLE_CREATED_SUCCESS = "Chat role created successfully.";
+	public static final String CHAT_ROLE_UPDATED_SUCCESS = "Chat role updated successfully.";
+	public static final String CHAT_ROLE_DELETED_SUCCESS = "Chat role deleted successfully.";
+	public static final String CHAT_PERMISSIONS_RETRIEVED_SUCCESS = "Chat permissions retrieved successfully.";
 	public static final String CONVERSATION_KEY_UPLOADED_SUCCESS = "Conversation key uploaded successfully.";
 	public static final String PARTICIPANT_PERMISSIONS_RETRIEVED_SUCCESS = "Participant permissions retrieved successfully.";
+	public static final String PARTICIPANT_ROLES_UPDATED_SUCCESS = "Participant roles updated successfully.";
 
 	public static final String ADMIN_ACCESS_CHECKED_SUCCESSFULLY = "Admin access checked successfully";
 	public static final String ADMIN_USERS_RETRIEVED_SUCCESS = "Admin users retrieved successfully.";
@@ -39,4 +46,5 @@ public final class ApiResponseMessages {
 	public static final String DEVICE_KEYS_RETRIEVED_SUCCESS = "Device keys retrieved successfully.";
 	public static final String USER_DEVICES_RETRIEVED_SUCCESS = "User devices retrieved successfully.";
 	public static final String CONVERSATION_KEY_REQUEST_CREATED = "Conversation key request created successfully.";
+	public static final String CONVERSATION_KEYS_RETRIEVED_SUCCESSFULLY = "Conversation keys retrieved successfully.";
 }

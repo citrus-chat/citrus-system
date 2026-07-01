@@ -10,8 +10,8 @@ public final class ChatRoleDefaultPriority {
 	public static int priority(ChatRoleDefault role) {
 		return switch (role) {
 			case OWNER -> 100;
-			case ADMIN -> 75;
-			case MEMBER -> 0;
+			case ADMIN -> 80;
+			case MEMBER -> 10;
 		};
 	}
 }

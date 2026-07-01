@@ -12,7 +12,7 @@ public interface IConversationKeyRequestRepository {
 
 	boolean existsByConversationIdAndTargetDeviceId(ChatRoomId conversationId, DeviceId targetDeviceId);
 
-	List<ConversationKeyRequest> findAllByTargetDeviceId(DeviceId targetDeviceId);
+	List<ConversationKeyRequest> findAllByConversationId(ChatRoomId conversationId);
 
 	void deleteByConversationIdAndTargetDeviceId(ChatRoomId conversationId, DeviceId targetDeviceId);
 
