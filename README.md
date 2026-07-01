@@ -10,4 +10,4 @@ Para utilizarlo, hay que hacer lo siguiente:
 - Asegurarse de que en el `pom.xml` esten estos 3 plugins: Checkstyle (Linter), Spotless (Formatter) y Surefire (Tests).
 - Usar el comando `git config core.hooksPath hooks/` una sola vez, para configurarlo (desde la raíz del proyecto)
 
-Ahora, cada vez que hagan un commit, se van a correr esos 3 procesos. Pueden usar la opción `--no-verify` para saltearse esto, pero no lo hagan.
+Ahora, cada vez que hagan un commit, se van a correr esos 3 procesos. Pueden usar la opción `--no-verify` para saltearse esto, pero no lo hagan.a

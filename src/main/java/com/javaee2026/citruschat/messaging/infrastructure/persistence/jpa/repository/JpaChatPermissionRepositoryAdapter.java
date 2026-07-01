@@ -25,6 +25,12 @@ public class JpaChatPermissionRepositoryAdapter implements IChatPermissionReposi
 	}
 
 	@Override
+	public Set<ChatPermission> findAll() {
+		return chatPermissionRepository.findAll().stream().map(chatPermissionMapper::toDomain)
+				.collect(Collectors.toSet());
+	}
+
+	@Override
 	@Transactional
 	public void save(ChatPermission chatPermission) {
 		chatPermissionRepository.save(chatPermissionMapper.toJpa(chatPermission));

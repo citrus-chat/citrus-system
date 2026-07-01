@@ -78,8 +78,6 @@ public class CreateChatRoomUseCase {
 			resolved.put(entry.getKey(), permissions);
 		}
 
-		System.out.println(resolved);
-
 		return resolved;
 	}
 

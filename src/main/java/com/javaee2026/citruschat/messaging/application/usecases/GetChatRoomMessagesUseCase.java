@@ -2,7 +2,9 @@ package com.javaee2026.citruschat.messaging.application.usecases;
 
 import com.javaee2026.citruschat.messaging.application.ports.IMessageRepository;
 import com.javaee2026.citruschat.messaging.application.results.ChatMessageResult;
+import com.javaee2026.citruschat.messaging.domain.policy.permissions.ChatPermissionList;
 import com.javaee2026.citruschat.shared.domain.valueobjects.ChatRoomId;
+import com.javaee2026.citruschat.shared.domain.valueobjects.UserId;
 
 import java.util.List;
 import java.util.UUID;
@@ -10,12 +12,12 @@ import java.util.UUID;
 public class GetChatRoomMessagesUseCase {
 
 	private final IMessageRepository messageRepository;
-	private final ValidateChatParticipantUseCase validateChatParticipantUseCase;
+	private final ChatPermissionAuthorizationService permissionAuthorizationService;
 
 	public GetChatRoomMessagesUseCase(IMessageRepository messageRepository,
-			ValidateChatParticipantUseCase validateChatParticipantUseCase) {
+			ChatPermissionAuthorizationService permissionAuthorizationService) {
 		this.messageRepository = messageRepository;
-		this.validateChatParticipantUseCase = validateChatParticipantUseCase;
+		this.permissionAuthorizationService = permissionAuthorizationService;
 	}
 
 	public List<ChatMessageResult> execute(UUID chatRoomId, UUID userId, int page, int size) {
@@ -23,13 +25,13 @@ public class GetChatRoomMessagesUseCase {
 			throw new IllegalArgumentException("chatRoomId and userId cannot be null");
 		}
 
-		if (!validateChatParticipantUseCase.execute(chatRoomId, userId)) {
-			throw new IllegalArgumentException("User is not participant of this chat room");
-		}
-
 		int safePage = Math.max(page, 0);
 		int safeSize = Math.min(Math.max(size, 1), 100);
+		ChatRoomId roomId = new ChatRoomId(chatRoomId);
 
-		return messageRepository.findMessagesByChatRoomId(new ChatRoomId(chatRoomId), safePage, safeSize);
+		permissionAuthorizationService.requirePermission(roomId, new UserId(userId),
+				ChatPermissionList.CAN_VIEW_MESSAGE);
+
+		return messageRepository.findMessagesByChatRoomId(roomId, safePage, safeSize);
 	}
 }

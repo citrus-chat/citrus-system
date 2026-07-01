@@ -22,7 +22,7 @@ public final class ApiRoutes {
 
 	// ===================== AUTH API Routes ====================
 	public static final String API_AUTH_VALIDATE_ACCOUNT = API_AUTH_BASE + "/validate-account"; // =>
-																								// /api/v1/auth/validate-account
+	// /api/v1/auth/validate-account
 	public static final String API_AUTH_LOGIN = API_AUTH_BASE + "/login"; // => /api/v1/auth/login
 	public static final String API_AUTH_LOGOUT = API_AUTH_BASE + "/logout"; // => /api/v1/auth/logout
 	public static final String API_AUTH_ME = API_AUTH_BASE + "/me"; // => /api/v1/auth/me
@@ -53,6 +53,13 @@ public final class ApiRoutes {
 
 	public static final String API_CHAT_ROOM_UPDATE_NAME = API_CHATROOM_BASE + "/{chatroomId}/name";
 	public static final String API_CHAT_ROOM_PENDING_CONVERSATION_KEY = API_CHAT_ROOM_CONVERSATION_KEY + "/pending";
+	// /api/v1/chatroom/{chatroomId}/participant/{participantId}/permission
+	public static final String API_CHAT_ROOM_PARTICIPANT_ROLES = API_CHATROOM_BASE
+			+ "/{chatroomId}/participant/{participantId}/roles"; // =>
+	// /api/v1/chatroom/{chatroomId}/participant/{participantId}/roles
+	public static final String API_CHAT_ROOM_ROLES = API_CHATROOM_BASE + "/{chatroomId}/roles";
+	public static final String API_CHAT_ROOM_ROLE_BY_ID = API_CHATROOM_BASE + "/{chatroomId}/roles/{roleId}";
+	public static final String API_CHAT_PERMISSIONS = API_CHATROOM_BASE + "/permissions";
 	// ===================== END API ROUTES ====================
 
 	// ===================== USER API ROUTES =======================

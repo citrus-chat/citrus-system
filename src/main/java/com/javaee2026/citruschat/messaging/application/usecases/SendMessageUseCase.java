@@ -14,9 +14,6 @@ import com.javaee2026.citruschat.messaging.infrastructure.websocket.ports.IMessa
 import com.javaee2026.citruschat.shared.domain.valueobjects.*;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class SendMessageUseCase {
 
 	private final IUserRepository userRepository;
@@ -25,16 +22,19 @@ public class SendMessageUseCase {
 	private final IMessageRepository messageRepository;
 	private final MessageFactory messageFactory;
 	private final IMessageRealtimeNotifier realtimeNotifier;
+	private final ChatPermissionAuthorizationService permissionAuthorizationService;
 
 	public SendMessageUseCase(IUserDeviceRepository deviceRepository, IUserRepository userRepository,
 			IChatRoomRepository chatRoomRepository, IMessageRepository messageRepository, MessageFactory messageFactory,
-			IMessageRealtimeNotifier realtimeNotifier) {
+			IMessageRealtimeNotifier realtimeNotifier,
+			ChatPermissionAuthorizationService permissionAuthorizationService) {
 		this.deviceRepository = deviceRepository;
 		this.userRepository = userRepository;
 		this.chatRoomRepository = chatRoomRepository;
 		this.messageRepository = messageRepository;
 		this.messageFactory = messageFactory;
 		this.realtimeNotifier = realtimeNotifier;
+		this.permissionAuthorizationService = permissionAuthorizationService;
 	}
 
 	private User validateSender(UserId userId) {
@@ -48,22 +48,7 @@ public class SendMessageUseCase {
 	}
 
 	public void validateSenderPermissions(ChatRoom chatRoom, User sender) {
-		List<ChatParticipant> participants = new ArrayList<>(chatRoom.getParticipants());
-		if (participants.isEmpty()) {
-			throw new IllegalArgumentException("Chat room has no participants");
-		}
-
-		// Find Sender
-		ChatParticipant senderParticipant = participants.stream()
-				.filter(participant -> participant.getUserId().equals(sender.getId())).findFirst()
-				.orElseThrow(() -> new IllegalArgumentException(
-						"Sender '" + sender.getId().value() + "' is not a participant of the chat room"));
-
-		// Validates that the user HAS PERMISSION TO SEND MESSAGE
-		if (!chatRoom.hasPermission(senderParticipant, ChatPermissionList.CAN_SEND_MESSAGE)) {
-			throw new IllegalArgumentException("Sender '" + sender.getId().value()
-					+ "' does not have permission to send messages in this chat room");
-		}
+		permissionAuthorizationService.requirePermission(chatRoom, sender.getId(), ChatPermissionList.CAN_SEND_MESSAGE);
 	}
 
 	private void validateDevice(UserId senderUserId, DeviceId senderDeviceId) {
@@ -73,8 +58,6 @@ public class SendMessageUseCase {
 
 	@Transactional
 	public void execute(SendMessageCommand command) {
-
-		System.out.println("Command: " + command);
 
 		UserId senderUserId = command.senderUserId();
 
@@ -96,12 +79,8 @@ public class SendMessageUseCase {
 
 		EncryptedContent content = new EncryptedContent(command.keyVersion(), command.iv(), command.ciphertext());
 
-		System.out.println("Content creado: " + content);
-
 		Message message = messageFactory.createNew(messageId, chatRoom.getId(), senderUserId, senderDeviceId,
 				command.replyMessageId() != null ? command.replyMessageId() : null, content);
-
-		System.out.println("Mensaje creado: " + message);
 
 		messageRepository.save(message);
 
