@@ -21,4 +21,11 @@ public class WebSocketMessageRealtimeNotifier implements IMessageRealtimeNotifie
 		messagingTemplate.convertAndSend("/topic/chatrooms/" + chatRoomId.value(),
 				new NewMessageEvent(chatRoomId.value()));
 	}
+
+	@Override
+	public void notifyKeysUpdated(ChatRoomId chatRoomId) {
+
+		messagingTemplate.convertAndSend("/topic/chatrooms/" + chatRoomId.value(),
+				new NewMessageEvent(chatRoomId.value()));
+	}
 }
