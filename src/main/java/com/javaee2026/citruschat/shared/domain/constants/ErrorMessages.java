@@ -56,6 +56,10 @@ public final class ErrorMessages {
 
 	public static final String DEVICE_ID_NOT_FOUND = "Device id not found";
 	public static final String DEVICE_ID_CANNOT_BE_NULL = "Device id cannot be null";
+	public static final String INVALID_WEB_LOGIN_TOKEN = "Invalid web login token";
+	public static final String EXPIRED_WEB_LOGIN_TOKEN = "Web login token expired";
+	public static final String USED_WEB_LOGIN_TOKEN = "Web login token already used";
+	public static final String WEB_LOGIN_DEVICE_NOT_FOUND = "Web login device not found";
 
 	public static final String CHATROOM_ID_NOT_FOUND = "Chatroom id not found";
 	public static final String CHATROOM_ID_CANNOT_BE_NULL = "Chatroom id cannot be null";
