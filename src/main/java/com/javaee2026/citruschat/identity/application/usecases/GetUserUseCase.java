@@ -18,11 +18,7 @@ public class GetUserUseCase {
 
 	public UserResult execute(UUID userId) {
 
-		System.out.println("Searching for user with id: " + userId.toString());
-
 		User user = userRepository.findById(new UserId(userId)).orElseThrow(UserNotFoundException::new);
-
-		System.out.println("User found: " + user.getUsername().getValue());
 
 		return new UserResult(user.getId().value(), user.getUsername().getValue(), user.getEmail().getValue(),
 				user.isActive(), user.getAvatarUrl());

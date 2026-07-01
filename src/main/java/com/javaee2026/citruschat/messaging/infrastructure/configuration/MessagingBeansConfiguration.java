@@ -37,15 +37,16 @@ public class MessagingBeansConfiguration {
 	@Bean
 	public SendMessageUseCase sendMessageUseCase(IUserDeviceRepository deviceRepository, IUserRepository userRepository,
 			IChatRoomRepository chatRoomRepository, IMessageRepository messageRepository, MessageFactory messageFactory,
-			IMessageRealtimeNotifier messageRealtimeNotifier) {
+			IMessageRealtimeNotifier messageRealtimeNotifier,
+			ChatPermissionAuthorizationService permissionAuthorizationService) {
 		return new SendMessageUseCase(deviceRepository, userRepository, chatRoomRepository, messageRepository,
-				messageFactory, messageRealtimeNotifier);
+				messageFactory, messageRealtimeNotifier, permissionAuthorizationService);
 	}
 
 	@Bean
 	public SyncMessagesUseCase SyncMessagesUseCase(IMessageRepository messageRepository,
-			IChatRoomRepository chatRoomRepository) {
-		return new SyncMessagesUseCase(messageRepository, chatRoomRepository);
+			ChatPermissionAuthorizationService permissionAuthorizationService) {
+		return new SyncMessagesUseCase(messageRepository, permissionAuthorizationService);
 	}
 
 	@Bean
@@ -80,6 +81,14 @@ public class MessagingBeansConfiguration {
 	}
 
 	@Bean
+	public IChatRoleRepository chatRoleRepository(SpringDataChatRoleRepository springDataChatRoleRepository,
+			SpringDataChatRoomRepository springDataChatRoomRepository,
+			SpingDataChatPermissionRepository chatPermissionRepository, ChatRoleMapper chatRoleMapper) {
+		return new JpaChatRoleRepositoryAdapter(springDataChatRoleRepository, springDataChatRoomRepository,
+				chatPermissionRepository, chatRoleMapper);
+	}
+
+	@Bean
 	public IChatPermissionRepository chatPermissionRepository(
 			SpingDataChatPermissionRepository chatPermissionRepository, ChatPermissionMapper chatPermissionMapper) {
 		return new JpaChatPermissionRepositoryAdapter(chatPermissionRepository, chatPermissionMapper);
@@ -105,14 +114,23 @@ public class MessagingBeansConfiguration {
 
 	@Bean
 	public GetChatRoomMessagesUseCase getChatRoomMessagesUseCase(IMessageRepository messageRepository,
-			ValidateChatParticipantUseCase validateChatParticipantUseCase) {
-		return new GetChatRoomMessagesUseCase(messageRepository, validateChatParticipantUseCase);
+			ChatPermissionAuthorizationService permissionAuthorizationService) {
+		return new GetChatRoomMessagesUseCase(messageRepository, permissionAuthorizationService);
 	}
 
 	@Bean
 	public IChatParticipantRepository chatParticipantRepository(
-			SpringDataChatParticipantRepository springDataChatParticipantRepository) {
-		return new JpaChatParticipantRepositoryAdapter(springDataChatParticipantRepository);
+			SpringDataChatParticipantRepository springDataChatParticipantRepository,
+			SpringDataChatRoleRepository springDataChatRoleRepository) {
+		return new JpaChatParticipantRepositoryAdapter(springDataChatParticipantRepository,
+				springDataChatRoleRepository);
+	}
+
+	@Bean
+	public ChatPermissionAuthorizationService chatPermissionAuthorizationService(IChatRoomRepository chatRoomRepository,
+			IChatParticipantRepository chatParticipantRepository, IChatPermissionRepository chatPermissionRepository) {
+		return new ChatPermissionAuthorizationService(chatRoomRepository, chatParticipantRepository,
+				chatPermissionRepository);
 	}
 
 	@Bean
@@ -127,5 +145,55 @@ public class MessagingBeansConfiguration {
 			IChatPermissionRepository chatPermissionRepository,
 			ValidateChatParticipantUseCase validateChatParticipantUseCase) {
 		return new GetParticipantPermissionsUseCase(chatPermissionRepository, validateChatParticipantUseCase);
+	}
+
+	@Bean
+	public UpdateParticipantRolesUseCase updateParticipantRolesUseCase(IChatRoomRepository chatRoomRepository,
+			IChatParticipantRepository chatParticipantRepository, IChatPermissionRepository chatPermissionRepository,
+			ChatPermissionAuthorizationService permissionAuthorizationService) {
+		return new UpdateParticipantRolesUseCase(chatRoomRepository, chatParticipantRepository,
+				chatPermissionRepository, permissionAuthorizationService);
+	}
+
+	@Bean
+	public GetChatRolesUseCase getChatRolesUseCase(IChatRoomRepository chatRoomRepository,
+			IChatRoleRepository chatRoleRepository) {
+		return new GetChatRolesUseCase(chatRoomRepository, chatRoleRepository);
+	}
+
+	@Bean
+	public GetChatRoleUseCase getChatRoleUseCase(IChatRoomRepository chatRoomRepository,
+			IChatRoleRepository chatRoleRepository) {
+		return new GetChatRoleUseCase(chatRoomRepository, chatRoleRepository);
+	}
+
+	@Bean
+	public CreateChatRoleUseCase createChatRoleUseCase(IChatRoomRepository chatRoomRepository,
+			IChatRoleRepository chatRoleRepository, IChatPermissionRepository chatPermissionRepository,
+			ChatPermissionAuthorizationService permissionAuthorizationService) {
+		return new CreateChatRoleUseCase(chatRoomRepository, chatRoleRepository, chatPermissionRepository,
+				permissionAuthorizationService);
+	}
+
+	@Bean
+	public UpdateChatRoleUseCase updateChatRoleUseCase(IChatRoomRepository chatRoomRepository,
+			IChatRoleRepository chatRoleRepository, IChatPermissionRepository chatPermissionRepository,
+			ChatPermissionAuthorizationService permissionAuthorizationService) {
+		return new UpdateChatRoleUseCase(chatRoomRepository, chatRoleRepository, chatPermissionRepository,
+				permissionAuthorizationService);
+	}
+
+	@Bean
+	public DeleteChatRoleUseCase deleteChatRoleUseCase(IChatRoomRepository chatRoomRepository,
+			IChatRoleRepository chatRoleRepository, IChatParticipantRepository chatParticipantRepository,
+			ChatPermissionAuthorizationService permissionAuthorizationService) {
+		return new DeleteChatRoleUseCase(chatRoomRepository, chatRoleRepository, chatParticipantRepository,
+				permissionAuthorizationService);
+	}
+
+	@Bean
+	public GetAvailableChatPermissionsUseCase getAvailableChatPermissionsUseCase(
+			IChatPermissionRepository chatPermissionRepository) {
+		return new GetAvailableChatPermissionsUseCase(chatPermissionRepository);
 	}
 }

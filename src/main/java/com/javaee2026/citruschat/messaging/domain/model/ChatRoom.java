@@ -66,7 +66,6 @@ public class ChatRoom {
 
 			roles.put(roleName, ChatRole.createDefault(id, roleDefault, rolePermissions, rolePriority));
 		}
-		System.out.println("Roles initialized: " + roles);
 		touch();
 	}
 
